@@ -17,6 +17,7 @@ const session = require('express-session');
 
 const store = require('./db');
 const email = require('./email');
+const analytics = require('./analytics');
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -93,6 +94,7 @@ app.post('/api/prospects', requireAuth, (req, res) => {
   const p = store.createProspect({
     name: d.name, company: d.company, email: d.email, role: d.role, pain: d.pain, note: d.note
   });
+  analytics.pageCreated(p);
   res.json({ prospect: p });
 });
 
@@ -127,16 +129,24 @@ app.get('/api/v/:token', (req, res) => {
 
 app.post('/api/v/:token/visit', (req, res) => {
   const r = store.recordVisit(req.params.token);
-  if (r && r.firstOpen) {
+  if (r && r.ok) {
     const p = store.getProspect(req.params.token);
-    if (p) email.notifyView(p);
+    if (p) {
+      analytics.visit(p, !!r.firstOpen); // Link Opened (first) vs Return Visit
+      if (r.firstOpen) email.notifyView(p);
+    }
   }
   res.json({ ok: true });
 });
 
 app.post('/api/v/:token/section-time', (req, res) => {
-  const { sectionId, ms } = req.body || {};
-  store.addSectionTime(req.params.token, sectionId, Number(ms) || 0);
+  const sectionId = req.body && req.body.sectionId;
+  const ms = Number(req.body && req.body.ms) || 0;
+  const r = store.addSectionTime(req.params.token, sectionId, ms);
+  if (r && r.ok) {
+    const p = store.getProspect(req.params.token);
+    if (p) analytics.sectionTime(p, sectionId, ms);
+  }
   res.json({ ok: true });
 });
 
@@ -144,6 +154,8 @@ app.post('/api/v/:token/event', (req, res) => {
   const { type, meta } = req.body || {};
   if (!type) return res.status(400).json({ error: 'type_required' });
   store.recordEvent(req.params.token, type, meta || null);
+  const p = store.getProspect(req.params.token);
+  if (p) analytics.viewerEvent(p, type, meta || null);
   res.json({ ok: true });
 });
 
@@ -152,7 +164,10 @@ app.post('/api/v/:token/question', (req, res) => {
   const result = store.addQuestion(req.params.token, { text, section });
   if (result) {
     const p = store.getProspect(req.params.token);
-    if (p) email.notifyQuestion(p, result.item.text, sectionLabel(result.item.section));
+    if (p) {
+      analytics.questionSubmitted(p, result.item);
+      email.notifyQuestion(p, result.item.text, sectionLabel(result.item.section));
+    }
   }
   res.json({ ok: true });
 });
@@ -181,5 +196,6 @@ app.listen(PORT, () => {
   console.log(`\n  Quely Sales Enablement running`);
   console.log(`  ▸ Dashboard : http://localhost:${PORT}/dashboard  (password: ${DASHBOARD_PASSWORD === 'quely' ? 'quely — set DASHBOARD_PASSWORD' : '••••••'})`);
   console.log(`  ▸ Prospect  : http://localhost:${PORT}/v/<token>`);
-  console.log(`  ▸ Email     : ${email.enabled ? 'SMTP configured' : 'console-log mode (set SMTP_* to send real mail)'}${email.repConfigured ? '' : ', REP_EMAIL not set'}\n`);
+  console.log(`  ▸ Email     : ${email.enabled ? 'SMTP configured' : 'console-log mode (set SMTP_* to send real mail)'}${email.repConfigured ? '' : ', REP_EMAIL not set'}`);
+  console.log(`  ▸ Analytics : ${analytics.enabled ? 'Mixpanel configured' : 'console-log mode (set MIXPANEL_TOKEN to send events)'}\n`);
 });
