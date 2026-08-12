@@ -91,6 +91,19 @@
       'Assign an owner to the dependency', 'Schedule a pre-launch review', 'Send the customer a status update via CS' ] }
   ];
 
+  // Supported project-management tools for the lens-item "Push to tool" menu (order matters).
+  var PM_TOOLS = [
+    { id: 'jira',        label: 'Jira',          logo: '/assets/logos/jira.svg' },
+    { id: 'linear',      label: 'Linear',        logo: '/assets/logos/linear.svg' },
+    { id: 'monday',      label: 'monday.com',    logo: '/assets/logos/monday.svg' },
+    { id: 'wrike',       label: 'Wrike',         logo: '/assets/logos/wrike.png' },
+    { id: 'todoist',     label: 'Todoist',       logo: '/assets/logos/todoist.svg' },
+    { id: 'trello',      label: 'Trello',        logo: '/assets/logos/trello.svg' },
+    { id: 'azuredevops', label: 'Azure DevOps',  logo: '/assets/logos/azuredevops.svg' },
+    { id: 'github',      label: 'GitHub Issues', logo: '/assets/logos/github.svg' }
+  ];
+  function toolById(id) { for (var i = 0; i < PM_TOOLS.length; i++) { if (PM_TOOLS[i].id === id) return PM_TOOLS[i]; } return null; }
+
   // ── DOM refs ──────────────────────────────────────────────────────────────
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var orbitScroll = $('#orbitScroll');
@@ -99,7 +112,7 @@
 
   // state
   var state = {
-    spaceTouched: false, orbitTouched: false, lens: 'decisions', lensTouched: false, pushed: {}
+    spaceTouched: false, orbitTouched: false, lens: 'decisions', lensTouched: false, pushed: {}, pushMenu: null
   };
   var pendingThink = 0;
 
@@ -257,41 +270,85 @@
     $('#activeLensLabel').textContent = def.label;
     var wrap = $('#lensItems');
     wrap.innerHTML = '';
+    var btnBase = 'position:relative; display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13px; font-weight:600; padding:8px 13px; border-radius:9px; cursor:pointer; white-space:nowrap;';
     def.items.forEach(function (text, idx) {
       var key = state.lens + '-' + idx;
       var pk = state.pushed[key];
+
+      // outer row is a column so the tool menu can drop in below the item content
       var row = document.createElement('div');
-      row.style.cssText = 'display:flex; align-items:center; gap:13px; padding:13px 14px; border-radius:12px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);' + (animate ? (' animation:qanswer .4s cubic-bezier(.2,0,0,1) both; animation-delay:' + (idx * 55) + 'ms;') : '');
+      row.style.cssText = 'display:flex; flex-direction:column; align-items:stretch; gap:11px; padding:13px 14px; border-radius:12px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);' + (animate ? (' animation:qanswer .4s cubic-bezier(.2,0,0,1) both; animation-delay:' + (idx * 55) + 'ms;') : '');
+
+      var top = document.createElement('div');
+      top.style.cssText = 'display:flex; align-items:center; gap:13px;';
       var icon = document.createElement('i');
       icon.className = def.icon;
       icon.style.cssText = 'flex:none; font-size:20px; color:' + def.color + ';';
-      row.appendChild(icon);
+      top.appendChild(icon);
       var txt = document.createElement('div');
       txt.style.cssText = 'flex:1; min-width:0; font-size:15px; line-height:1.4; color:#EAECEF;';
       txt.textContent = text;
-      row.appendChild(txt);
+      top.appendChild(txt);
+
       if (pk) {
+        // confirmation state: "Added to {tool}" (with logo tile) or "Meeting scheduled"
         var done = document.createElement('span');
         done.style.cssText = 'flex:none; display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; padding:8px 13px; border-radius:9px; background:rgba(34,197,94,.14); border:1px solid rgba(34,197,94,.4); color:#4ADE80; animation:qanswer .4s cubic-bezier(.2,0,0,1);';
-        done.innerHTML = '<i class="' + (pk === 'meeting' ? 'ph-fill ph-calendar-check' : 'ph-fill ph-check-circle') + '"></i>' + (pk === 'meeting' ? 'Meeting scheduled' : 'Added to Jira');
-        row.appendChild(done);
+        if (pk === 'meeting') {
+          done.innerHTML = '<i class="ph-fill ph-calendar-check"></i>Meeting scheduled';
+        } else {
+          var tool = toolById(pk) || { label: 'tool', logo: '' };
+          done.innerHTML = '<span style="width:18px; height:18px; border-radius:5px; background:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none;"><img src="' + tool.logo + '" alt="" style="width:13px; height:13px;"></span>Added to ' + tool.label;
+        }
+        top.appendChild(done);
       } else {
+        // action controls: "Push to tool ▾" menu trigger + separate "Schedule"
         var btns = document.createElement('div');
         btns.style.cssText = 'display:flex; gap:7px; flex:none;';
-        var btnBase = 'position:relative; display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13px; font-weight:600; padding:8px 13px; border-radius:9px; cursor:pointer; white-space:nowrap;';
-        var jira = document.createElement('button');
-        jira.style.cssText = btnBase + ' background:#fff; border:1px solid #fff; color:#111827;';
+        var menuOpen = state.pushMenu === key;
         var firstPush = (idx === 0 && Object.keys(state.pushed).length === 0);
-        jira.innerHTML = (firstPush ? '<span style="position:absolute; top:-6px; right:-6px; width:14px; height:14px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#60A5FA; opacity:.8; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#60A5FA;"></span></span>' : '') + '<img src="/assets/logos/jira.svg" alt="" style="width:15px; height:15px;">Push to Jira';
-        jira.addEventListener('click', function () { pushItem(key, 'jira'); });
+
+        var trigger = document.createElement('button');
+        trigger.style.cssText = btnBase + ' background:#fff; border:1px solid #fff; color:#111827;';
+        var caretStyle = 'font-size:14px; margin-left:-1px; transition:transform .14s; transform:rotate(' + (menuOpen ? '180' : '0') + 'deg);';
+        trigger.innerHTML = (firstPush ? '<span style="position:absolute; top:-6px; right:-6px; width:14px; height:14px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#60A5FA; opacity:.8; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#60A5FA;"></span></span>' : '') +
+          '<i class="ph-fill ph-paper-plane-tilt" style="font-size:15px;"></i>Push to tool<i class="ph-bold ph-caret-down" style="' + caretStyle + '"></i>';
+        trigger.addEventListener('click', function (e) { e.stopPropagation(); togglePushMenu(key); });
+
         var meet = document.createElement('button');
         meet.style.cssText = btnBase + ' background:transparent; border:1px solid rgba(255,255,255,.22); color:#fff;';
         meet.innerHTML = '<i class="ph-bold ph-calendar-plus" style="font-size:15px;"></i>Schedule';
         meet.addEventListener('click', function () { pushItem(key, 'meeting'); });
-        btns.appendChild(jira);
+
+        btns.appendChild(trigger);
         btns.appendChild(meet);
-        row.appendChild(btns);
+        top.appendChild(btns);
       }
+      row.appendChild(top);
+
+      // tool menu (drops in below the item when its trigger is open)
+      if (!pk && state.pushMenu === key) {
+        var menu = document.createElement('div');
+        menu.style.cssText = 'background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px; animation:qanswer .28s cubic-bezier(.2,0,0,1);';
+        var mlbl = document.createElement('div');
+        mlbl.style.cssText = 'font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.4); padding:4px 10px 8px;';
+        mlbl.textContent = 'Push this item to';
+        menu.appendChild(mlbl);
+        var grid = document.createElement('div');
+        grid.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:2px;';
+        PM_TOOLS.forEach(function (tl) {
+          var opt = document.createElement('button');
+          opt.style.cssText = 'display:flex; align-items:center; gap:10px; width:100%; font-family:inherit; font-size:14px; font-weight:600; text-align:left; padding:9px 12px; border:none; background:transparent; color:#EAECEF; cursor:pointer; border-radius:8px; transition:background .12s;';
+          opt.onmouseenter = function () { opt.style.background = 'rgba(255,255,255,.08)'; };
+          opt.onmouseleave = function () { opt.style.background = 'transparent'; };
+          opt.innerHTML = '<span style="width:26px; height:26px; border-radius:7px; background:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none;"><img src="' + tl.logo + '" alt="" style="width:17px; height:17px;"></span>' + tl.label;
+          opt.addEventListener('click', function (e) { e.stopPropagation(); pushItem(key, tl.id); });
+          grid.appendChild(opt);
+        });
+        menu.appendChild(grid);
+        row.appendChild(menu);
+      }
+
       wrap.appendChild(row);
     });
   }
@@ -299,12 +356,19 @@
     recordEvent('lens_view', { lens: id });
     state.lens = id;
     state.lensTouched = true;
+    state.pushMenu = null;
     renderLensRail();
     renderLensItems(true);
   }
+  function togglePushMenu(key) {
+    state.pushMenu = (state.pushMenu === key) ? null : key;
+    renderLensItems(false);
+  }
   function pushItem(key, kind) {
+    // `kind` is the selected tool id (jira/linear/monday/…) or 'meeting'
     recordEvent('lens_push', { key: key, kind: kind });
     state.pushed[key] = kind;
+    state.pushMenu = null;
     renderLensItems(false);
   }
 
@@ -429,6 +493,10 @@
     initScroll();
     orbitInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runOrbit(orbitInput.value); } });
     $('#orbitSend').addEventListener('click', function () { runOrbit(orbitInput.value); });
+    // close an open "Push to tool" menu when clicking outside the lens items
+    document.addEventListener('click', function (e) {
+      if (state.pushMenu && !e.target.closest('#lensItems')) { state.pushMenu = null; renderLensItems(false); }
+    });
 
     if (!token) { personalize({ found: false }); return; }
     fetch('/api/v/' + encodeURIComponent(token))

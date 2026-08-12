@@ -16,6 +16,16 @@
 
   var SECCOLORS = { hero: '#9CA3AF', problem: '#8F5BD7', proof: '#6366F1', spaces: '#5C28A4', orbit: '#2A6FDB', features: '#16A34A', cta: '#D97706' };
 
+  // Labels for the project-management tools a prospect can push a lens item to.
+  var PM_TOOL_LABELS = {
+    jira: 'Jira', linear: 'Linear', monday: 'monday.com', wrike: 'Wrike',
+    todoist: 'Todoist', trello: 'Trello', azuredevops: 'Azure DevOps', github: 'GitHub Issues'
+  };
+  function pushTargetLabel(kind) {
+    if (kind === 'meeting') return 'Scheduled a meeting';
+    return 'Pushed to ' + (PM_TOOL_LABELS[kind] || 'a tool');
+  }
+
   var state = {
     view: 'prospects', selToken: null, notifOpen: false, copyLabel: 'Copy',
     createdToken: null,
@@ -171,7 +181,7 @@
     if (orbitQs.length) interactions.push({ label: 'Asked Orbit · ' + orbitQs.length, icon: 'ph-fill ph-sparkle', detail: uniq(orbitQs.map(function (e) { return e.meta && e.meta.q; })).join('\n') });
     if (tabEvs.length) interactions.push({ label: 'Explored the Space', icon: 'ph-fill ph-kanban', detail: 'Tabs: ' + uniq(tabEvs.map(function (e) { return tabNames[e.meta && e.meta.tab] || (e.meta && e.meta.tab); })).join(', ') });
     if (lensViews.length) interactions.push({ label: 'Lenses: ' + uniq(lensViews.map(function (e) { return cap(e.meta && e.meta.lens); })).join(', '), icon: 'ph-fill ph-graph', detail: 'Opened ' + lensViews.length + ' lens view(s)' });
-    if (lensPushes.length) interactions.push({ label: 'Pushed to tools · ' + lensPushes.length, icon: 'ph-fill ph-arrow-square-out', detail: lensPushes.map(function (e) { return (e.meta && e.meta.kind) === 'meeting' ? 'Scheduled a meeting' : 'Pushed to Jira'; }).join('\n') });
+    if (lensPushes.length) interactions.push({ label: 'Pushed to tools · ' + lensPushes.length, icon: 'ph-fill ph-arrow-square-out', detail: lensPushes.map(function (e) { return pushTargetLabel(e.meta && e.meta.kind); }).join('\n') });
 
     var mv = mostViewedSection(selP);
     var q0 = selP.questions[0];
