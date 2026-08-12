@@ -95,6 +95,18 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_questions_token ON questions(token);
 `);
 
+// Migration: Advanced (per-prospect generated page) columns. Added idempotently
+// so existing databases upgrade in place. HANDOFF §4 data model.
+(function migrateAdvanced() {
+  const cols = db.prepare('PRAGMA table_info(prospects)').all().map((c) => c.name);
+  const add = (name, ddl) => { if (cols.indexOf(name) === -1) db.exec('ALTER TABLE prospects ADD COLUMN ' + ddl); };
+  add('advanced', 'advanced INTEGER NOT NULL DEFAULT 0');
+  add('focus_topic', 'focus_topic TEXT');
+  add('focus_role', 'focus_role TEXT');
+  add('gen_notes', 'gen_notes TEXT');
+  add('page_plan', 'page_plan TEXT'); // JSON of the generated PagePlan (null in Standard mode)
+})();
+
 // ── helpers ───────────────────────────────────────────────────────────────
 function now() { return Date.now(); }
 
@@ -113,8 +125,9 @@ function makeToken(name, company) {
 // Prepared statements
 const q = {
   insertProspect: db.prepare(
-    `INSERT INTO prospects (token, seq, name, company, email, role, pain, note, created, cta_clicked)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)`),
+    `INSERT INTO prospects (token, seq, name, company, email, role, pain, note, created, cta_clicked,
+                            advanced, focus_topic, focus_role, gen_notes, page_plan)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)`),
   nextSeq: db.prepare('SELECT COALESCE(MAX(seq), 0) + 1 AS s FROM prospects'),
   getProspectRow: db.prepare('SELECT * FROM prospects WHERE token = ?'),
   listProspectRows: db.prepare('SELECT * FROM prospects ORDER BY seq DESC'),
@@ -170,7 +183,13 @@ function hydrate(row) {
     sectionMs,
     ctaClicked: !!row.cta_clicked,
     events,
-    questions: q.questionsFor.all(row.token).map(x => ({ text: x.text, section: x.section, ts: x.ts }))
+    questions: q.questionsFor.all(row.token).map(x => ({ text: x.text, section: x.section, ts: x.ts })),
+    // Advanced (per-prospect generated page) fields
+    advanced: !!row.advanced,
+    focusTopic: row.focus_topic || '',
+    focusRole: row.focus_role || '',
+    genNotes: row.gen_notes || '',
+    pagePlan: row.page_plan ? safeParse(row.page_plan) : null
   };
 }
 
@@ -195,7 +214,12 @@ const API = {
     const seq = q.nextSeq.get().s;
     q.insertProspect.run(
       token, seq, d.name || '', d.company || '', d.email || '',
-      d.role || '', d.pain || '', d.note || '', now()
+      d.role || '', d.pain || '', d.note || '', now(),
+      d.advanced ? 1 : 0,
+      d.focusTopic || null,
+      d.focusRole || null,
+      d.genNotes || null,
+      d.pagePlan ? JSON.stringify(d.pagePlan) : null
     );
     return this.getProspect(token);
   },

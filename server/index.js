@@ -18,6 +18,7 @@ const session = require('express-session');
 const store = require('./db');
 const email = require('./email');
 const analytics = require('./analytics');
+const generate = require('./generate');
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -92,10 +93,27 @@ app.post('/api/prospects', requireAuth, (req, res) => {
   const d = req.body || {};
   if (!(d.name || d.company)) return res.status(400).json({ error: 'name_or_company_required' });
   const p = store.createProspect({
-    name: d.name, company: d.company, email: d.email, role: d.role, pain: d.pain, note: d.note
+    name: d.name, company: d.company, email: d.email, role: d.role, pain: d.pain, note: d.note,
+    // Advanced (per-prospect generated page) — omitted/false = Standard mode
+    advanced: !!d.advanced,
+    focusTopic: d.focusTopic, focusRole: d.focusRole, genNotes: d.genNotes, pagePlan: d.pagePlan
   });
   analytics.pageCreated(p);
   res.json({ prospect: p });
+});
+
+// Options for the dashboard's Advanced generator (problem topics, roles).
+app.get('/api/generate/options', requireAuth, (req, res) => {
+  res.json({ topics: generate.TOPICS, roles: generate.ROLES, aiEnabled: generate.aiEnabled });
+});
+
+// Generate a tailored PagePlan for review (rep edits/approves before creating the link).
+app.post('/api/generate', requireAuth, (req, res) => {
+  const d = req.body || {};
+  const plan = generate.generatePlan({
+    name: d.name, company: d.company, role: d.role, topic: d.topic, notes: d.notes
+  });
+  res.json({ plan: plan });
 });
 
 app.get('/api/prospects/:token', requireAuth, (req, res) => {
@@ -124,7 +142,12 @@ app.post('/api/notifications/clear', requireAuth, (req, res) => {
 app.get('/api/v/:token', (req, res) => {
   const p = store.getProspect(req.params.token);
   if (!p) return res.json({ found: false });
-  res.json({ found: true, name: p.name, company: p.company, sections: store.SECTIONS });
+  // Advanced prospects carry a generated pagePlan the viewer renders; Standard
+  // prospects get null and the viewer shows the frozen default page.
+  res.json({
+    found: true, name: p.name, company: p.company, sections: store.SECTIONS,
+    advanced: !!p.advanced, pagePlan: p.advanced ? (p.pagePlan || null) : null
+  });
 });
 
 app.post('/api/v/:token/visit', (req, res) => {
