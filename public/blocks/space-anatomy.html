@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quely — Space Anatomy</title>
+<link rel="icon" href="/assets/quely-mark-brand.svg">
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#F9FAFB; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+
+  [data-region] { transition:opacity 200ms cubic-bezier(.2,0,0,1), background 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1); }
+  [data-card]   { transition:transform 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1), border-color 200ms cubic-bezier(.2,0,0,1); }
+
+  /* Coupling by attention, not by index: hovering a card recedes the whole
+     surface and lights only the region that card is talking about. */
+  [data-qsa]:has([data-card]:hover) [data-region] { opacity:.3; }
+  [data-qsa]:has([data-card="1"]:hover) [data-region="1"],
+  [data-qsa]:has([data-card="2"]:hover) [data-region="2"],
+  [data-qsa]:has([data-card="3"]:hover) [data-region="3"],
+  [data-qsa]:has([data-card="4"]:hover) [data-region="4"],
+  [data-qsa]:has([data-card="5"]:hover) [data-region="5"],
+  [data-qsa]:has([data-card="6"]:hover) [data-region="6"] {
+    opacity:1; background:#F9F6FE; box-shadow:inset 0 0 0 1.5px #8F5BD7;
+  }
+  [data-card]:hover { transform:translateY(-3px); border-color:#C4B5DD !important; box-shadow:0 10px 22px -10px rgba(3,7,18,.20) !important; }
+
+  /* the locate affordance is visible at rest, and commits to brand on hover */
+  [data-el="loc"] { transition:color 200ms cubic-bezier(.2,0,0,1), background 200ms cubic-bezier(.2,0,0,1); }
+  [data-card]:hover [data-el="loc"] { color:#5C28A4; background:#F3EEFB; }
+  /* the card's own mark commits too, so lighting a region reads as one gesture */
+  [data-el="mark"] { transition:background 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1); }
+  [data-card]:hover [data-el="mark"] { box-shadow:inset 0 0 0 1.5px #C4B5DD; }
+
+  @keyframes qsa-row { to { opacity:1; transform:translateY(0); } }
+  [data-qsa][data-go] [data-el="row"] { animation:qsa-row 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qsa] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</head>
+<body>
+<section style="position:relative; overflow:hidden; background:#F9FAFB; padding:80px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; top:210px; left:50%; width:1080px; height:640px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.16), rgba(143,91,215,0)); filter:blur(8px); pointer-events:none; z-index:0;"></div>
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="max-width:780px; margin:0 auto; text-align:center;">
+      <div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">Inside a Quely Space</div>
+      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">See the work and everything that explains it in one Space.</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#4B5563; text-wrap:pretty;">Each Space keeps the work item alongside the conversations, decisions, meeting records, dependencies, documents, and designs around it. Your team can discuss the work, add updates, and ask Orbit questions from the same place.</p>
+    </div>
+
+    <div data-qsa style="margin-top:36px;">
+
+      <!-- ============ THE SPACE, as it actually looks ============ -->
+      <div style="position:relative; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 12px 24px rgba(3,7,18,.10), 0 4px 8px rgba(3,7,18,.06); overflow:hidden;">
+
+        <div style="display:flex; flex-wrap:wrap; align-items:stretch; min-height:498px;">
+
+          <!-- icon rail -->
+          <div style="flex:none; width:52px; box-sizing:border-box; border-right:1px solid #F3F4F6; padding:12px 0; display:flex; flex-direction:column; align-items:center; gap:16px;">
+            <span style="width:22px; height:22px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
+            <i class="ph ph-magnifying-glass" style="font-size:17px; color:#4B5563;"></i>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:#F3EEFB;"><i class="ph-fill ph-cards" style="font-size:17px; color:#5C28A4;"></i></span>
+            <i class="ph ph-list-checks" style="font-size:17px; color:#4B5563;"></i>
+            <i class="ph ph-calendar-blank" style="font-size:17px; color:#4B5563;"></i>
+            <i class="ph ph-buildings" style="font-size:17px; color:#4B5563;"></i>
+            <i class="ph ph-megaphone-simple" style="font-size:17px; color:#4B5563;"></i>
+          </div>
+
+          <!-- main column -->
+          <div style="flex:1 1 420px; min-width:320px; box-sizing:border-box; display:flex; flex-direction:column;">
+
+            <!-- top bar -->
+            <div style="display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid #F3F4F6;">
+              <span style="flex:none; font-size:12.5px; font-weight:500; color:#6B7280;">Home</span>
+              <span style="flex:none; font-size:12.5px; color:#6B7280;">/</span>
+              <span style="flex:none; font-size:12.5px; font-weight:600; color:#111827;">My Space</span>
+              <span style="flex:none; margin-left:auto; background:#EFEAFB; border-radius:7px; padding:5px 11px; font-size:13px; font-weight:700; letter-spacing:.08em; color:#5C28A4; font-variant-numeric:tabular-nums;">00:42:18</span>
+              <i class="ph ph-bell" style="flex:none; font-size:16px; color:#4B5563;"></i>
+              <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#1D4ED8; font-size:9px; font-weight:700; color:#fff;">ON</span>
+            </div>
+
+            <!-- the work item -->
+            <div data-region="1" style="padding:15px 16px 13px; border-bottom:1px solid #F3F4F6;">
+              <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
+                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:7px; padding:3px 9px; font-size:11px; font-weight:700; color:#1D4ED8;">
+                  <span style="width:11px; height:11px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>QUEL-1065
+                </span>
+                <span style="flex:1 1 auto; min-width:0; font-size:16px; font-weight:700; letter-spacing:-.012em; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">[DESIGN] Session Builder</span>
+                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:7px; padding:3px 9px; font-size:11px; font-weight:600; color:#374151;">In progress <span style="color:#6B7280;">2d</span></span>
+              </div>
+              <div style="margin-top:9px; font-size:11.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Design an AI-assisted flow for creating and initialising Sessions, so a team can spin one up from context, goals, and connected data sources.</div>
+            </div>
+
+            <!-- tabs -->
+            <div style="display:flex; align-items:center; gap:18px; padding:0 16px; border-bottom:1px solid #F3F4F6;">
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#6B7280;"><i class="ph ph-link-simple" style="font-size:14px;"></i>Attachments <b style="color:#6B7280;">3</b></span>
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:700; color:#111827; box-shadow:inset 0 -2px #111827;"><i class="ph ph-graph" style="font-size:14px;"></i>Relationships</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#6B7280;"><i class="ph ph-clock-counter-clockwise" style="font-size:14px;"></i>Activity</span>
+            </div>
+
+            <!-- linked units -->
+            <div data-region="3" style="padding:13px 16px 14px; border-bottom:1px solid #F3F4F6;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                <i class="ph ph-link" style="flex:none; font-size:14px; color:#5C28A4;"></i>
+                <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#111827;">Relationships</span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:7px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#F3EEFB; border:1px solid #E4D3F5; color:#4B1F88;">Parent</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
+                    <i class="ph-fill ph-lightning" style="font-size:11px; color:#7C3AED;"></i>QUEL-925
+                  </span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Orbit</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#FEF2F2; border:1px solid #FECACA; color:#B91C1C;">Blocked by</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
+                    <i class="ph-fill ph-check-square" style="font-size:11px; color:#2563EB;"></i>QL-23
+                  </span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Session data model</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#F0FDF4; border:1px solid #BBF7D0; color:#15803D;">Merged into</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
+                    <i class="ph-fill ph-book-bookmark" style="font-size:11px; color:#15803D;"></i>QUEL-1104
+                  </span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">[DESIGN] Homepage story</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- activity + worklog -->
+            <div data-region="4" style="padding:13px 16px 14px; border-bottom:1px solid #F3F4F6;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#374151; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ME</span>
+                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">2h 30m</span>
+                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Miracle Eseurhobo</span>
+                  <span style="flex:none; font-size:10.5px; color:#6B7280;">14 May</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#374151; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ME</span>
+                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">5h 42m</span>
+                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Miracle Eseurhobo</span>
+                  <span style="flex:none; font-size:10.5px; color:#6B7280;">11 May</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
+                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">Estimate &#8594; 6h 10m</span>
+                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
+                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Sync from tracker</span>
+                  <span style="flex:none; font-size:10.5px; color:#6B7280;">31 May</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- tools -->
+            <div data-region="5" style="flex:1; padding:13px 16px 15px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:#22D3EE;"><i class="ph-fill ph-squares-four" style="font-size:11px; color:#fff;"></i></span>
+                <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#111827;">Tools</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px;">
+                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <i class="ph-fill ph-clock" style="font-size:17px; color:#4F46E5;"></i>
+                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Time Tracking</span>
+                </div>
+                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <i class="ph-fill ph-lightning" style="font-size:17px; color:#15803D;"></i>
+                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Estimations</span>
+                </div>
+                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <i class="ph-fill ph-flow-arrow" style="font-size:17px; color:#B91C1C;"></i>
+                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Diagram</span>
+                </div>
+                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <i class="ph-fill ph-file-text" style="font-size:17px; color:#2563EB;"></i>
+                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Document</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Orbit rail -->
+          <div style="flex:1 1 306px; min-width:262px; box-sizing:border-box; border-left:1px solid #E5E7EB; background:#FDFDFE; display:flex; flex-direction:column;">
+
+            <div data-region="6" style="padding:12px 14px 11px;">
+              <span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #C4B5DD; border-radius:9px; padding:6px 12px 6px 8px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+                <span style="width:19px; height:19px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
+                <span style="font-size:12.5px; font-weight:700; color:#111827;">Ask Orbit</span>
+              </span>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:7px; padding:0 14px 10px;">
+              <span style="flex:1; display:inline-flex; align-items:center; justify-content:space-between; background:#fff; border:1px solid #E5E7EB; border-radius:7px; padding:5px 8px; font-size:10.5px; font-weight:600; color:#374151;">New first <i class="ph ph-caret-down" style="font-size:9px; color:#5C28A4;"></i></span>
+              <span style="flex:1; display:inline-flex; align-items:center; justify-content:space-between; background:#fff; border:1px solid #E5E7EB; border-radius:7px; padding:5px 8px; font-size:10.5px; font-weight:600; color:#374151;">All threads <i class="ph ph-caret-down" style="font-size:9px; color:#5C28A4;"></i></span>
+            </div>
+
+            <div data-region="2" style="flex:1; display:flex; flex-direction:column; border-top:1px solid #F3F4F6;">
+              <div style="padding:11px 14px 10px; border-bottom:1px solid #F3F4F6;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                  <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
+                  <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Onyi Nwankwo</span>
+                  <span style="flex:none; font-size:10px; color:#6B7280;">2d</span>
+                </div>
+                <div style="font-size:11.5px; line-height:1.5; color:#1F2937; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">Scope check: are we shipping the AI agenda draft in v1, or only the manual builder? Needs a call before estimates land.</div>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:8px;"></i>4</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:10px;"></i>Resolve</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:10px;"></i>2</span>
+                </div>
+              </div>
+              <div style="padding:11px 14px 10px; border-bottom:1px solid #F3F4F6;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                  <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
+                  <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Onyi Nwankwo</span>
+                  <span style="flex:none; font-size:10px; color:#6B7280;">4d</span>
+                </div>
+                <div style="font-size:11.5px; line-height:1.5; color:#1F2937; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">Decision: data source selection stays limited to meetings, Slack, and Jira for the first release.</div>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:8px;"></i>2</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:10px;"></i>Resolve</span>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:10px;"></i>3</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:9px; padding:11px 14px 12px; border-top:1px solid #E5E7EB;">
+              <span style="flex:1; min-width:0; font-size:11.5px; color:#6B7280;">What's on your mind?</span>
+              <i class="ph ph-paperclip" style="flex:none; font-size:14px; color:#4B5563;"></i>
+              <i class="ph ph-calendar-plus" style="flex:none; font-size:14px; color:#4B5563;"></i>
+              <i class="ph ph-microphone" style="flex:none; font-size:14px; color:#4B5563;"></i>
+              <i class="ph-fill ph-paper-plane-right" style="flex:none; font-size:14px; color:#5C28A4;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:34px; display:flex; align-items:center; gap:9px;">
+        <i class="ph ph-crosshair-simple" style="flex:none; font-size:15px; color:#5C28A4;"></i>
+        <span style="flex:1 1 auto; min-width:0; font-size:13px; font-weight:600; color:#4B5563; text-wrap:pretty;">Hover over a card to see where each capability appears in the Space.</span>
+      </div>
+
+      <div style="margin-top:12px; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px;">
+        <!-- 1 -->
+        <div data-el="row" data-card="1" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:260ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#EFF6FF; color:#1D4ED8;"><i class="ph-fill ph-kanban" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See what the work is and its progress</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View the title, description, and status in Quely. Update the status in Quely or your project tool, and it stays synced in both.</div>
+        </div>
+        <!-- 2 -->
+        <div data-el="row" data-card="2" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:390ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#F3EEFB; color:#5C28A4;"><i class="ph-fill ph-chats-circle" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Keep discussions connected to the work</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Keep updates, questions, and decisions in one place, so people can find answers without another meeting or interruption.</div>
+        </div>
+        <!-- 3 -->
+        <div data-el="row" data-card="3" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:520ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#FEF2F2; color:#B91C1C;"><i class="ph-fill ph-graph" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See how tasks connect</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View related tasks, dependencies, and blockers, and understand what a change may affect.</div>
+        </div>
+        <!-- 4 -->
+        <div data-el="row" data-card="4" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:650ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#EEF2FF; color:#4F46E5;"><i class="ph-fill ph-clock-counter-clockwise" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See activity and time spent</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View activity and worklogs synced from your project tool, without creating a separate progress report.</div>
+        </div>
+        <!-- 5 -->
+        <div data-el="row" data-card="5" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:780ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#ECFEFF; color:#0E7490;"><i class="ph-fill ph-squares-four" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Develop ideas inside the Space</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Use built-in documents, diagrams, and estimates to explain your thinking or map out a flow beside the work.</div>
+        </div>
+        <!-- 6 -->
+        <div data-el="row" data-card="6" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:910ms;">
+          <div style="display:flex; align-items:flex-start; gap:11px;">
+            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#F3EEFB; color:#5C28A4;"><i class="ph-fill ph-sparkle" style="font-size:16px;"></i></span>
+            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Ask Orbit about the work</div>
+            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Orbit reads everything in the Space and answers questions about updates, decisions, blockers, and history.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<script>
+  // Imperative attribute flip drives the CSS stagger (style-attribute holes do not
+  // re-apply on re-render). Plays once when the block first enters view.
+  (function () {
+    var node = document.querySelector('[data-qsa]');
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.setAttribute('data-go', ''); return;
+    }
+    var played = false, t;
+    var play = function () { if (played) return; played = true; node.setAttribute('data-go', ''); };
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { t = setTimeout(play, 340); }
+          else if (!played) { clearTimeout(t); }
+        });
+      }, { threshold: 0.15 });
+      io.observe(node);
+    } else { play(); }
+  })();
+</script>
+</body>
+</html>

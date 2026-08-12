@@ -46,6 +46,8 @@ app.use(session({
 // is picked up immediately instead of being masked by a stale browser cache.
 app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets'), { maxAge: 0, etag: true, lastModified: true }));
 app.use('/js', express.static(path.join(PUBLIC_DIR, 'js'), { maxAge: 0 }));
+// Marketing/visual blocks (public, framework-free page sections ported from the design's Block library)
+app.use('/blocks', express.static(path.join(PUBLIC_DIR, 'blocks'), { maxAge: 0, extensions: ['html'] }));
 
 function requireAuth(req, res, next) {
   if (req.session && req.session.authed) return next();
