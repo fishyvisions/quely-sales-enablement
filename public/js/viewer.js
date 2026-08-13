@@ -64,16 +64,18 @@
       text: "The ticket is assigned to the checkout squad, but the blocking payments dependency has no owner yet. The renewal context is owned by CS, and the scope decision came from the Nov 18 planning group.",
       sources: ['jira', 'meeting', 'crm'] }
   ];
+  // Default fallback answer (overridden by a personalized plan's orbit.fallback).
+  var ORBIT_FALLBACK = {
+    text: "Here's what the Space shows on that: the work is “Fix checkout flow,” currently blocked on a payments dependency, scoped to card checkout only, and flagged as a renewal risk by CS. Ask about what's blocking it, what changed, why the scope was set, or what's next.",
+    sources: ['jira', 'slack', 'meeting', 'crm']
+  };
   function answerFor(qtext) {
     var s = (qtext || '').toLowerCase();
     for (var i = 0; i < ANSWERS.length; i++) {
       var a = ANSWERS[i];
       for (var k = 0; k < a.keys.length; k++) { if (s.indexOf(a.keys[k]) !== -1) return a; }
     }
-    return {
-      text: "Here's what the Space shows on that: the work is “Fix checkout flow,” currently blocked on a payments dependency, scoped to card checkout only, and flagged as a renewal risk by CS. Ask about what's blocking it, what changed, why the scope was set, or what's next.",
-      sources: ['jira', 'slack', 'meeting', 'crm']
-    };
+    return ORBIT_FALLBACK;
   }
 
   var LENSES = [
@@ -483,6 +485,41 @@
     }
   }
 
+  // Apply a generated PagePlan to the page (Advanced mode). Overlays the plan's
+  // family-specific copy onto the fixed sections and swaps the Orbit + Lens data,
+  // then re-renders the JS-driven pieces. Standard mode never calls this.
+  function applyPlan(plan) {
+    if (!plan) return;
+    var setText = function (sel, val) { var el = $(sel); if (el && val != null && val !== '') el.textContent = val; };
+    if (plan.hero) {
+      setText('#heroEyebrow', plan.hero.eyebrow);
+      setText('#heroHeadline', plan.hero.headline);
+      setText('#heroBody', plan.hero.body);
+    }
+    if (plan.problem) {
+      setText('#probHeadline', plan.problem.headline);
+      setText('#probBody', plan.problem.body);
+    }
+    if (plan.orbit) {
+      setText('#orbitIntro', plan.orbit.intro);
+      if (plan.orbit.suggestions && plan.orbit.suggestions.length) SUGGESTIONS = plan.orbit.suggestions;
+      if (plan.orbit.answers && plan.orbit.answers.length) ANSWERS = plan.orbit.answers;
+      if (plan.orbit.fallback && plan.orbit.fallback.text) ORBIT_FALLBACK = plan.orbit.fallback;
+    }
+    if (plan.lenses && plan.lenses.length) {
+      LENSES = plan.lenses;
+      state.lens = LENSES[0].id;
+    }
+    if (plan.cta) {
+      setText('#ctaHeadline', plan.cta.headline);
+      setText('#ctaBody', plan.cta.body);
+    }
+    // re-render the JS-driven pieces with the new data
+    renderChips();
+    renderLensRail();
+    renderLensItems(false);
+  }
+
   function boot() {
     renderChips();
     renderLensRail();
@@ -505,6 +542,8 @@
         prospect = data;
         tracking = !!(data && data.found);
         personalize(data);
+        // Advanced prospects get a per-prospect generated page; Standard keeps the frozen default.
+        if (data && data.advanced && data.pagePlan) applyPlan(data.pagePlan);
         if (tracking) post('/api/v/' + encodeURIComponent(token) + '/visit');
       })
       .catch(function () { personalize({ found: false }); });
