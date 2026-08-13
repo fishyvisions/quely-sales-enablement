@@ -75,6 +75,33 @@
                 </div>
                 <div style="display:flex; align-items:flex-end;"><button id="createBtn" style="width:100%; background:#5C28A4; color:#fff; font-size:15px; font-weight:600; padding:11px; border:none; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;"><i class="ph-bold ph-link-simple"></i>Generate link</button></div>
               </div>
+
+              <!-- Advanced: personalized (per-prospect generated) page -->
+              <div style="margin-top:16px; border-top:1px solid #F3F4F6; padding-top:16px;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                  <input type="checkbox" id="advToggle" style="width:16px; height:16px; accent-color:#5C28A4; cursor:pointer;">
+                  <span style="font-size:14px; font-weight:600; color:#111827;">Personalize this page for the prospect</span>
+                  <span id="aiBadge" style="display:none; font-size:11px; font-weight:700; color:#5C28A4; background:#F5EEFB; border:1px solid #E4D3F5; border-radius:9999px; padding:2px 9px;">AI on</span>
+                </label>
+                <div style="font-size:12.5px; color:#6B7280; margin-top:5px; margin-left:26px;">Pick their main problem and paste your call notes. Quely assembles a tailored page from approved content — you review it before the link goes out.</div>
+
+                <div id="advPanel" style="display:none; margin-top:14px; margin-left:26px;">
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div><label style="display:block; font-size:12px; font-weight:600; color:#6B7280; margin-bottom:6px;">Primary problem</label>
+                      <select id="fTopic" style="width:100%; font-size:14px; color:#111827; padding:10px 12px; border:1px solid #D1D5DB; border-radius:9px; background:#fff;"><option value="">Select…</option></select></div>
+                    <div><label style="display:block; font-size:12px; font-weight:600; color:#6B7280; margin-bottom:6px;">Their role</label>
+                      <select id="fRoleSlug" style="width:100%; font-size:14px; color:#111827; padding:10px 12px; border:1px solid #D1D5DB; border-radius:9px; background:#fff;"><option value="">Select…</option></select></div>
+                  </div>
+                  <div style="margin-top:12px;"><label style="display:block; font-size:12px; font-weight:600; color:#6B7280; margin-bottom:6px;">Call notes <span style="font-weight:400; color:#9CA3AF;">— their words, their situation</span></label>
+                    <textarea id="fNotes" placeholder="e.g. Their VP said they nearly missed a renewal because status was buried across Slack and Jira, and standups run long." style="width:100%; box-sizing:border-box; min-height:76px; resize:vertical; font-family:inherit; font-size:14px; line-height:1.45; color:#111827; padding:10px 12px; border:1px solid #D1D5DB; border-radius:9px;"></textarea></div>
+                  <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+                    <button id="genBtn" style="background:#111827; color:#fff; font-size:14px; font-weight:600; padding:10px 16px; border:none; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;"><i class="ph-fill ph-sparkle"></i>Generate preview</button>
+                    <span id="genStatus" style="font-size:12.5px; color:#6B7280;"></span>
+                  </div>
+                  <div id="genPreview" style="display:none; margin-top:14px;"></div>
+                </div>
+              </div>
+
               <div id="createdBanner" style="display:none; margin-top:16px; background:#F5EEFB; border:1px solid #E4D3F5; border-radius:12px; padding:14px 16px; align-items:center; gap:12px;">
                 <i class="ph-fill ph-check-circle" style="font-size:22px; color:#5C28A4;"></i>
                 <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:600; color:#5C28A4; margin-bottom:2px;">Link ready for <span id="createdName"></span></div><div id="createdPretty" style="font-size:13px; color:#4B5563; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div></div>

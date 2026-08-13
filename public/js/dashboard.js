@@ -397,23 +397,97 @@
       $('#copyBtn').textContent = 'Copied';
       setTimeout(function () { $('#copyBtn').textContent = 'Copy'; }, 1500);
     });
+
+    // advanced / personalize
+    $('#advToggle').addEventListener('change', function () {
+      var on = $('#advToggle').checked;
+      $('#advPanel').style.display = on ? 'block' : 'none';
+      if (!on) { state.genPlan = null; $('#genPreview').style.display = 'none'; $('#genStatus').textContent = ''; }
+    });
+    $('#genBtn').addEventListener('click', generatePreview);
+    $('#fTopic').addEventListener('change', function () { state.genPlan = null; $('#genPreview').style.display = 'none'; });
+  }
+
+  // ── Advanced page generation ──────────────────────────────────────────────
+  function initGenerator() {
+    fetch('/api/generate/options').then(handleAuth).then(function (r) { return r.json(); }).then(function (o) {
+      var topicSel = $('#fTopic');
+      (o.topics || []).forEach(function (t) { var op = document.createElement('option'); op.value = t.slug; op.textContent = t.label; topicSel.appendChild(op); });
+      var roleSel = $('#fRoleSlug');
+      (o.roles || []).forEach(function (r) { var op = document.createElement('option'); op.value = r.slug; op.textContent = r.label; roleSel.appendChild(op); });
+      if (o.aiEnabled) $('#aiBadge').style.display = 'inline-block';
+    }).catch(function () {});
+  }
+
+  function generatePreview() {
+    var body = {
+      name: $('#fName').value, company: $('#fCompany').value,
+      role: $('#fRoleSlug').value, topic: $('#fTopic').value, notes: $('#fNotes').value
+    };
+    if (!body.topic) { $('#genStatus').textContent = 'Pick a primary problem first.'; return; }
+    $('#genStatus').textContent = 'Generating…';
+    fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(handleAuth).then(function (r) { return r.json(); }).then(function (res) {
+        state.genPlan = res.plan;
+        $('#genStatus').textContent = '';
+        renderGenPreview(res.plan);
+      }).catch(function () { $('#genStatus').textContent = 'Something went wrong. Try again.'; });
+  }
+
+  function renderGenPreview(plan) {
+    var blocks = (plan.blockOrder || []).map(function (b) { return b.replace(/^Block\s+/, ''); });
+    var cta = (plan.cta && (plan.cta.headline || plan.cta.title)) || '';
+    var byAI = plan.generatedBy === 'ai';
+    var body = (plan.hero && plan.hero.body) || '';
+    $('#genPreview').innerHTML =
+      '<div style="border:1px solid #E4D3F5; background:#FCFAFE; border-radius:12px; padding:16px 18px;">' +
+        '<div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">' +
+          '<i class="ph-fill ph-sparkle" style="color:#5C28A4; font-size:16px;"></i>' +
+          '<span style="font-size:13px; font-weight:700; color:#5C28A4;">Tailored preview</span>' +
+          '<span style="font-size:11px; font-weight:600; color:#6B7280; background:#F3F4F6; border-radius:9999px; padding:2px 8px;">' + esc(plan.familyLabel || '') + '</span>' +
+          '<span style="margin-left:auto; font-size:11px; font-weight:700; color:' + (byAI ? '#5C28A4' : '#6B7280') + ';">' + (byAI ? 'AI-written' : 'Smart template') + '</span>' +
+        '</div>' +
+        '<div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#8F5BD7; margin-bottom:4px;">' + esc((plan.hero && plan.hero.eyebrow) || '') + '</div>' +
+        '<div style="font-size:16px; font-weight:700; color:#111827; line-height:1.3;">' + esc((plan.hero && plan.hero.headline) || '') + '</div>' +
+        '<div style="font-size:13px; color:#4B5563; line-height:1.5; margin-top:6px;">' + esc(body.slice(0, 180)) + (body.length > 180 ? '…' : '') + '</div>' +
+        '<div style="margin-top:12px; font-size:12px; font-weight:600; color:#6B7280;">Sections on this page</div>' +
+        '<div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:6px;">' +
+          blocks.map(function (b) { return '<span style="font-size:12px; color:#374151; background:#F3F4F6; border-radius:9999px; padding:3px 10px;">' + esc(b) + '</span>'; }).join('') +
+        '</div>' +
+        (cta ? '<div style="margin-top:12px; font-size:12px; color:#6B7280;">Ends with: <span style="color:#111827; font-weight:600;">' + esc(cta) + '</span></div>' : '') +
+        '<div style="margin-top:12px; font-size:12px; color:#6A37AE; background:#F5EEFB; border-radius:8px; padding:8px 12px; line-height:1.45;"><i class="ph ph-info" style="margin-right:5px;"></i>Review this. Edit the notes and regenerate if needed — nothing is sent until you click <b>Generate link</b>.</div>' +
+      '</div>';
+    $('#genPreview').style.display = 'block';
   }
 
   function createProspect() {
+    var advanced = $('#advToggle').checked;
     var d = {
       name: $('#fName').value, company: $('#fCompany').value, email: $('#fEmail').value,
       role: $('#fRole').value, pain: $('#fPain').value
     };
     if (!(d.name || d.company)) return;
+    if (advanced) {
+      if (!state.genPlan) { $('#genStatus').textContent = 'Click “Generate preview” first.'; return; }
+      d.advanced = true;
+      d.focusTopic = $('#fTopic').value;
+      d.focusRole = $('#fRoleSlug').value;
+      d.genNotes = $('#fNotes').value;
+      d.pagePlan = state.genPlan;
+    }
     fetch('/api/prospects', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d)
     }).then(handleAuth).then(function (r) { return r.json(); }).then(function (res) {
       var p = res.prospect;
       state.createdToken = p.token;
       state.selToken = p.token;
-      // reset form
+      // reset standard form
       ['fName', 'fCompany', 'fEmail', 'fRole'].forEach(function (id) { $('#' + id).value = ''; });
       $('#fPain').value = '';
+      // reset advanced panel
+      $('#advToggle').checked = false; $('#advPanel').style.display = 'none';
+      $('#fTopic').value = ''; $('#fRoleSlug').value = ''; $('#fNotes').value = '';
+      $('#genPreview').style.display = 'none'; $('#genStatus').textContent = ''; state.genPlan = null;
       // banner
       $('#createdName').textContent = p.name || p.company;
       $('#createdPretty').textContent = prettyLink(p.token);
@@ -426,6 +500,7 @@
 
   // ── boot ────────────────────────────────────────────────────────────────
   initEvents();
+  initGenerator();
   refresh();
   setInterval(refresh, 1500);
   window.addEventListener('focus', refresh);
