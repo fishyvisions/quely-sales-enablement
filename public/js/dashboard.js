@@ -133,7 +133,7 @@
       var selected = state.selToken === p.token;
       var rowStyle = 'display:grid; grid-template-columns:1.6fr .9fr .7fr .7fr 1fr auto; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid #F6F7F9; cursor:pointer; ' + (selected ? 'background:#F5EEFB;' : 'background:#fff;');
       return '<div class="prow" data-token="' + esc(p.token) + '" style="' + rowStyle + '">' +
-        '<div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#111827; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(p.name || '(no name)') + '</div><div style="font-size:13px; color:#9CA3AF; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(p.company || '—') + '</div></div>' +
+        '<div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#111827; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(p.name || '(no name)') + (p.advanced ? ' <span title="Personalized page" style="font-size:10px; font-weight:700; color:#5C28A4; background:#F5EEFB; border:1px solid #E4D3F5; border-radius:9999px; padding:1px 7px; vertical-align:middle;"><i class="ph-fill ph-sparkle" style="font-size:9px;"></i> Personalized</span>' : '') + '</div><div style="font-size:13px; color:#9CA3AF; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + esc(p.company || '—') + '</div></div>' +
         '<div><span style="' + statusStyle(viewed) + '">' + (viewed ? 'Viewed' : 'Not opened') + '</span></div>' +
         '<div style="font-size:14px; color:#374151;">' + p.visits.length + '</div>' +
         '<div style="font-size:14px; color:#374151;">' + fmt(totalMs(p)) + '</div>' +
@@ -207,6 +207,14 @@
       '</div>' +
       '<div style="font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#9CA3AF; margin-bottom:12px;">Attention by section</div>' +
       '<div style="display:flex; flex-direction:column; gap:9px;">' + bars + '</div>';
+
+    if (selP.advanced) {
+      var pp = selP.pagePlan || {};
+      html += '<div style="margin-top:20px; background:#FCFAFE; border:1px solid #E4D3F5; border-radius:10px; padding:12px 14px;">' +
+        '<div style="display:flex; align-items:center; gap:7px; font-size:12px; font-weight:700; color:#5C28A4; margin-bottom:6px;"><i class="ph-fill ph-sparkle"></i>Personalized page' + (pp.topicLabel ? (' · ' + esc(pp.topicLabel)) : '') + '</div>' +
+        (selP.genNotes ? ('<div style="font-size:12.5px; color:#4B5563; line-height:1.45;">' + esc(selP.genNotes) + '</div>') : '<div style="font-size:12.5px; color:#9CA3AF;">No call notes recorded.</div>') +
+      '</div>';
+    }
 
     if (interactions.length) {
       html += '<div style="margin-top:20px; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#9CA3AF; margin-bottom:10px;">Interacted with</div>' +
