@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+
+  /* One movement: six full tool surfaces are absorbed into the one empty task,
+     which then opens into a Space holding all of it. Driven by [data-go]. */
+  @keyframes qcv-absorb { to { left:50%; top:50%; transform:translate(-50%,-50%) rotate(0deg) scale(.46); opacity:0; } }
+  @keyframes qcv-widen  { to { width:600px; } }
+  @keyframes qcv-open   { to { max-height:640px; } }
+  @keyframes qcv-shed   { to { max-height:0; opacity:0; margin-top:0; } }
+  @keyframes qcv-dim    { to { opacity:0; } }
+  @keyframes qcv-lift   { to { opacity:1; transform:translateY(0); } }
+  @keyframes qcv-drift  { 0%,100% { transform:translate(-50%,-50%) rotate(var(--rot)) scale(var(--sc)) translate(0,0); }
+                          50%     { transform:translate(-50%,-50%) rotate(var(--rot)) scale(var(--sc)) translate(var(--dx), var(--dy)); } }
+
+  /* ~1.6s dwell on the scattered state, then absorb one surface at a time */
+  [data-qcv] [data-el="frag"] { animation:qcv-drift 7s ease-in-out var(--dd) infinite; }
+  [data-qcv][data-go] [data-el="frag"] { animation:qcv-absorb 1150ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qcv][data-go] [data-el="bars"] { animation:qcv-shed 480ms cubic-bezier(.3,0,0,1) 2400ms forwards; }
+  [data-qcv][data-go] [data-el="card"] { animation:qcv-widen 950ms cubic-bezier(.3,0,0,1) 2400ms forwards; }
+  [data-qcv][data-go] [data-el="body"] { animation:qcv-open 1150ms cubic-bezier(.3,0,0,1) 2450ms forwards; }
+  [data-qcv][data-go] [data-el="pool"] { animation:qcv-dim 900ms ease-out 2450ms forwards; }
+  [data-qcv][data-go] [data-el="rise"] { animation:qcv-lift 650ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qcv] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
+        <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
+        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+      </div>
+      <h2 style="margin:0 0 20px; max-width:900px; font-size:32px; line-height:1.08; letter-spacing:-.028em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; max-width:780px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.62); text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <div data-qcv style="position:relative; width:100%; height:614px; margin-top:40px;">
+
+      <div data-el="pool" style="position:absolute; left:50%; top:50%; width:620px; height:420px; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.24), rgba(143,91,215,0)); filter:blur(6px); pointer-events:none; z-index:0; opacity:1;"></div>
+
+      <!-- six real tool surfaces, each FULL of the context the task is missing -->
+      <sc-for list="{{ fragments }}" as="f" hint-placeholder-count="6">
+        <div data-el="frag" style="{{ f.wrapStyle }}">
+          <div style="{{ f.cardStyle }}">
+            <div style="{{ f.headStyle }}">
+              <span style="{{ f.markStyle }}"></span>
+              <i class="{{ f.iconClass }}" style="{{ f.iconStyle }}"></i>
+              <span style="{{ f.toolStyle }}">{{ f.tool }}</span>
+            </div>
+            <div style="padding:11px 12px 12px;">
+
+              <sc-if value="{{ f.isPerson }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                  <span style="flex:none; width:18px; height:18px; border-radius:50%; background:#5C28A4; color:#fff; font-size:8.5px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">{{ f.metaInitial }}</span>
+                  <span style="font-size:11px; font-weight:600; color:#374151;">{{ f.metaName }}</span>
+                  <span style="font-size:10.5px; color:#4B5563;">{{ f.metaWhen }}</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isWave }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; align-items:center; gap:7px; margin-bottom:9px;">
+                  <i class="ph-fill ph-play-circle" style="flex:none; font-size:16px; color:#8B4FA8;"></i>
+                  <span style="flex:1; display:flex; align-items:flex-end; gap:2px; height:14px;">
+                    <sc-for list="{{ f.wave }}" as="w" hint-placeholder-count="14"><span style="{{ w.style }}"></span></sc-for>
+                  </span>
+                  <span style="flex:none; font-size:10px; font-weight:600; color:#4B5563;">{{ f.metaWhen }}</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isThumbs }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; gap:5px; margin-bottom:9px;">
+                  <span style="flex:1; height:26px; border-radius:4px; background:#F3F4F6; border:1px solid #E5E7EB;"></span>
+                  <span style="flex:1; height:26px; border-radius:4px; background:#EDE9FE; border:1px solid #DDD6FE;"></span>
+                  <span style="flex:1; height:26px; border-radius:4px; background:#F3F4F6; border:1px solid #E5E7EB;"></span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isStatus }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                  <span style="{{ f.dotStyle }}"></span>
+                  <span style="font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#6B7280;">{{ f.metaName }}</span>
+                  <span style="font-size:10.5px; color:#4B5563;">{{ f.metaWhen }}</span>
+                </div>
+              </sc-if>
+
+              <div style="{{ f.textStyle }}">{{ f.text }}</div>
+              <div style="margin-top:9px; padding-top:8px; border-top:1px solid #F3F4F6; font-size:9.5px; font-weight:700; letter-spacing:.05em; color:#4B5563;">{{ f.taskRef }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+
+      <!-- the task: the one surface with nothing in it. It becomes the answer. -->
+      <div data-el="card" style="position:absolute; left:50%; top:50%; width:320px; transform:translate(-50%,-50%); z-index:5;">
+        <div data-el="body" style="box-sizing:border-box; width:100%; overflow:hidden; max-height:196px; background:#fff; border-radius:18px; box-shadow:0 44px 96px -30px rgba(0,0,0,.86), 0 0 0 1px rgba(255,255,255,.12), 0 0 66px -14px rgba(143,91,215,.42);">
+          <div style="padding:20px 22px 18px;">
+
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#2563EB;"><img src="/assets/logos/jira.svg" alt="" style="width:13px; height:13px;">{{ ticketId }}</span>
+              <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#B45309;"><i class="ph-fill ph-circle-half" style="font-size:11px;"></i>{{ ticketStatus }}</span>
+            </div>
+
+            <div style="font-size:23px; font-weight:800; letter-spacing:-.018em; color:#111827;">{{ ticketTitle }}</div>
+
+            <!-- the empty description, shed as the real context lands -->
+            <div data-el="bars" style="overflow:hidden; max-height:64px; opacity:1; margin-top:14px;">
+              <div style="display:flex; flex-direction:column; gap:7px;">
+                <div style="height:7px; width:88%; border-radius:9999px; background:#EEF0F4;"></div>
+                <div style="height:7px; width:41%; border-radius:9999px; background:#EEF0F4;"></div>
+              </div>
+              <div style="display:inline-flex; align-items:center; gap:6px; margin-top:12px; font-size:12.5px; font-weight:600; color:#B91C1C;">
+                <i class="ph-fill ph-question" style="font-size:14px;"></i>{{ ticketGap }}
+              </div>
+            </div>
+
+            <!-- what the task actually requires, in full -->
+            <div style="display:flex; flex-direction:column; gap:15px; margin-top:16px;">
+              <sc-for list="{{ facts }}" as="ft" hint-placeholder-count="3">
+                <div data-el="rise" style="{{ ft.riseStyle }}">
+                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:5px;">
+                    <i class="{{ ft.labelIcon }}" style="font-size:13px; color:{{ ft.labelColor }};"></i>
+                    <span style="font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">{{ ft.label }}</span>
+                  </div>
+                  <div style="font-size:14.5px; line-height:1.5; color:#111827; text-wrap:pretty;">{{ ft.text }}</div>
+                  <div style="display:flex; align-items:center; gap:6px; margin-top:5px;">
+                    <span style="{{ ft.markStyle }}"></span>
+                    <i class="{{ ft.iconClass }}" style="{{ ft.iconStyle }}"></i>
+                    <span style="font-size:11.5px; color:#4B5563;">{{ ft.source }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div data-el="rise" style="{{ attachStyle }}">
+              <div style="font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280; margin-bottom:8px;">{{ attachLabel }}</div>
+              <div style="display:flex; flex-wrap:wrap; gap:7px;">
+                <sc-for list="{{ attachments }}" as="a" hint-placeholder-count="3">
+                  <span style="display:inline-flex; align-items:center; gap:6px; background:#F9FAFB; border:1px solid #F3F4F6; border-radius:9999px; padding:5px 11px; font-size:11.5px; font-weight:600; color:#374151; white-space:nowrap;">
+                    <span style="{{ a.markStyle }}"></span>
+                    <i class="{{ a.iconClass }}" style="{{ a.iconStyle }}"></i>{{ a.name }}
+                  </span>
+                </sc-for>
+              </div>
+            </div>
+
+            <div data-el="rise" style="{{ orbitStyle }}">
+              <img src="/assets/quely-orbit-mascot.png" alt="" style="flex:none; width:26px; height:auto;">
+              <span style="font-size:13px; font-weight:600; color:#5C28A4;">{{ orbitLabel }}</span>
+              <i class="ph-bold ph-arrow-right" style="margin-left:auto; font-size:14px; color:#5C28A4;"></i>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1120}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'One Space for the whole task',
+    headline: 'Understand what any task requires without searching across multiple tools.',
+    body: 'Get a Space for every task where conversations, decisions, dependencies, supporting documents, and assets stay connected, so anyone can quickly find the information they need to move the work forward.',
+    ticketId: 'CHECKOUT-1428',
+    ticketStatus: 'In progress',
+    ticketTitle: 'Fix checkout flow',
+    ticketGap: 'Fix what, exactly?',
+    attachLabel: 'Attached',
+    orbitLabel: 'Ask Orbit anything about this task',
+    taskRef: 'CHECKOUT-1428',
+    // Each is a real tool surface, full of context. Same skeleton, own accent.
+    fragments: [
+      { tool: 'Slack', logo: '/assets/logos/slack.svg', tint: '#F6F2FB', tone: '#6B4E8C',
+        meta: 'person', metaName: 'Priya', metaWhen: '2d', text: 'Scope narrowed to card only — wallet can wait.',
+        x: 15, y: 13, rot: -7, w: 210, depth: 'near', dx: '-6px', dy: '7px' },
+      { tool: 'Customer call', icon: 'ph-fill ph-phone-call', color: '#8B4FA8', tint: '#FAF3FD', tone: '#8B4FA8',
+        meta: 'wave', metaWhen: '41 min', text: 'Needs card checkout before renewal.',
+        x: 84, y: 13, rot: 5, w: 196, depth: 'mid', dx: '6px', dy: '8px' },
+      { tool: 'Meeting notes', icon: 'ph-fill ph-note-blank', color: '#854D0E', tint: '#FEF9EC', tone: '#854D0E',
+        meta: 'person', metaName: 'Sam', metaWhen: 'Mar 8', text: 'Decision: defer wallet and ACH.',
+        x: 14, y: 44, rot: 4, w: 184, depth: 'far', dx: '7px', dy: '-8px' },
+      { tool: 'Figma', logo: '/assets/logos/figma.svg', tint: '#FDF2F5', tone: '#A03A56',
+        meta: 'thumbs', text: 'Card checkout flow — approved.',
+        x: 86, y: 42, rot: -6, w: 204, depth: 'near', dx: '-7px', dy: '-6px' },
+      { tool: 'Notion', logo: '/assets/logos/notion.svg', tint: '#F4F4F5', tone: '#3F3F46',
+        meta: 'status', metaName: 'v3', metaWhen: 'updated 2d ago', dot: '#4B5563', text: 'Checkout requirements.',
+        x: 20, y: 83, rot: 6, w: 200, depth: 'mid', dx: '-5px', dy: '-8px' },
+      { tool: 'Linear', logo: '/assets/logos/linear.svg', tint: '#F1F2FB', tone: '#4A4E9B',
+        meta: 'status', metaName: 'Open', metaWhen: 'PAY-311', dot: '#F59E0B', text: 'Payment dependency, no owner.',
+        x: 80, y: 85, rot: -4, w: 190, depth: 'far', dx: '5px', dy: '-7px' }
+    ],
+    facts: [
+      { label: 'Why it matters', labelIcon: 'ph-fill ph-target', labelColor: '#B91C1C',
+        text: 'A customer needs card checkout working before their renewal date.',
+        source: 'Customer call · Mar 6', icon: 'ph-fill ph-phone-call', color: '#C084FC' },
+      { label: 'Decided', labelIcon: 'ph-fill ph-seal-check', labelColor: '#15803D',
+        text: 'Scope narrowed to card checkout only. Wallet and ACH deferred to the next cycle.',
+        source: 'Planning · Mar 8 · Priya, Sam', icon: 'ph-fill ph-note-blank', color: '#FBBF24' },
+      { label: 'Blocking', labelIcon: 'ph-fill ph-warning', labelColor: '#B45309',
+        text: 'The payment tokenization dependency is still open, with no owner assigned.',
+        source: 'Linear · PAY-311', logo: '/assets/logos/linear.svg' }
+    ],
+    attachments: [
+      { name: 'Checkout requirements v3', logo: '/assets/logos/notion.svg' },
+      { name: 'Card checkout flow', logo: '/assets/logos/figma.svg' },
+      { name: 'Scope thread', logo: '/assets/logos/slack.svg' }
+    ]
+  };
+
+  DEPTH = {
+    near: { op: 1,   sc: 1,    blur: 0,  shadow: '0 26px 52px -20px rgba(0,0,0,.78)', z: 3 },
+    mid:  { op: .94, sc: .955, blur: .3, shadow: '0 20px 42px -18px rgba(0,0,0,.68)', z: 2 },
+    far:  { op: .84, sc: .9,   blur: .7, shadow: '0 14px 32px -16px rgba(0,0,0,.58)', z: 1 }
+  };
+  WAVE = [5,9,13,7,11,14,6,10,13,8,12,6,9,11];
+
+  // brand logo as a background image (no <img src> hole, so nothing requests a
+  // half-streamed URL); otherwise a Phosphor glyph.
+  mark(f, px) {
+    return f.logo
+      ? { markStyle: 'flex:none; width:' + px + 'px; height:' + px + 'px; background:url(\'' + f.logo + '\') center/contain no-repeat;',
+          iconClass: 'ph', iconStyle: 'display:none;' }
+      : { markStyle: 'display:none;',
+          iconClass: f.icon || 'ph-fill ph-file',
+          iconStyle: 'font-size:' + (px - 1) + 'px; color:' + (f.color || '#8F5BD7') + ';' };
+  }
+
+  // ~1.6s scattered dwell + staggered absorb + card opening ends ~5050ms in
+  RUN = 5050; HOLD = 3600;
+
+  componentDidMount() {
+    const node = document.querySelector('[data-qcv]');
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.setAttribute('data-go', ''); return;
+    }
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Loops only while on screen, so the movement can
+    // never finish before the viewer is looking at it.
+    this._visible = false;
+    const cycle = () => {
+      if (!this._visible) return;
+      node.removeAttribute('data-go');
+      void node.offsetWidth;                  // force reflow so the animation restarts
+      node.setAttribute('data-go', '');
+      this._t = setTimeout(cycle, this.RUN + this.HOLD);
+    };
+    if ('IntersectionObserver' in window) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !this._visible) { this._visible = true; this._t = setTimeout(cycle, 420); }
+          else if (!e.isIntersecting && this._visible) { this._visible = false; clearTimeout(this._t); }
+        });
+      }, { threshold: 0.25 });
+      this.io.observe(node);
+    } else { this._visible = true; cycle(); }
+    // never leave the movement unplayed if IntersectionObserver never fires
+    this._safety = setTimeout(() => { if (!this._visible) { this._visible = true; cycle(); } }, 1600);
+    this._onVis = () => { if (document.visibilityState === 'visible' && this._visible) { clearTimeout(this._t); cycle(); } };
+    document.addEventListener('visibilitychange', this._onVis);
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    if (this._onVis) document.removeEventListener('visibilitychange', this._onVis);
+    clearTimeout(this._t); clearTimeout(this._safety);
+  }
+
+  rise(delay) { return 'opacity:0; transform:translateY(10px); --d:' + delay + 'ms;'; }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const rawFrags = (p.fragments && p.fragments.length) ? p.fragments : D.fragments;
+    const rawFacts = (p.facts && p.facts.length) ? p.facts : D.facts;
+    const rawAtt   = (p.attachments && p.attachments.length) ? p.attachments : D.attachments;
+    const taskRef = p.taskRef ?? D.taskRef;
+
+    const fragments = rawFrags.map((f, i) => {
+      const d = this.DEPTH[f.depth] || this.DEPTH.mid;
+      const w = f.w || 196;
+      return Object.assign(this.mark(f, 14), {
+        tool: f.tool, text: f.text, taskRef: taskRef,
+        isPerson: f.meta === 'person', isWave: f.meta === 'wave',
+        isThumbs: f.meta === 'thumbs', isStatus: f.meta === 'status',
+        metaName: f.metaName || '', metaWhen: f.metaWhen || '',
+        metaInitial: (f.metaName || '?').slice(0, 1).toUpperCase(),
+        dotStyle: 'flex:none; width:7px; height:7px; border-radius:50%; background:' + (f.dot || '#4B5563') + ';',
+        wave: this.WAVE.map((h) => ({ style: 'flex:1; height:' + h + 'px; border-radius:1px; background:#D8B4E8;' })),
+        wrapStyle: 'position:absolute; left:' + f.x + '%; top:' + f.y + '%; width:' + w + 'px; z-index:' + d.z + ';'
+          + ' opacity:' + d.op + '; filter:blur(' + d.blur + 'px);'
+          + ' transform:translate(-50%,-50%) rotate(' + f.rot + 'deg) scale(' + d.sc + ');'
+          + ' --rot:' + f.rot + 'deg; --sc:' + d.sc + '; --dx:' + (f.dx || '5px') + '; --dy:' + (f.dy || '-6px') + ';'
+          + ' --d:' + (1600 + i * 130) + 'ms; --dd:' + (i * 0.45) + 's;',
+        cardStyle: 'overflow:hidden; box-sizing:border-box; width:100%; background:#fff;'
+          + ' border-radius:12px; box-shadow:' + d.shadow + ', 0 0 0 1px rgba(255,255,255,.14);',
+        headStyle: 'display:flex; align-items:center; gap:7px; padding:8px 12px;'
+          + ' background:' + (f.tint || '#F4F4F5') + '; border-bottom:1px solid rgba(3,7,18,.06);',
+        toolStyle: 'font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;'
+          + ' color:' + (f.tone || '#3F3F46') + '; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;',
+        textStyle: 'font-size:12.5px; line-height:1.45; color:#1F2937;'
+          + ' display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;'
+      });
+    });
+
+    const facts = rawFacts.map((ft, i) => Object.assign(this.mark(ft, 12), {
+      label: ft.label, labelIcon: ft.labelIcon, labelColor: ft.labelColor,
+      text: ft.text, source: ft.source, riseStyle: this.rise(2950 + i * 230)
+    }));
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      ticketId: p.ticketId ?? D.ticketId,
+      ticketStatus: p.ticketStatus ?? D.ticketStatus,
+      ticketTitle: p.ticketTitle ?? D.ticketTitle,
+      ticketGap: p.ticketGap ?? D.ticketGap,
+      attachLabel: p.attachLabel ?? D.attachLabel,
+      orbitLabel: p.orbitLabel ?? D.orbitLabel,
+      fragments: fragments,
+      facts: facts,
+      attachments: rawAtt.map((a) => Object.assign(this.mark(a, 13), { name: a.name })),
+      attachStyle: 'margin-top:17px; padding-top:15px; border-top:1px solid #F3F4F6; ' + this.rise(4120),
+      orbitStyle: 'display:flex; align-items:center; gap:9px; margin-top:16px; padding:11px 13px; background:#F7F3FD; border:1px solid #EADDF8; border-radius:11px; ' + this.rise(4300)
+    };
+  }
+}
+</script>
+</body>
+</html>
