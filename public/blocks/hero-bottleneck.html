@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+
+  /* The person is gone. What they knew is already recorded, so the work continues. */
+  @keyframes qbn-leave  { to { opacity:.6; filter:grayscale(1); } }
+  @keyframes qbn-hold   { to { opacity:1; transform:scale(1); } }
+  @keyframes qbn-record { to { opacity:1; transform:translateY(0); } }
+  @keyframes qbn-carry  { to { opacity:1; transform:translateY(0); } }
+  @keyframes qbn-glow   { 0%,100% { opacity:.3; } 50% { opacity:.66; } }
+
+  [data-qbn][data-go] [data-el="leaver"] { animation:qbn-leave 900ms ease-out 500ms forwards; }
+  [data-qbn][data-go] [data-el="gone"]   { animation:qbn-hold 520ms cubic-bezier(.3,0,0,1) 1000ms forwards; }
+  [data-qbn][data-go] [data-el="record"] { animation:qbn-record 620ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qbn][data-go] [data-el="carry"]  { animation:qbn-carry 620ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qbn] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+  <div style="position:absolute; top:46%; left:50%; width:900px; height:420px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.18), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none; animation:qbn-glow 8s ease-in-out infinite;"></div>
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
+        <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
+        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+      </div>
+      <h1 style="margin:0 0 18px; max-width:900px; font-size:50px; line-height:1.06; letter-spacing:-.03em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h1>
+      <p style="margin:0; max-width:800px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <!-- the absence: the person who knew, and the record that outlasts them -->
+    <div data-qbn style="margin-top:44px; display:flex; flex-wrap:wrap; align-items:stretch; gap:26px;">
+
+      <!-- LEFT: the departure -->
+      <div style="flex:0 1 176px; min-width:150px; display:flex; flex-direction:column; align-items:center; text-align:center; padding-top:8px;">
+        <div data-el="leaver" style="display:flex; flex-direction:column; align-items:center;">
+          <span style="{{ leaverAvatarStyle }}">{{ leaverInitials }}</span>
+          <div style="margin-top:12px; font-size:15px; font-weight:700; color:#fff;">{{ leaverName }}</div>
+          <div style="margin-top:3px; font-size:12px; line-height:1.4; color:rgba(255,255,255,.94);">{{ leaverRole }}</div>
+        </div>
+        <span data-el="gone" style="{{ goneStyle }}">
+          <i class="ph-fill ph-sign-out" style="font-size:12px;"></i>{{ leaverStatus }}
+        </span>
+        <div style="margin-top:18px; font-size:12.5px; line-height:1.55; color:rgba(255,255,255,.5); text-wrap:pretty;">{{ leaverNote }}</div>
+      </div>
+
+      <!-- MIDDLE: what stayed behind, in the Space. Has a real min-width floor and the
+           row wraps, so the payload column can never become the narrowest track. -->
+      <div style="flex:1 1 320px; min-width:300px;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
+          <img src="/assets/quely-mark-brand.svg" alt="" style="width:13px; height:13px; opacity:.85;">
+          <span style="flex:1; min-width:0; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ spaceLabel }}</span>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <sc-for list="{{ records }}" as="r" hint-placeholder-count="4">
+            <div data-el="record" style="{{ r.wrapStyle }}">
+              <div style="display:flex; align-items:flex-start; gap:12px; background:#fff; border-radius:13px; padding:13px 15px; box-shadow:0 18px 40px -20px rgba(0,0,0,.68), 0 0 0 1px rgba(255,255,255,.11);">
+                <i class="{{ r.icon }}" style="flex:none; margin-top:2px; font-size:17px; color:#5C28A4;"></i>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:13.5px; line-height:1.45; font-weight:600; color:#111827; text-wrap:pretty;">{{ r.text }}</div>
+                  <div style="display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:7px;">
+                    <span style="flex:none; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#5C28A4;">{{ r.kind }}</span>
+                    <span style="flex:none; font-size:10.5px; color:#4B5563; white-space:nowrap;">{{ r.meta }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- RIGHT: the team that carries on -->
+      <div style="flex:0 1 238px; min-width:210px; display:flex; flex-direction:column;">
+        <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
+          <i class="ph-fill ph-arrow-bend-down-right" style="font-size:14px; color:#86EFAC;"></i>
+          <span style="flex:1; min-width:0; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.66); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ carryLabel }}</span>
+        </div>
+
+        <div data-el="carry" style="{{ carryCardStyle }}">
+          <div style="background:#5C28A4; border-radius:16px; overflow:hidden; box-shadow:0 24px 48px rgba(3,7,18,.18), 0 40px 84px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(171,132,225,.34), 0 0 70px -18px rgba(143,91,215,.5);">
+            <div style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid rgba(255,255,255,.12);">
+              <span style="{{ joinerAvatarStyle }}">{{ joinerInitials }}</span>
+              <div style="flex:1; min-width:0; line-height:1.3;">
+                <div style="font-size:12.5px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ joinerName }}</div>
+                <div style="font-size:10.5px; color:rgba(255,255,255,.66); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ joinerRole }}</div>
+              </div>
+            </div>
+            <div style="padding:15px 16px 17px;">
+              <div style="font-size:15.5px; line-height:1.5; font-weight:600; color:#fff; text-wrap:pretty;">{{ joinerLine }}</div>
+              <div style="display:flex; align-items:flex-start; gap:8px; margin-top:14px; padding-top:13px; border-top:1px solid rgba(255,255,255,.13);">
+                <i class="ph-fill ph-check-circle" style="flex:none; margin-top:1px; font-size:14px; color:#86EFAC;"></i>
+                <span style="flex:1; min-width:0; font-size:11.5px; line-height:1.5; color:rgba(255,255,255,.76);">{{ carryNote }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'Preserve project history',
+    headline: 'Let anyone understand any task or project without relying on the person who built it.',
+    body: 'Quely keeps the decisions, rationale, discussions, meeting transcripts, and supporting documents around any task or project in one Space. Orbit makes that history easy to retrieve, so new engineers can understand why the system works the way it does, what was ruled out, and what comes next.',
+    leaverName: 'Priya Nandi',
+    leaverRole: 'Tech lead, four years on this codebase',
+    leaverStatus: 'Left in March',
+    leaverNote: 'Every architectural call on this project was hers.',
+    spaceLabel: 'Still in the Space',
+    records: [
+      { kind: 'Decision', icon: 'ph-fill ph-seal-check',
+        text: 'Retry logic moved to the queue consumer, after duplicate charges were traced to worker restarts.',
+        meta: 'Recorded March 4' },
+      { kind: 'Rationale', icon: 'ph-fill ph-lightbulb',
+        text: 'A worker-side fix was rejected because restarts could not be made atomic in time for the release.',
+        meta: 'Design review, 6 attendees' },
+      { kind: 'Discussion', icon: 'ph-fill ph-chat-circle',
+        text: 'Rollout order agreed with support: internal accounts first, then EU, then US.',
+        meta: 'Thread on PAY-208' },
+      { kind: 'Meeting', icon: 'ph-fill ph-microphone-stage',
+        text: 'Incident review that started the work, with the transcript attached to the task.',
+        meta: 'Feb 27, transcript attached' }
+    ],
+    carryLabel: 'The work continues',
+    joinerName: 'Ana Ruiz',
+    joinerRole: 'Joined last week',
+    joinerLine: 'I can see why the retry logic lives here, what was ruled out, and what ships next. I never had to ask.',
+    carryNote: 'Anyone can retrieve the same history, on their first day or a year from now.'
+  };
+
+  avatar(tint, px, fs) {
+    return 'flex:none; width:' + px + 'px; height:' + px + 'px; border-radius:50%; background:' + tint
+      + '; color:#fff; font-size:' + fs + 'px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;';
+  }
+  initialsOf(n) { return (n || '?').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase(); }
+
+  componentDidMount() {
+    const node = document.querySelector('[data-qbn]');
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.setAttribute('data-go', ''); return;
+    }
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Plays once when it first enters view.
+    this._played = false;
+    const play = () => {
+      if (this._played) return;
+      this._played = true;
+      node.setAttribute('data-go', '');
+    };
+    if ('IntersectionObserver' in window) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 380); }
+          else if (!this._played) { clearTimeout(this._t); }
+        });
+      }, { threshold: 0.25 });
+      this.io.observe(node);
+    } else { play(); }
+    // never leave the payload hidden if IntersectionObserver never fires
+    this._safety = setTimeout(play, 1200);
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const raw = (p.records && p.records.length) ? p.records : D.records;
+
+    const records = raw.map((r, i) => ({
+      kind: r.kind, icon: r.icon, text: r.text, meta: r.meta,
+      wrapStyle: 'opacity:0; transform:translateY(14px); --d:' + (1250 + i * 200) + 'ms;'
+    }));
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      leaverName: p.leaverName ?? D.leaverName,
+      leaverRole: p.leaverRole ?? D.leaverRole,
+      leaverStatus: p.leaverStatus ?? D.leaverStatus,
+      leaverNote: p.leaverNote ?? D.leaverNote,
+      leaverInitials: this.initialsOf(p.leaverName ?? D.leaverName),
+      leaverAvatarStyle: this.avatar('#4B5563', 72, 23),
+      goneStyle: 'margin-top:14px; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; opacity:0;'
+        + ' transform:scale(.92); background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);'
+        + ' border-radius:9999px; padding:5px 12px; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.78);',
+      spaceLabel: p.spaceLabel ?? D.spaceLabel,
+      records: records,
+      carryLabel: p.carryLabel ?? D.carryLabel,
+      joinerName: p.joinerName ?? D.joinerName,
+      joinerRole: p.joinerRole ?? D.joinerRole,
+      joinerLine: p.joinerLine ?? D.joinerLine,
+      carryNote: p.carryNote ?? D.carryNote,
+      joinerInitials: this.initialsOf(p.joinerName ?? D.joinerName),
+      joinerAvatarStyle: this.avatar('#15803D', 32, 11.5),
+      carryCardStyle: 'opacity:0; transform:translateY(18px); --d:2200ms;'
+    };
+  }
+}
+</script>
+</body>
+</html>

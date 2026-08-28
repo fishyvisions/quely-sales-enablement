@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  @keyframes qhalo { 0%,100% { opacity:.5; } 50% { opacity:.78; } }
+  @keyframes qrise { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+  @keyframes qbob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+  @keyframes qorbit { to { transform:rotate(360deg); } }
+</style>
+</helmet>
+<div style="{{ shellStyle }}">
+  <div style="width:100%; max-width:1040px; display:flex; flex-direction:column; align-items:center; text-align:center;">
+
+    <div style="font-size:14px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:#AB84E1; margin-bottom:20px;">{{ eyebrowText }}</div>
+    <h1 style="margin:0; max-width:880px; font-size:58px; line-height:1.04; letter-spacing:-.032em; font-weight:800; color:#fff;">{{ headlineText }}</h1>
+    <p style="margin:24px 0 0; max-width:730px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.6); text-wrap:pretty;">{{ bodyText }}</p>
+
+    <!-- THREE TIERS: answers in front (crisp, dominant) -> Orbit -> the Space behind (small, dim) -->
+    <div style="position:relative; width:100%; max-width:820px; margin-top:60px; display:flex; flex-direction:column; align-items:center;">
+
+      <!-- one soft cone of light rising through the tiers; no beams, no grid -->
+      <div style="position:absolute; left:50%; bottom:56px; width:520px; height:400px; transform:translateX(-50%); background:radial-gradient(ellipse at 50% 100%, rgba(143,91,215,.42), rgba(143,91,215,.08) 52%, rgba(143,91,215,0) 74%); filter:blur(38px); animation:qhalo 7s ease-in-out infinite; z-index:0; pointer-events:none;"></div>
+
+      <!-- TIER 1 — the answer you came for, dominant -->
+      <div style="position:relative; z-index:3; width:100%; max-width:640px; display:flex; flex-direction:column; gap:11px; animation:qrise 8s ease-in-out infinite;">
+        <div style="display:flex; align-items:center; gap:10px; align-self:flex-start; max-width:100%; padding:9px 15px 9px 12px; border-radius:9999px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.15); box-shadow:0 8px 22px -12px rgba(0,0,0,.7);">
+          <i class="ph-bold ph-magnifying-glass" style="flex:none; font-size:14px; color:#C9AEF0;"></i>
+          <span style="font-size:14px; font-weight:600; color:#F0EAFA; text-align:left;">{{ questionText }}</span>
+          <span style="flex:none; font-size:11px; font-weight:600; color:rgba(255,255,255,.62);">{{ latencyText }}</span>
+        </div>
+
+        <div style="background:#fff; border-radius:17px; padding:22px 24px 18px; text-align:left; box-shadow:0 44px 84px -30px rgba(0,0,0,.92), 0 0 0 1px rgba(143,91,215,.16), inset 0 1px 0 #fff;">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:11px;">
+            <span style="flex:none; width:26px; height:26px; border-radius:8px; background:#ECFDF5; color:#15803D; display:inline-flex; align-items:center; justify-content:center;"><i class="ph-fill ph-seal-check" style="font-size:15px;"></i></span>
+            <span style="font-size:10px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; color:#15803D;">{{ primaryLabel }}</span>
+          </div>
+          <div style="font-size:20px; line-height:1.35; font-weight:700; letter-spacing:-.015em; color:#111827; text-wrap:pretty;">{{ primaryText }}</div>
+          <div style="margin-top:15px; padding-top:13px; border-top:1px solid #F3F4F6; display:flex; align-items:center; gap:7px;">
+            <i class="ph-fill ph-microphone-stage" style="font-size:13px; color:#5C28A4;"></i>
+            <span style="font-size:12px; font-weight:500; color:#6B7280;">{{ provenanceText }}</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:11px; align-items:stretch;">
+          <sc-for list="{{ secondary }}" as="s" hint-placeholder-count="3">
+            <div style="flex:1; min-width:0; background:#F7F8FA; border-radius:13px; padding:14px 15px; text-align:left; box-shadow:0 18px 36px -22px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.62);">
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:7px;">
+                <i class="{{ s.icon }}" style="font-size:13px; color:#5C28A4;"></i>
+                <span style="font-size:9px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; color:#6B7280;">{{ s.label }}</span>
+              </div>
+              <div style="font-size:13px; line-height:1.45; font-weight:500; color:#374151; text-wrap:pretty;">{{ s.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="position:relative; z-index:2; width:1px; height:34px; background:linear-gradient(180deg, rgba(171,132,225,0), rgba(171,132,225,.55));"></div>
+
+      <!-- TIER 2 — Orbit, the synthesis point (brand mark: gradient orbit ring + mascot disc) -->
+      <div style="position:relative; z-index:2; display:inline-flex; align-items:center; gap:14px;">
+        <span style="position:relative; flex:none; width:104px; height:104px; display:inline-flex; align-items:center; justify-content:center;">
+          <svg viewBox="0 0 400 400" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; animation:qorbit 46s linear infinite;">
+            <g fill="#8F5BD7" opacity=".5">
+              <ellipse cx="200" cy="80" rx="17" ry="40"></ellipse>
+              <ellipse cx="200" cy="320" rx="17" ry="40"></ellipse>
+              <ellipse cx="80" cy="200" rx="40" ry="17"></ellipse>
+              <ellipse cx="320" cy="200" rx="40" ry="17"></ellipse>
+              <ellipse cx="115" cy="115" rx="17" ry="40" transform="rotate(45 115 115)"></ellipse>
+              <ellipse cx="285" cy="285" rx="17" ry="40" transform="rotate(45 285 285)"></ellipse>
+              <ellipse cx="285" cy="115" rx="17" ry="40" transform="rotate(-45 285 115)"></ellipse>
+              <ellipse cx="115" cy="285" rx="17" ry="40" transform="rotate(-45 115 285)"></ellipse>
+            </g>
+          </svg>
+          <img src="/assets/quely-orbit-mascot.png" alt="Orbit" style="position:relative; z-index:1; width:66px; height:auto; filter:drop-shadow(0 0 24px rgba(143,91,215,.85)); animation:qbob 5s ease-in-out infinite;">
+        </span>
+        <span style="display:inline-flex; align-items:center; gap:7px; font-size:16px; font-weight:700; color:#F0EAFA; letter-spacing:-.01em;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#9747FF" aria-hidden="true" style="flex:none;"><path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2z"></path></svg>{{ orbitLabel }}
+        </span>
+      </div>
+
+      <div style="position:relative; z-index:2; width:1px; height:34px; background:linear-gradient(180deg, rgba(171,132,225,.55), rgba(171,132,225,.16));"></div>
+
+      <!-- TIER 3 — the Space: the material, further back so it reads as foundation -->
+      <div style="position:relative; z-index:1; display:flex; gap:9px; justify-content:center; opacity:.62;">
+        <sc-for list="{{ sources }}" as="s" hint-placeholder-count="3">
+          <div style="flex:0 0 168px; box-sizing:border-box; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.11); text-align:left;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i class="{{ s.icon }}" style="font-size:13px; color:rgba(201,174,240,.9);"></i>
+              <span style="font-size:12px; font-weight:600; color:rgba(255,255,255,.82);">{{ s.title }}</span>
+            </div>
+            <div style="margin-top:3px; font-size:11px; color:rgba(255,255,255,.62);">{{ s.meta }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+
+    <sc-if value="{{ showScrollCue }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:48px; display:flex; flex-direction:column; align-items:center; gap:8px; font-size:15px; color:rgba(255,255,255,.62); animation:qbob 2.4s ease-in-out infinite;"><span>Scroll to explore</span><i class="ph ph-arrow-down" style="font-size:20px;"></i></div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240,&quot;height&quot;:1200}}">
+class Component extends DCLogic {
+  DEFAULT_SECONDARY = [
+    { label:'Why',       icon:'ph-fill ph-lightbulb',   text:'A gateway project would have added three weeks and ~4×  infra cost.' },
+    { label:'Trade-off', icon:'ph-fill ph-scales',      text:'30s of delay accepted to ship five weeks sooner.' },
+    { label:'Next step', icon:'ph-fill ph-arrow-right', text:'Scope the Q3 gateway work — Marcus.' }
+  ];
+
+  DEFAULT_SOURCES = [
+    { icon:'ph-fill ph-chats-circle',     title:'Async discussion', meta:'24 messages on the task' },
+    { icon:'ph-fill ph-microphone-stage', title:'Meeting recording', meta:'38 min, transcribed' },
+    { icon:'ph-fill ph-file-text',        title:'Documents',        meta:'PRD, specs, designs' }
+  ];
+
+  renderVals() {
+    const embedded = !!this.props.embedded;
+    return {
+      shellStyle: (embedded ? 'padding:0 40px 8px;' : 'background:#03070F; padding:64px 40px 84px;')
+        + " display:flex; justify-content:center; font-family:'Inter',sans-serif;",
+      showScrollCue: this.props.showScrollCue !== false,
+      eyebrowText: this.props.eyebrow ?? 'One searchable history for every piece of work',
+      headlineText: this.props.headline ?? 'Find what was decided and why in minutes.',
+      bodyText: this.props.body ?? 'Quely gives every task a Space where your team can discuss the work, make decisions, and move from async discussion to a live meeting when needed. Quely’s AI assistant, Orbit, makes it easy to retrieve what was decided, why, the trade-offs considered, and who owns the next step.',
+      primaryLabel: this.props.primaryLabel ?? 'Decided',
+      primaryText: this.props.primaryText ?? 'Ship 30-second polling for V1 and defer WebSockets to Q3.',
+      orbitLabel: this.props.orbitLabel ?? 'Orbit',
+      questionText: this.props.question ?? 'Why did we ship polling instead of WebSockets?',
+      latencyText: this.props.latency ?? '4s',
+      provenanceText: this.props.provenance ?? 'Infra review · Mar 14 · Priya, Marcus, Elena',
+
+      secondary: (this.props.secondary && this.props.secondary.length) ? this.props.secondary : this.DEFAULT_SECONDARY,
+      sources: (this.props.sources && this.props.sources.length) ? this.props.sources : this.DEFAULT_SOURCES
+    };
+  }
+}
+</script>
+</body>
+</html>
