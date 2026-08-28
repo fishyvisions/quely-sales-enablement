@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+
+  @keyframes qol-in   { to { opacity:1; transform:translateY(0); } }
+  @keyframes qol-pop  { to { opacity:1; transform:scale(1); } }
+  [data-qol][data-go] [data-el="in"]  { animation:qol-in 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qol][data-go] [data-el="pop"] { animation:qol-pop 320ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qol] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#03070F; padding:68px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; top:240px; left:50%; width:1120px; height:640px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.24), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none; z-index:0;"></div>
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="max-width:820px; margin:0 auto; text-align:center;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:14px;">
+        <span style="flex:none; width:18px; height:18px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
+        <span style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+      </div>
+      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <!-- ============ LENSES, AS THE PRODUCT DRAWS THEM ============ -->
+    <div data-qol style="margin-top:28px; background:#fff; border-radius:14px; box-shadow:0 40px 80px -28px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.12), 0 0 70px -20px rgba(143,91,215,.42); overflow:hidden;">
+
+      <!-- header -->
+      <div style="padding:18px 20px 14px;">
+        <div style="display:flex; align-items:center; flex-wrap:wrap; gap:11px;">
+          <span style="flex:none; font-size:21px; font-weight:700; letter-spacing:-.018em; color:#111827;">{{ lensesLabel }}</span>
+          <span style="flex:none; background:#F3F4F6; border-radius:9999px; padding:2px 10px; font-size:12.5px; font-weight:700; color:#374151;">{{ lensCount }}</span>
+          <span style="flex:1 1 auto; min-width:0;"></span>
+          <span style="flex:1 1 200px; min-width:170px; display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; border-radius:10px; padding:7px 11px; font-size:12.5px; color:#4B5563;"><i class="ph ph-magnifying-glass" style="flex:none; font-size:14px;"></i>{{ searchLabel }}</span>
+          <span style="flex:none; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:10px; padding:7px 13px; font-size:12.5px; font-weight:600; color:#374151;"><i class="ph ph-graph" style="font-size:14px; color:#5C28A4;"></i>{{ lensMapLabel }}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:7px; margin-top:8px;">
+          <span style="flex:none; font-size:13px; color:#B45309;">&#10022;</span>
+          <span style="flex:1; min-width:0; font-size:12.5px; color:#4B5563;">{{ synthLabel }}</span>
+        </div>
+
+        <!-- every kind of thing Orbit pulls out of the discussion -->
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
+          <sc-for list="{{ kinds }}" as="kd" hint-placeholder-count="6">
+            <span data-el="pop" style="{{ kd.style }}"><span style="{{ kd.dotStyle }}"></span>{{ kd.name }} <b style="opacity:.65;">{{ kd.count }}</b></span>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- the items themselves, grouped as the rail groups them -->
+      <div style="border-top:1px solid #F3F4F6; padding:6px 20px 18px;">
+        <sc-for list="{{ groups }}" as="gp" hint-placeholder-count="3">
+          <div style="margin-top:14px;">
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:9px;">
+              <span style="{{ gp.dotStyle }}"></span>
+              <span style="flex:none; font-size:15px; font-weight:700; color:#111827;">{{ gp.name }}</span>
+              <span style="flex:none; font-size:13px; font-weight:600; color:#6B7280;">{{ gp.count }}</span>
+              <span style="flex:1 1 auto; min-width:0;"></span>
+              <i class="ph-bold ph-caret-down" style="flex:none; font-size:12px; color:#4B5563;"></i>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ gp.items }}" as="it" hint-placeholder-count="2">
+                <div data-el="in" style="{{ it.wrapStyle }}">
+                  <div style="display:flex; align-items:flex-start; gap:12px;">
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-size:13.5px; line-height:1.5; color:#111827; text-wrap:pretty;">{{ it.text }}</div>
+                      <div style="display:flex; align-items:center; gap:7px; margin-top:7px;">
+                        <i class="ph ph-flag" style="flex:none; font-size:12px; color:#4B5563;"></i>
+                        <span style="flex:none; font-size:11.5px; color:#6B7280;">{{ it.when }}</span>
+                      </div>
+                    </div>
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:11.5px; color:#6B7280;">
+                      <i class="ph ph-broadcast" style="font-size:13px;"></i>{{ it.refs }}
+                    </span>
+                  </div>
+
+                  <!-- what you can do with any item, without leaving the Space -->
+                  <div style="{{ it.actionsStyle }}">
+                    <span style="{{ it.tipStyle }}">{{ pushTip }}</span>
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:7px; background:#F3EEFB;"><i class="ph ph-arrow-square-out" style="font-size:15px; color:#5C28A4;"></i></span>
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;"><i class="ph ph-paper-plane-tilt" style="font-size:15px; color:#374151;"></i></span>
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;"><i class="ph ph-calendar-plus" style="font-size:15px; color:#374151;"></i></span>
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;"><i class="ph ph-trash" style="font-size:15px; color:#374151;"></i></span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- where an item can go next -->
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px; padding:14px 20px; background:#FAFBFC; border-top:1px solid #E5E7EB;">
+        <span style="flex:1 1 200px; min-width:190px; font-size:13px; line-height:1.5; font-weight:600; color:#111827; text-wrap:pretty;">{{ actionLine }}</span>
+        <span style="flex:none; display:inline-flex; align-items:center; gap:9px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:7px 13px; font-size:12.5px; font-weight:600; color:#374151;">
+          {{ pushLabel }}
+          <span style="display:inline-flex; align-items:center; gap:6px;">
+            <sc-for list="{{ pushTools }}" as="pt" hint-placeholder-count="8"><span style="{{ pt.style }}"></span></sc-for>
+          </span>
+        </span>
+        <span style="flex:none; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:8px 14px; font-size:12.5px; font-weight:600; color:#374151;">
+          <i class="ph-fill ph-calendar-plus" style="font-size:14px; color:#5C28A4;"></i>{{ meetLabel }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:840},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Make every discussion useful&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Know what was decided, what is still open, and what needs to happen next.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit, Quely's AI assistant, turns the conversations and meeting notes in each Space into a clear view of decisions, risks, open questions, opportunities, action items, and next steps. Schedule a meeting around any item or push it into your project-management tool, so you can move from discussion to action instantly.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensesLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lenses&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;synthLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Synthesized from 3 sources&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensMapLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lens Map&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionLine&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Every item can leave the discussion as real work.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pushLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Push to your tool&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;meetLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Schedule a meeting&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pushTools&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;kinds&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;count?:number;tint:string}&gt;&quot;},&quot;groups&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;tint:string;items:Array&lt;{text:string;when:string;refs:string;hovered?:boolean}&gt;}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'Make every discussion useful',
+    headline: 'Know what was decided, what is still open, and what needs to happen next.',
+    body: 'Orbit, Quely’s AI assistant, turns the conversations and meeting notes in each Space into a clear view of decisions, risks, open questions, opportunities, action items, and next steps. Schedule a meeting around any item or push it into your project-management tool, so you can move from discussion to action instantly.',
+
+    lensesLabel: 'Lenses',
+    lensCount: '36',
+    searchLabel: 'Search lenses…',
+    lensMapLabel: 'Lens Map',
+    synthLabel: 'Synthesized from 3 sources',
+
+    kinds: [
+      { name: 'Decisions',      tint: '#15803D' },
+      { name: 'Action Items',   count: 19, tint: '#2563EB' },
+      { name: 'Risks',          tint: '#B91C1C' },
+      { name: 'Opportunities',  count: 5,  tint: '#B45309' },
+      { name: 'Open Questions', count: 17, tint: '#7C3AED' },
+      { name: 'Next Steps',     tint: '#4F46E5' }
+    ],
+
+    groups: [
+      { name: 'Decisions', tint: '#15803D', items: [
+        { text: 'The Agile Coaches Report landing page is live and open for internal review and feedback.', when: '3 days ago', refs: '1', hovered: true },
+        { text: 'All required launch assets (landing page and report PDF) are complete and ready for use.', when: '3 days ago', refs: '1' }
+      ] },
+      { name: 'Risks', tint: '#B91C1C', items: [
+        { text: 'Changes to outreach messaging could delay the pilot if they land after the launch date.', when: '5 days ago', refs: '2' },
+        { text: 'Delays or lack of follow-up on the first pilot could push the rollout past the quarter.', when: '5 days ago', refs: '1' }
+      ] },
+      { name: 'Next Steps', tint: '#4F46E5', items: [
+        { text: 'Design and implement an activation-to-revenue funnel dashboard to track the agreed KPIs end-to-end.', when: '12 days ago', refs: '1' },
+        { text: 'Determine the content assets needed to shorten time-to-value and boost adoption.', when: '12 days ago', refs: '2' }
+      ] }
+    ],
+
+    pushTip: 'Push',
+    actionLine: 'Every item can leave the discussion as real work.',
+    pushLabel: 'Push to your tool',
+    pushTools: [
+      '/assets/logos/jira.svg', '/assets/logos/linear.svg', '/assets/logos/todoist.svg',
+      '/assets/logos/azuredevops.svg', '/assets/logos/github.svg', '/assets/logos/wrike.png',
+      '/assets/logos/monday.svg', '/assets/logos/trello.svg'
+    ],
+    meetLabel: 'Schedule a meeting'
+  };
+
+  logoMark(src, px) {
+    return 'flex:none; width:' + px + 'px; height:' + px + 'px;'
+      + ' background:url(\'' + src + '\') center/contain no-repeat;';
+  }
+
+  componentDidMount() {
+    this._played = false;
+    const play = () => {
+      if (this._played) return;
+      const n = document.querySelector('[data-qol]');
+      if (!n) return;
+      this._played = true;
+      n.setAttribute('data-go', '');
+    };
+    this._safety = setTimeout(play, 2200);
+
+    let tries = 0;
+    const attach = () => {
+      const node = document.querySelector('[data-qol]');
+      if (!node) { if (++tries < 40) { this._poll = setTimeout(attach, 60); } return; }
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { play(); return; }
+      if (!('IntersectionObserver' in window)) { play(); return; }
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 300); }
+          else if (!this._played) { clearTimeout(this._t); }
+        });
+      }, { threshold: 0.12 });
+      this.io.observe(node);
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._poll); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+
+    const rawGroups = p.groups && p.groups.length ? p.groups : D.groups;
+    const sizeOf = {};
+    rawGroups.forEach((gp) => { sizeOf[gp.name] = gp.items.length; });
+
+    const rawKinds = p.kinds && p.kinds.length ? p.kinds : D.kinds;
+    const kinds = rawKinds.map((kd, i) => ({
+      name: kd.name, count: sizeOf[kd.name] ?? kd.count ?? 0,
+      style: 'display:inline-flex; align-items:center; gap:7px; white-space:nowrap;'
+        + ' background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:6px 13px;'
+        + ' font-size:12.5px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' opacity:0; transform:scale(.94); --d:' + (180 + i * 70) + 'ms;',
+      dotStyle: 'flex:none; width:7px; height:7px; border-radius:50%; background:' + kd.tint + ';'
+    }));
+
+    let n = 0;
+    const groups = rawGroups.map((gp) => ({
+      name: gp.name, count: gp.items.length,
+      dotStyle: 'flex:none; width:9px; height:9px; border-radius:50%; background:' + gp.tint + ';',
+      items: gp.items.map((it) => {
+        const at = 620 + (n++) * 120;
+        return {
+          text: it.text, when: it.when, refs: it.refs,
+          wrapStyle: 'position:relative; box-sizing:border-box; border-radius:11px;'
+            + ' padding:12px 14px;' + (it.hovered ? ' padding-right:146px;' : '')
+            + (it.hovered ? ' background:#F9FAFB; box-shadow:inset 0 0 0 1px #E5E7EB;' : '')
+            + ' opacity:0; transform:translateY(8px); --d:' + at + 'ms;',
+          actionsStyle: it.hovered
+            ? 'position:absolute; top:8px; right:12px; display:flex; align-items:center; gap:2px;'
+              + ' background:#fff; border:1px solid #E5E7EB; border-radius:10px; padding:3px;'
+              + ' box-shadow:0 4px 8px rgba(3,7,18,.10), 0 2px 4px rgba(3,7,18,.06);'
+            : 'display:none;',
+          tipStyle: it.hovered
+            ? 'position:absolute; top:calc(100% + 5px); right:4px; white-space:nowrap;'
+              + ' background:#111827; color:#fff; border-radius:6px; padding:3px 8px;'
+              + ' font-size:10.5px; font-weight:600;'
+            : 'display:none;'
+        };
+      })
+    }));
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      lensesLabel: p.lensesLabel ?? D.lensesLabel,
+      lensCount: p.lensCount ?? kinds.reduce((a, k) => a + Number(k.count || 0), 0),
+      searchLabel: p.searchLabel ?? D.searchLabel,
+      lensMapLabel: p.lensMapLabel ?? D.lensMapLabel,
+      synthLabel: p.synthLabel ?? D.synthLabel,
+      kinds: kinds,
+      groups: groups,
+      pushTip: p.pushTip ?? D.pushTip,
+      actionLine: p.actionLine ?? D.actionLine,
+      pushLabel: p.pushLabel ?? D.pushLabel,
+      meetLabel: p.meetLabel ?? D.meetLabel,
+      pushTools: (p.pushTools && p.pushTools.length ? p.pushTools : D.pushTools)
+        .map((src) => ({ style: this.logoMark(src, 16) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
