@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#FBFAFF; font-family:'Inter',sans-serif; }
+  a { color:#7138D5; } a:hover { color:#5427A3; }
+</style>
+</helmet>
+<section data-qhw-host style="{{ sectionStyle }}">
+
+  <div style="max-width:1000px; margin:0 auto 28px; text-align:center;">
+    <div style="font-size:13px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7138D5; margin-bottom:12px;">{{ eyebrow }}</div>
+    <h2 style="margin:0; font-size:36px; line-height:1.08; letter-spacing:-.028em; font-weight:800; color:#1D1A45; text-wrap:balance;">{{ headline }}</h2>
+    <p style="margin:16px auto 0; max-width:780px; font-size:16px; line-height:1.7; color:#4B4860; text-wrap:pretty;">{{ body }}</p>
+  </div>
+
+  <!-- ScaleToFit: the 1600x900 canvas scales as one unit, so the SVG and every
+       absolutely-placed column keep exactly the same coordinate system. -->
+  <div data-fit style="width:100%; position:relative; overflow:hidden;">
+    <div data-canvas style="width:1600px; height:900px; position:absolute; top:0; left:50%; transform:translateX(-50%); transform-origin:top center;">
+      <svg data-wires aria-hidden="true" width="1600" height="900" viewBox="0 0 1600 900" fill="none" style="position:absolute; inset:0; z-index:1; pointer-events:none; overflow:visible;">
+        <defs>
+          <marker id="qw-solid-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1 1 L11 6 L1 11 Z" fill="#7138d5"></path>
+          </marker>
+          <marker id="qw-soft-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1 1 L11 6 L1 11 Z" fill="#a78bfa"></path>
+          </marker>
+          <filter id="qw-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.5" result="blur"></feGaussianBlur>
+            <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+          </filter>
+        </defs>
+        <path id="w-pm"    d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path id="w-src"   d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path id="w-topic" d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <circle id="w-halo" cx="-99" cy="-99" r="7" fill="#ede9fe" stroke="#7138d5" stroke-width="2.5" filter="url(#qw-glow)"></circle>
+        <circle id="w-dot"  cx="-99" cy="-99" r="4" fill="#7138d5"></circle>
+        <path id="w-join"  d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#qw-solid-arrow)"></path>
+        <path id="w-meet"  d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#qw-solid-arrow)"></path>
+        <path id="w-v1"    d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#qw-solid-arrow)"></path>
+        <path id="w-v2"    d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#qw-solid-arrow)"></path>
+        <path id="w-back"  d="" fill="none" stroke="#a78bfa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#qw-soft-arrow)"></path>
+        <path id="w-sporb" d="" fill="none" stroke="#a78bfa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#qw-soft-arrow)"></path>
+        <path id="w-tsorb" d="" fill="none" stroke="#a78bfa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#qw-soft-arrow)"></path>
+        <path id="w-out"   d="" fill="none" stroke="#7138d5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#qw-solid-arrow)"></path>
+      </svg>
+
+
+
+      <!-- ============ STEP 1 ============ -->
+      <section data-required-step="1" style="{{ col1 }}">
+        <div style="{{ stepTitle }}"><span style="{{ stepNum }}">1</span><span>Bring in the work</span></div>
+
+        <div data-a="pm" style="{{ sourcePanel }}">
+          <p style="{{ sourceLabel }}">A &middot; Project-management tools</p>
+          <sc-for list="{{ pmTools }}" as="t" hint-placeholder-count="7">
+            <div style="{{ toolRow }}"><span style="{{ t.markStyle }}"></span><span>{{ t.name }}</span></div>
+          </sc-for>
+        </div>
+
+        <div data-a="src" style="{{ sourcePanel }}">
+          <p style="{{ sourceLabel }}">B &middot; Connected sources</p>
+          <sc-for list="{{ sources }}" as="s" hint-placeholder-count="3">
+            <div style="{{ toolRow }}"><span style="{{ s.markStyle }}"></span><i class="{{ s.iconClass }}" style="{{ s.iconStyle }}"></i><span>{{ s.name }}</span></div>
+          </sc-for>
+        </div>
+
+        <div data-a="topic" style="{{ topicPanel }}">
+          <p style="{{ sourceLabelPurple }}">C &middot; Topic or idea</p>
+          <div style="display:flex; align-items:flex-start; gap:10px;">
+            <i class="ph-fill ph-lightbulb" style="flex:none; font-size:20px; color:#7138D5;"></i>
+            <div style="flex:1; min-width:0;">
+              <h4 style="margin:0; font-size:14px; line-height:1.35; font-weight:750; color:#1D1A45;">Checkout-flow improvements</h4>
+              <p style="margin:6px 0 0; font-size:11px; font-weight:600; color:#7441C9;">Not yet in a project tool</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STEP 2 ============ -->
+      <section data-required-step="2" style="{{ col2 }}">
+        <div style="{{ stepTitle }}"><span style="{{ stepNum }}">2</span><span>Work through it in one Space</span></div>
+
+        <div data-a="space" style="{{ spacePanel }}">
+          <div style="{{ spaceHeader }}">
+            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+              <span style="{{ logo }}">Q</span>
+              <strong style="flex:none; font-size:13px; color:#1D1A45;">Quely</strong>
+              <span style="flex:none; font-size:11px; color:#777386;">#3421</span>
+              <strong style="flex:1; min-width:0; font-size:13px; color:#1D1A45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Checkout-flow improvements</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; flex:none;">
+              <span style="{{ timer }}"><i class="ph ph-clock" style="font-size:13px;"></i>Closes in 2 days</span>
+              <div style="display:flex; margin-left:4px;">
+                <sc-for list="{{ crew }}" as="c" hint-placeholder-count="3"><span style="{{ c.style }}">{{ c.i }}</span></sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="{{ spaceBody }}">
+
+            <div style="{{ innerCard }}">
+              <div style="{{ cardTitle }}"><i class="ph-fill ph-chat-circle-dots" style="font-size:15px; color:#7138D5;"></i>Discussion</div>
+
+              <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="3">
+                <div style="{{ msgRow }}">
+                  <span style="{{ m.avStyle }}">{{ m.i }}</span>
+                  <div style="min-width:0;">
+                    <div style="{{ msgHead }}"><strong style="font-size:11px; color:#1D1A45;">{{ m.who }}</strong><span style="font-size:9px; color:#6B7280;">{{ m.when }}</span></div>
+                    <sc-if value="{{ m.hasText }}" hint-placeholder-val="{{ true }}">
+                      <p style="margin:0; font-size:10px; line-height:1.5; color:#595568; text-wrap:pretty;">{{ m.text }}</p>
+                    </sc-if>
+                    <sc-if value="{{ m.hasReact }}" hint-placeholder-val="{{ false }}">
+                      <span style="{{ reaction }}">&#128077; 12</span>
+                    </sc-if>
+                    <sc-if value="{{ m.hasVoice }}" hint-placeholder-val="{{ false }}">
+                      <div style="{{ audio }}">
+                        <i class="ph-fill ph-play" style="flex:none; font-size:14px; color:#7138D5;"></i>
+                        <span style="flex:1; min-width:0; display:flex; align-items:center; gap:2px; height:16px; overflow:hidden;">
+                          <sc-for list="{{ wave }}" as="w" hint-placeholder-count="18"><span style="{{ w.style }}"></span></sc-for>
+                        </span>
+                        <span style="flex:none; font-size:9px; font-weight:700;">0:42</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ m.hasReply }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin-top:7px; font-size:9px; color:#6B7280;">&#8627; Reply</div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+
+              <div style="{{ replyBox }}">
+                <span>Add a reply...</span>
+                <span style="display:flex; align-items:center; gap:8px;">
+                  <i class="ph ph-microphone" style="font-size:13px;"></i>
+                  <i class="ph ph-paperclip" style="font-size:13px;"></i>
+                  <i class="ph-bold ph-arrow-right" style="font-size:14px; color:#7138D5;"></i>
+                </span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="{{ innerCard }}">
+                <div style="{{ cardTitle }}"><i class="ph-fill ph-chart-bar" style="font-size:15px; color:#2563EB;"></i>Poll</div>
+                <p style="margin:0 0 14px; font-size:10px; line-height:1.45; font-weight:750; color:#1D1A45; text-wrap:pretty;">Should we combine shipping and payment?</p>
+                <sc-for list="{{ poll }}" as="o" hint-placeholder-count="3">
+                  <div style="margin-bottom:11px;">
+                    <div style="display:flex; justify-content:space-between; gap:6px; margin-bottom:5px; font-size:9px; color:#595568;">
+                      <span style="min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ o.name }}</span>
+                      <strong style="flex:none; color:#1D1A45;">{{ o.pct }}</strong>
+                    </div>
+                    <div style="height:7px; border-radius:999px; background:#EEEAF3; overflow:hidden;"><div style="{{ o.fill }}"></div></div>
+                  </div>
+                </sc-for>
+                <div style="{{ muted }}">19 votes &middot; Closed</div>
+              </div>
+
+              <div style="{{ innerCard }}">
+                <div style="{{ cardTitle }}"><i class="ph-fill ph-thumbs-up" style="font-size:15px; color:#B45309;"></i>Upvoted by 8</div>
+                <p style="margin:0; font-size:10px; line-height:1.5; color:#5B5768;">Simplify the shipping form</p>
+                <div style="display:flex; margin-top:13px;">
+                  <sc-for list="{{ crew }}" as="c" hint-placeholder-count="3"><span style="{{ c.style }}">{{ c.i }}</span></sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="{{ innerCard }}">
+                <div style="{{ cardTitle }}"><i class="ph-fill ph-file-text" style="font-size:15px; color:#2563EB;"></i>Doc</div>
+                <h4 style="margin:0; font-size:13px; line-height:1.4; font-weight:750; color:#1D1A45;">Checkout-flow exploration</h4>
+                <div style="{{ muted }} margin-top:5px;">Updated 1 day ago</div>
+                <div style="margin-top:16px;">
+                  <sc-for list="{{ docLines }}" as="d" hint-placeholder-count="3"><div style="{{ d.style }}"></div></sc-for>
+                </div>
+              </div>
+
+              <div style="{{ innerCard }}">
+                <div style="{{ cardTitle }}"><i class="ph-fill ph-git-branch" style="font-size:15px; color:#15803D;"></i>Diagram</div>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:5px; margin-top:16px;">
+                  <span style="{{ node }}">Cart</span>
+                  <i class="ph-bold ph-arrow-right" style="flex:none; font-size:12px; color:#9C97AA;"></i>
+                  <span style="{{ nodeActive }}">Shipping</span>
+                  <i class="ph-bold ph-arrow-right" style="flex:none; font-size:12px; color:#9C97AA;"></i>
+                  <span style="{{ node }}">Payment</span>
+                </div>
+                <div style="{{ review }}">Review</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STEP 3 ============ -->
+      <section data-required-step="3" style="{{ col3 }}">
+        <div style="{{ stepTitle }}"><span style="{{ stepNum }}">3</span><span>Move into a<br>meeting when needed</span></div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div data-a="meet" style="{{ meetingCard }}">
+            <div style="{{ meetingTitle }}"><i class="ph-fill ph-calendar-dots" style="font-size:15px; color:#7138D5;"></i>Schedule meeting</div>
+            <h4 style="margin:0; font-size:12px; font-weight:750; color:#1D1A45;">Checkout-flow sync</h4>
+            <p style="margin:6px 0 0; font-size:10px; color:#777386;">Tomorrow, 10:00 AM</p>
+            <div style="display:flex; margin-top:13px;">
+              <sc-for list="{{ crew }}" as="c" hint-placeholder-count="3"><span style="{{ c.style }}">{{ c.i }}</span></sc-for>
+            </div>
+          </div>
+
+          <div style="{{ down }}"></div>
+
+          <div data-a="bot" style="{{ botCard }}">
+            <i class="ph-fill ph-robot" style="font-size:20px; color:#7138D5;"></i>
+            <h4 style="margin:8px 0 0; font-size:12px; font-weight:750; color:#1D1A45;">Quely Meeting Bot</h4>
+            <p style="{{ muted }} margin:4px 0 0;">Recording and transcribing...</p>
+            <div style="{{ botCircle }}"><span style="width:22px; height:22px; border-radius:50%; background:#7138D5;"></span></div>
+            <div style="{{ muted }}">12:45</div>
+          </div>
+
+          <div style="{{ down }}"></div>
+
+          <div data-a="script" style="{{ transcriptCard }}">
+            <div style="{{ meetingTitle }}"><i class="ph-fill ph-file-text" style="font-size:15px; color:#7138D5;"></i>Meeting transcript</div>
+            <strong style="font-size:9px; color:#4B4860;">Highlights</strong>
+            <div style="margin-top:9px;">
+              <sc-for list="{{ docLines }}" as="d" hint-placeholder-count="3"><div style="{{ d.style }}"></div></sc-for>
+            </div>
+          </div>
+
+          <div style="{{ returnLabel }}">Transcript flows back into<br>the same Space</div>
+        </div>
+      </section>
+
+      <!-- ============ STEP 4 ============ -->
+      <section data-required-step="4" style="{{ col4 }}">
+        <div style="{{ stepTitle }}"><span style="{{ stepNum }}">4</span><span>Orbit reads across<br>the Space</span></div>
+
+        <div data-a="orbit" style="{{ orbitPanel }}">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <span style="flex:none; width:22px; height:22px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
+            <strong style="font-size:16px; color:#1D1A45;">Orbit</strong>
+          </div>
+
+          <p style="margin:0 0 14px; font-size:10px; line-height:1.5; color:#777386;">Reads across everything in this Space.</p>
+
+          <sc-for list="{{ orbitSrc }}" as="o" hint-placeholder-count="5">
+            <div style="{{ orbitSource }}"><i class="{{ o.icon }}" style="flex:none; font-size:13px; color:#7138D5;"></i><span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ o.name }}</span></div>
+          </sc-for>
+
+          <div style="{{ orbitQuestion }}">What did we decide about the checkout flow?</div>
+          <div style="{{ orbitAnswer }}">We'll combine shipping and payment into one step and simplify the shipping form to reduce drop-off. We'll test the change next sprint.</div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px;">
+            <span style="{{ muted }}">Sources: 6</span>
+            <div style="display:flex;">
+              <sc-for list="{{ crew }}" as="c" hint-placeholder-count="3"><span style="{{ c.style }}">{{ c.i }}</span></sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STEP 5 — required, never collapsed ============ -->
+      <section data-required-step="5" style="{{ col5 }}">
+        <div style="{{ stepTitle }}"><span style="{{ stepNum }}">5</span><span>Get clear outcomes</span></div>
+
+        <div data-a="out" style="display:flex; flex-direction:column; gap:11px;">
+          <sc-for list="{{ outcomes }}" as="o" hint-placeholder-count="6">
+            <div style="{{ outcomeCard }}">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:7px;">
+                <div style="display:flex; align-items:center; gap:7px; min-width:0; font-size:11px;">
+                  <i class="{{ o.icon }}" style="{{ o.iconStyle }}"></i>
+                  <strong style="flex:1; min-width:0; color:#1D1A45; text-wrap:pretty;">{{ o.name }}</strong>
+                </div>
+                <span style="{{ o.countStyle }}">{{ o.count }}</span>
+              </div>
+              <p style="margin:10px 0 0; font-size:10px; line-height:1.45; color:#6D6978; text-wrap:pretty;">{{ o.text }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1700,&quot;height&quot;:1180}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'How Quely works',
+    headline: 'Bring in the work, work through it together, and keep every outcome searchable.',
+    body: 'Start with a task, a sprint, or an idea. Quely gives your team one Space to discuss it, meet when needed, retrieve what matters, and turn conversations into action.',
+    footer: 'One unified history. Everything stays connected and searchable.'
+  };
+
+  CANVAS_W = 1600; CANVAS_H = 900;
+
+  LOGO = {
+    jira:'/assets/logos/jira.svg', linear:'/assets/logos/linear.svg', github:'/assets/logos/github.svg',
+    azuredevops:'/assets/logos/azuredevops.svg', monday:'/assets/logos/monday.svg',
+    trello:'/assets/logos/trello.svg', wrike:'/assets/logos/wrike.png',
+    confluence:'/assets/logos/confluence.svg'
+  };
+  PM = [
+    { name:'Jira', logo:'jira' }, { name:'Linear', logo:'linear' },
+    { name:'Azure DevOps', logo:'azuredevops' }, { name:'GitHub Issues', logo:'github' },
+    { name:'Monday.com', logo:'monday' }, { name:'Trello', logo:'trello' }, { name:'Wrike', logo:'wrike' }
+  ];
+  SOURCES = [
+    { name:'Google Docs',        icon:'ph-fill ph-file-doc' },
+    { name:'Confluence',         logo:'confluence' },
+    { name:'Research and notes', icon:'ph-fill ph-magnifying-glass' }
+  ];
+  MSGS = [
+    { who:'Maya',  i:'M', tint:'#B45309', when:'9:15 AM', text:'Users drop off on the shipping step. Let’s simplify the form.', react:true },
+    { who:'Rohan', i:'R', tint:'#1D4ED8', when:'9:18 AM', voice:true },
+    { who:'Lena',  i:'L', tint:'#BE185D', when:'9:26 AM', text:'We removed address auto-fill last sprint. Could it be related?', reply:true }
+  ];
+  POLL = [ { name:'Yes', pct:'68%', w:68 }, { name:'No', pct:'21%', w:21 }, { name:'Need more data', pct:'11%', w:11 } ];
+  ORBIT_SRC = [
+    { name:'Discussion',         icon:'ph-fill ph-chat-circle-dots' },
+    { name:'Meeting transcript', icon:'ph-fill ph-file-text' },
+    { name:'Document',           icon:'ph-fill ph-file-doc' },
+    { name:'Diagram',            icon:'ph-fill ph-git-branch' },
+    { name:'Poll and votes',     icon:'ph-fill ph-chart-bar' }
+  ];
+  TONE = {
+    green:  { ink:'#15803D', wash:'#DCFCE7' },
+    blue:   { ink:'#1D4ED8', wash:'#DBEAFE' },
+    amber:  { ink:'#92400E', wash:'#FEF3C7' },
+    purple: { ink:'#7138D5', wash:'#EDE9FE' }
+  };
+  OUTCOMES = [
+    { name:'Decisions',         count:'1', icon:'ph-fill ph-check-circle',     tone:'green',  text:'Combine shipping and payment into one step.' },
+    { name:'Open questions',    count:'3', icon:'ph-fill ph-question',         tone:'blue',   text:'What is the impact on international orders?' },
+    { name:'Risks',             count:'2', icon:'ph-fill ph-warning',          tone:'amber',  text:'Potential impact on fraud checks and tax calculations.' },
+    { name:'Action items',      count:'4', icon:'ph-fill ph-check-square',     tone:'purple', text:'Define, assign, and track work through completion.' },
+    { name:'Next steps',        count:'2', icon:'ph-fill ph-arrow-right',      tone:'blue',   text:'Run the A/B test next sprint and review the results.' },
+    { name:'Answers on demand', count:'∞', icon:'ph-fill ph-magnifying-glass', tone:'purple', text:'Ask Orbit anything about the work at any time.' }
+  ];
+
+  // ScaleToFit: measure the wrapper, scale the whole canvas, and set the wrapper's
+  // height to the scaled canvas so nothing overflows and nothing scrolls.
+  fit() {
+    const box = document.querySelector('[data-fit]');
+    const canvas = document.querySelector('[data-canvas]');
+    if (!box || !canvas) return;
+    // never cache a scale of 0: retry until layout gives the box a real width
+    const w = box.clientWidth;
+    if (!w) { if (this._raf) cancelAnimationFrame(this._raf);
+              this._raf = requestAnimationFrame(() => this.fit()); return; }
+    window.__qhwW = w;
+    const k = Math.min(1, w / this.CANVAS_W);
+    // write unconditionally, so a cached _k can never desync from the live DOM
+    this._k = k;
+    canvas.style.transform = 'translateX(-50%) scale(' + k + ')';
+    box.style.height = Math.ceil(this.CANVAS_H * k) + 'px';
+    this.route();
+  }
+
+  // rounded orthogonal polyline through a list of points
+  poly(pts, r) {
+    r = r || 12;
+    let d = 'M' + pts[0][0] + ' ' + pts[0][1];
+    for (let i = 1; i < pts.length - 1; i++) {
+      const [px, py] = pts[i - 1], [cx, cy] = pts[i], [nx, ny] = pts[i + 1];
+      const d1 = Math.hypot(cx - px, cy - py), d2 = Math.hypot(nx - cx, ny - cy);
+      const rr = Math.max(2, Math.min(r, d1 / 2, d2 / 2));
+      const ax = cx + (px - cx) / d1 * rr, ay = cy + (py - cy) / d1 * rr;
+      const bx = cx + (nx - cx) / d2 * rr, by = cy + (ny - cy) / d2 * rr;
+      d += ' L' + ax + ' ' + ay + ' Q' + cx + ' ' + cy + ' ' + bx + ' ' + by;
+    }
+    const e = pts[pts.length - 1];
+    return d + ' L' + e[0] + ' ' + e[1];
+  }
+
+  // Every route runs horizontally in a gap between cards, then vertically in the
+  // gutter between columns, then back in. Derived from measured rects, so a card
+  // changing height can never push a line behind another card.
+  route() {
+    const canvas = document.querySelector('[data-canvas]');
+    if (!canvas) return;
+    const k = this._k || 1;
+    const cr = canvas.getBoundingClientRect();
+    const R = (sel) => {
+      const el = canvas.querySelector(sel);
+      if (!el) return null;
+      const b = el.getBoundingClientRect();
+      return { l:(b.left-cr.left)/k, r:(b.right-cr.left)/k, t:(b.top-cr.top)/k, b:(b.bottom-cr.top)/k,
+               mx:((b.left+b.right)/2-cr.left)/k, my:((b.top+b.bottom)/2-cr.top)/k };
+    };
+    const A = (n) => R('[data-a="' + n + '"]');
+    const C = (n) => R('[data-required-step="' + n + '"]');
+
+    const pm=A('pm'), src=A('src'), tp=A('topic'), sp=A('space'), mt=A('meet'),
+          bt=A('bot'), ts=A('script'), ob=A('orbit'), ot=A('out'),
+          c1=C('1'), c2=C('2'), c3=C('3'), c4=C('4'), c5=C('5');
+    if (!pm||!src||!tp||!sp||!mt||!bt||!ts||!ob||!ot||!c1||!c2||!c3||!c4||!c5) return;
+
+    const g1=c1.r+11, g2=(c2.r+c3.l)/2, g3=(c3.r+c4.l)/2, g4=(c4.r+c5.l)/2;
+    const lane = Math.max(c1.b, c2.b, c3.b, c4.b, c5.b) + 26;
+    const P = (id, pts, r) => { const el = canvas.querySelector('#' + id); if (el) el.setAttribute('d', this.poly(pts, r)); };
+    const AT = (id, x, y) => { const el = canvas.querySelector('#' + id); if (el) { el.setAttribute('cx', x); el.setAttribute('cy', y); } };
+
+    // 1-3: the three sources elbow into one trunk in gutter 1, meeting at the junction
+    const jy = sp.t + 150;
+    P('w-pm',    [[pm.r, pm.my],   [g1, pm.my],   [g1, jy]]);
+    P('w-src',   [[src.r, src.my], [g1, src.my],  [g1, jy]]);
+    P('w-topic', [[tp.r, tp.my],   [g1, tp.my],   [g1, jy]]);
+    AT('w-halo', g1, jy); AT('w-dot', g1, jy);
+    P('w-join',  [[g1 + 7, jy], [sp.l - 6, jy]]);
+
+    // 4: Space -> meeting, horizontal through gutter 2
+    P('w-meet',  [[sp.r + 3, mt.t + 34], [g2, mt.t + 34], [g2, mt.my], [mt.l - 6, mt.my]]);
+
+    // 5-6: the meeting sequence, vertical in the gaps between the three cards
+    P('w-v1', [[mt.mx, mt.b + 6], [mt.mx, bt.t - 6]]);
+    P('w-v2', [[bt.mx, bt.b + 6], [bt.mx, ts.t - 6]]);
+
+    // 7: transcript returns to the Space, up gutter 2
+    P('w-back',  [[ts.l - 3, ts.my], [g2, ts.my], [g2, sp.b - 60], [sp.r + 6, sp.b - 60]]);
+
+    // 8: the Space also feeds Orbit, along the clear lane below every column
+    P('w-sporb', [[sp.r + 3, sp.b - 20], [g2 - 14, sp.b - 20], [g2 - 14, lane], [g3 + 14, lane], [g3 + 14, ob.b - 60], [ob.l - 6, ob.b - 60]]);
+
+    // 9: transcript -> Orbit, through gutter 3
+    P('w-tsorb', [[ts.r + 3, ts.my], [g3, ts.my], [g3, ob.t + 210], [ob.l - 6, ob.t + 210]]);
+
+    // 10: Orbit -> outcomes, a short arrow centred in gutter 4
+    P('w-out',   [[ob.r + 3, ob.my], [ot.l - 6, ob.my]]);
+  }
+
+  componentDidMount() {
+    const start = () => {
+      if (!document.querySelector('[data-canvas]')) { this._poll = setTimeout(start, 120); return; }
+      this.fit();
+      // A single module-level watcher, independent of any instance or node: this
+      // runtime re-renders without re-running componentDidMount, so an instance-owned
+      // hook dies silently. It re-queries the live nodes each tick and rescales them
+      // directly — never observing [data-fit], whose height fit() writes (that loops).
+      window.__qhwInst = this;
+      Component.arm();
+      this._onResize = () => this.fit();
+      window.addEventListener('resize', this._onResize);
+      this._again = setTimeout(() => this.fit(), 600);
+      this._again2 = setTimeout(() => this.fit(), 1600);
+    };
+    start();
+  }
+  componentWillUnmount() {
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    clearTimeout(this._poll); clearTimeout(this._again); clearTimeout(this._again2);
+  }
+
+  av(tint, px, fs, first) {
+    return 'flex:none; display:inline-flex; align-items:center; justify-content:center; width:' + px + 'px;'
+      + ' height:' + px + 'px; border-radius:50%; background:' + tint + '; color:#fff; font-size:' + fs + 'px;'
+      + ' font-weight:800; border:2px solid #fff;' + (first ? '' : ' margin-left:-6px;');
+  }
+  col(left, width) { return 'position:absolute; top:0; z-index:2; left:' + left + 'px; width:' + width + 'px;'; }
+
+  // A single self-rescheduling rAF loop, owned by the class rather than an instance:
+  // this runtime re-renders without re-running componentDidMount, so any hook owned by
+  // an instance dies silently. It re-queries the live nodes each frame and rescales them
+  // directly — it never observes [data-fit], whose height it writes (that would loop).
+  static arm() {
+    if (window.__qhwArmed) return;
+    window.__qhwArmed = true;
+    const tick = () => {
+      const b = document.querySelector('[data-fit]');
+      const c = document.querySelector('[data-canvas]');
+      if (b && c) {
+        const w = b.clientWidth;
+        if (w && w !== window.__qhwW) {
+          window.__qhwW = w;
+          const k = Math.min(1, w / 1600);
+          c.style.transform = 'translateX(-50%) scale(' + k + ')';
+          b.style.height = Math.ceil(900 * k) + 'px';
+          const inst = window.__qhwInst;
+          if (inst) { inst._k = k; try { inst.route(); } catch (e) {} }
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  renderVals() {
+    Component.arm();
+    const p = this.props || {}, D = this.DEMO;
+    const PANEL = 'background:rgba(255,255,255,.94); border:1px solid #DDD5F2; border-radius:18px;'
+      + ' box-shadow:0 14px 35px rgba(49,34,96,.08); box-sizing:border-box;';
+    const CARD = 'border:1px solid #E2DFEA; border-radius:13px; background:#fff; padding:13px; box-sizing:border-box;';
+    const MUTED = 'color:#6B7280; font-size:9px; line-height:1.4;';
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      footer: p.footer ?? D.footer,
+
+      sectionStyle: 'width:100%; box-sizing:border-box; padding:36px 20px 22px; color:#15152F;'
+        + ' background:radial-gradient(circle at 50% 20%, rgba(139,92,246,.08), transparent 38%),'
+        + ' linear-gradient(180deg, #FBFAFF 0%, #F5F2FF 100%);',
+
+      col1: this.col(32, 210), col2: this.col(284, 600), col3: this.col(915, 180),
+      col4: this.col(1125, 220), col5: this.col(1375, 190),
+
+      stepTitle: 'height:66px; display:flex; align-items:flex-start; gap:12px; font-size:16px;'
+        + ' line-height:1.25; font-weight:750; color:#1D1A45;',
+      stepNum: 'flex:0 0 34px; width:34px; height:34px; border-radius:50%; display:inline-flex;'
+        + ' align-items:center; justify-content:center; color:#fff; font-size:15px; font-weight:800;'
+        + ' background:linear-gradient(145deg, #7C3AED, #5523AA); box-shadow:0 8px 20px rgba(92,43,184,.22);',
+
+      sourcePanel: PANEL + ' padding:13px; margin-bottom:13px;',
+      sourceLabel: 'margin:0 0 11px; color:#69667A; font-size:11px; line-height:1.35; font-weight:800;'
+        + ' text-transform:uppercase; letter-spacing:.05em;',
+      sourceLabelPurple: 'margin:0 0 11px; color:#6530BB; font-size:11px; line-height:1.35; font-weight:800;'
+        + ' text-transform:uppercase; letter-spacing:.05em;',
+      toolRow: 'min-height:38px; border:1px solid #E5E1ED; border-radius:12px; padding:8px 10px; margin-top:7px;'
+        + ' display:flex; align-items:center; gap:9px; background:#fff; color:#454257; font-size:11px;'
+        + ' font-weight:650; box-sizing:border-box;',
+      toolIcon: 'flex:none; width:17px; text-align:center; font-size:13px; color:#6D3BD1;',
+      topicPanel: PANEL + ' padding:16px; border-color:#CBB8F2;'
+        + ' background:linear-gradient(145deg, #FAF7FF, #F2EAFF);',
+
+      spacePanel: PANEL + ' height:530px; overflow:hidden; border:2px solid #C2A8F4; background:#fff;',
+      spaceHeader: 'height:55px; border-bottom:1px solid #E5E0EE; padding:0 14px; display:flex;'
+        + ' align-items:center; justify-content:space-between; box-sizing:border-box;',
+      logo: 'flex:none; width:27px; height:27px; border-radius:8px; display:inline-flex; align-items:center;'
+        + ' justify-content:center; background:#7138D5; color:#fff; font-size:12px; font-weight:900;',
+      timer: 'flex:none; display:flex; align-items:center; gap:6px; border:1px solid #D8CAF3; border-radius:999px;'
+        + ' padding:7px 11px; background:#F8F2FF; color:#6530BB; font-size:10px; font-weight:750; white-space:nowrap;',
+      spaceBody: 'height:475px; padding:12px; display:grid; grid-template-columns:1.15fr .75fr 1.05fr;'
+        + ' gap:12px; background:#F8F7FB; box-sizing:border-box;',
+      innerCard: CARD,
+      cardTitle: 'display:flex; align-items:center; gap:7px; margin-bottom:14px; font-size:11px;'
+        + ' font-weight:800; color:#1D1A45;',
+      msgRow: 'display:grid; grid-template-columns:29px 1fr; gap:9px; margin-bottom:17px;',
+      msgHead: 'display:flex; gap:7px; margin-bottom:4px; align-items:center;',
+      reaction: 'display:inline-block; margin-top:7px; padding:4px 8px; border-radius:999px;'
+        + ' background:#FEF3C7; color:#92400E; font-size:9px; font-weight:700;',
+      audio: 'margin-top:7px; height:36px; border-radius:12px; display:flex; align-items:center; gap:8px;'
+        + ' padding:0 10px; color:#6330BB; background:#EEE4FF; box-sizing:border-box;',
+      replyBox: 'height:50px; border:1px solid #DED9E8; border-radius:12px; padding:0 11px; margin-top:10px;'
+        + ' display:flex; align-items:center; justify-content:space-between; color:#6B7280; font-size:10px;'
+        + ' box-sizing:border-box;',
+      muted: MUTED,
+      node: 'display:inline-flex; align-items:center; justify-content:center; padding:8px 9px;'
+        + ' border:1px solid #DED9E6; border-radius:7px; background:#fff; font-size:9px; color:#454257;'
+        + ' white-space:nowrap;',
+      nodeActive: 'display:inline-flex; align-items:center; justify-content:center; padding:8px 9px;'
+        + ' border:1px solid #BD9CF0; border-radius:7px; background:#F3EBFF; font-size:9px; color:#6530BB;'
+        + ' font-weight:750; white-space:nowrap;',
+      review: 'width:60px; margin:14px auto 0; padding:7px; border:1px dashed #D8D1E3; border-radius:7px;'
+        + ' text-align:center; font-size:9px; color:#6D6978; box-sizing:border-box;',
+
+      meetingCard: PANEL + ' height:167px; padding:15px;',
+      meetingTitle: 'display:flex; align-items:center; gap:7px; margin-bottom:13px; font-size:11px;'
+        + ' font-weight:800; color:#1D1A45;',
+      down: 'height:48px;',
+      botCard: PANEL + ' height:160px; text-align:center; padding:17px;',
+      botCircle: 'width:44px; height:44px; margin:10px auto 6px; border-radius:50%; display:flex;'
+        + ' align-items:center; justify-content:center; background:#EEE4FF;',
+      transcriptCard: PANEL + ' height:124px; padding:15px;',
+      returnLabel: 'padding:12px; border-radius:12px; background:#E9DCFF; color:#6430BC; text-align:center;'
+        + ' font-size:10px; line-height:1.35; font-weight:700;',
+
+      orbitPanel: PANEL + ' height:530px; padding:15px;',
+      orbitSource: 'min-height:34px; margin-bottom:7px; border:1px solid #E3DFEB; border-radius:12px;'
+        + ' padding:8px 10px; display:flex; align-items:center; gap:8px; background:#FAF9FC;'
+        + ' color:#5D596A; font-size:9px; box-sizing:border-box;',
+      orbitQuestion: 'margin-top:14px; padding:12px; border-radius:12px; background:#E9DCFF; color:#5C2AAE;'
+        + ' font-size:10px; line-height:1.45; font-weight:750;',
+      orbitAnswer: 'margin-top:10px; padding:12px; border:1px solid #E3DFEB; border-radius:12px;'
+        + ' background:#fff; color:#535060; font-size:10px; line-height:1.5;',
+
+      outcomeCard: PANEL + ' min-height:91px; padding:13px;',
+
+      historyLabel: 'position:absolute; left:50%; bottom:32px; z-index:3; transform:translateX(-50%);'
+        + ' padding:10px 34px; border:1px solid #D9CDF1; border-radius:999px; background:#fff;'
+        + ' box-shadow:0 10px 28px rgba(63,40,110,.08); color:#5427A3; font-size:11px; font-weight:800;'
+        + ' white-space:nowrap;',
+
+      pmTools: this.PM.map((t) => ({
+        name: t.name,
+        markStyle: 'flex:none; width:17px; height:17px; background:url(\'' + (this.LOGO[t.logo] || '') + '\') center/contain no-repeat;'
+      })),
+      sources: this.SOURCES.map((s) => ({
+        name: s.name,
+        markStyle: s.logo
+          ? 'flex:none; width:17px; height:17px; background:url(\'' + (this.LOGO[s.logo] || '') + '\') center/contain no-repeat;'
+          : 'display:none;',
+        iconClass: s.icon || 'ph',
+        iconStyle: s.logo ? 'display:none;' : 'flex:none; width:17px; text-align:center; font-size:13px; color:#6D3BD1;'
+      })),
+      orbitSrc: this.ORBIT_SRC,
+
+      crew: [['M','#B45309'],['R','#1D4ED8'],['L','#BE185D']].map(([i, t], n) => ({
+        i: i, style: this.av(t, 25, 9, n === 0)
+      })),
+
+      msgs: this.MSGS.map((m) => ({
+        who: m.who, when: m.when, text: m.text || '', i: m.i,
+        hasText: !!m.text, hasReact: !!m.react, hasVoice: !!m.voice, hasReply: !!m.reply,
+        avStyle: 'width:29px; height:29px; border-radius:50%; display:flex; align-items:center;'
+          + ' justify-content:center; color:#fff; font-size:10px; font-weight:800; background:' + m.tint + ';'
+      })),
+      wave: Array.from({ length: 18 }, (_, i) => ({
+        style: 'flex:1; min-width:0; border-radius:999px; background:#7C3AED; opacity:.55;'
+          + ' height:' + (4 + Math.round(11 * Math.abs(Math.sin(i * 1.45)))) + 'px;'
+      })),
+      poll: this.POLL.map((o) => ({
+        name: o.name, pct: o.pct,
+        fill: 'height:100%; width:' + o.w + '%; border-radius:999px;'
+          + ' background:linear-gradient(90deg, #7C3AED, #A78BFA);'
+      })),
+      docLines: [100, 84, 62].map((w) => ({
+        style: 'height:8px; border-radius:5px; margin-top:8px; background:#EEECF1; width:' + w + '%;'
+      })),
+
+      outcomes: this.OUTCOMES.map((o) => {
+        const t = this.TONE[o.tone] || this.TONE.purple;
+        return {
+          name: o.name, count: o.count, icon: o.icon, text: o.text,
+          iconStyle: 'flex:none; width:18px; display:inline-flex; align-items:center; justify-content:center;'
+            + ' font-size:15px; color:' + t.ink + ';',
+          countStyle: 'flex:none; min-width:22px; height:22px; padding:0 6px; border-radius:7px;'
+            + ' display:inline-flex; align-items:center; justify-content:center; font-size:10px;'
+            + ' font-weight:800; box-sizing:border-box; color:' + t.ink + '; background:' + t.wash + ';'
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

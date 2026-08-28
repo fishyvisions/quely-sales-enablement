@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="/assets/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  @keyframes qba-in { to { opacity:1; transform:translateY(0); } }
+  [data-qba][data-go] [data-el="row"] { animation:qba-in 520ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qba] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#03070F; padding:80px 40px 88px; display:flex; justify-content:center;">
+  <div style="position:absolute; top:-4%; left:50%; width:900px; height:520px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.14), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none;"></div>
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:34px;">
+      <div style="font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#AB84E1; margin-bottom:16px;">{{ eyebrow }}</div>
+      <h2 style="margin:0; max-width:860px; font-size:38px; line-height:1.16; letter-spacing:-.028em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:15px 0 0; max-width:640px; font-size:15px; line-height:1.65; color:rgba(255,255,255,.5); text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <!-- the matrix: one row per job, the same job answered twice -->
+    <div data-qba style="border:1px solid rgba(255,255,255,.11); border-radius:14px; overflow:hidden;">
+
+      <div style="display:grid; grid-template-columns:{{ cols }};">
+        <div style="background:rgba(255,255,255,.02);"></div>
+        <div style="padding:15px 18px; text-align:center; background:rgba(255,255,255,.04); border-left:1px solid rgba(255,255,255,.09); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.62);">{{ beforeLabel }}</div>
+        <div style="padding:15px 18px; text-align:center; background:#5C28A4; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff;">{{ afterLabel }}</div>
+      </div>
+
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+        <div data-el="row" style="{{ r.rowStyle }}">
+
+          <!-- the job -->
+          <div style="box-sizing:border-box; padding:20px 18px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:11px; background:rgba(143,91,215,.14); border:1px solid rgba(143,91,215,.3);"><i class="{{ r.icon }}" style="font-size:19px; color:#AB84E1;"></i></span>
+            <div style="margin-top:12px; font-size:15px; line-height:1.28; font-weight:700; color:#fff; text-wrap:pretty;">{{ r.job }}</div>
+          </div>
+
+          <!-- before -->
+          <div style="box-sizing:border-box; padding:20px 18px; border-left:1px solid rgba(255,255,255,.09); display:flex; flex-wrap:wrap; gap:14px; align-items:flex-start;">
+            <div style="flex:1 1 190px; min-width:0; font-size:12.5px; line-height:1.55; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ r.beforeCopy }}</div>
+            <div style="flex:1 1 205px; min-width:0; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:11px; display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ r.beforeParts }}" as="pt" hint-placeholder-count="3">
+                <sc-if value="{{ pt.isTitle }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size:11.5px; font-weight:700; color:rgba(255,255,255,.86);">{{ pt.text }}</div>
+                </sc-if>
+                <sc-if value="{{ pt.isRow }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:7px;">
+                    <span style="{{ pt.markStyle }}"></span>
+                    <i class="{{ pt.iconClass }}" style="{{ pt.iconStyle }}"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:rgba(255,255,255,.78); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                    <span style="flex:none; font-size:10px; color:rgba(255,255,255,.58); white-space:nowrap;">{{ pt.meta }}</span>
+                    <span style="{{ pt.dotStyle }}"></span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isNote }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:rgba(255,255,255,.05); border-radius:7px; padding:8px 9px;">
+                    <div style="font-size:10px; font-weight:700; color:rgba(255,255,255,.62); margin-bottom:3px;">{{ pt.label }}</div>
+                    <div style="font-size:10.5px; line-height:1.45; color:rgba(255,255,255,.6);">{{ pt.text }}</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isSearch }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:7px; padding:6px 9px;">
+                    <i class="ph ph-magnifying-glass" style="flex:none; font-size:11px; color:rgba(255,255,255,.52);"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; color:rgba(255,255,255,.56); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isCheck }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="ph ph-square" style="flex:none; font-size:13px; color:rgba(255,255,255,.62);"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; color:rgba(255,255,255,.72); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isBubble }}" hint-placeholder-val="{{ false }}">
+                  <div style="align-self:flex-end; max-width:92%; background:rgba(143,91,215,.24); border:1px solid rgba(143,91,215,.34); border-radius:11px; border-bottom-right-radius:4px; padding:9px 11px; font-size:10.5px; line-height:1.5; color:rgba(255,255,255,.84);">{{ pt.text }}</div>
+                </sc-if>
+                <sc-if value="{{ pt.isDots }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:inline-flex; align-items:center; gap:4px; background:rgba(255,255,255,.06); border-radius:9999px; padding:7px 11px; align-self:flex-start;">
+                    <span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.62);"></span>
+                    <span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.62);"></span>
+                    <span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.62);"></span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isLogos }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    <sc-for list="{{ pt.logos }}" as="lg" hint-placeholder-count="4">
+                      <span style="{{ lg.style }}"></span>
+                    </sc-for>
+                    <span style="display:inline-flex; align-items:center; justify-content:center; min-width:26px; height:26px; border-radius:7px; background:rgba(255,255,255,.07); font-size:10px; font-weight:700; color:rgba(255,255,255,.6);">{{ pt.more }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isBtn }}" hint-placeholder-val="{{ false }}">
+                  <span style="align-self:flex-start; background:#5C28A4; border-radius:7px; padding:6px 12px; font-size:10.5px; font-weight:700; color:#fff; white-space:nowrap;">{{ pt.text }}</span>
+                </sc-if>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- with quely: the same job, on a Quely surface -->
+          <div style="box-sizing:border-box; padding:20px 18px; border-left:1px solid rgba(143,91,215,.3); background:rgba(143,91,215,.05); display:flex; flex-wrap:wrap; gap:14px; align-items:flex-start;">
+            <div style="flex:1 1 190px; min-width:0; font-size:12.5px; line-height:1.55; color:rgba(255,255,255,.72); text-wrap:pretty;">{{ r.afterCopy }}</div>
+            <div style="flex:1 1 205px; min-width:0; background:#fff; border-radius:10px; padding:11px; box-shadow:0 18px 40px -20px rgba(0,0,0,.8); display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ r.afterParts }}" as="pt" hint-placeholder-count="3">
+                <sc-if value="{{ pt.isTitle }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; align-items:center; gap:7px;">
+                    <i class="{{ pt.iconClass }}" style="{{ pt.iconStyle }}"></i>
+                    <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827;">{{ pt.text }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isMeta }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:6px; padding:2px 7px; font-size:9.5px; font-weight:700; color:#1D4ED8;">
+                      <span style="width:10px; height:10px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ pt.text }}
+                    </span>
+                    <span style="flex:none; white-space:nowrap; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:6px; padding:2px 7px; font-size:9.5px; font-weight:700; color:#15803D;">{{ pt.meta }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isTabs }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap; padding-bottom:7px; border-bottom:1px solid #F3F4F6;">
+                    <sc-for list="{{ pt.tabs }}" as="tb" hint-placeholder-count="4">
+                      <span style="{{ tb.style }}">{{ tb.name }}</span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isMsg }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:flex-start; gap:8px;">
+                    <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#5C28A4; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">{{ pt.who }}</span>
+                    <div style="flex:1; min-width:0;">
+                      <div style="display:flex; align-items:baseline; gap:6px;">
+                        <span style="flex:none; font-size:10.5px; font-weight:700; color:#111827;">{{ pt.name }}</span>
+                        <span style="flex:none; font-size:9.5px; color:#6B7280;">{{ pt.meta }}</span>
+                      </div>
+                      <div style="margin-top:2px; font-size:10.5px; line-height:1.5; color:#374151;">{{ pt.text }}</div>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isBubble }}" hint-placeholder-val="{{ false }}">
+                  <div style="align-self:flex-end; max-width:92%; background:#F3EEFB; border:1px solid #E4D3F5; border-radius:11px; border-bottom-right-radius:4px; padding:8px 10px; font-size:10.5px; line-height:1.5; font-weight:600; color:#4B1F88;">{{ pt.text }}</div>
+                </sc-if>
+                <sc-if value="{{ pt.isAnswer }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#F9FAFB; border:1px solid #F3F4F6; border-radius:8px; padding:9px 10px; font-size:10.5px; line-height:1.55; color:#1F2937;">{{ pt.text }}</div>
+                </sc-if>
+                <sc-if value="{{ pt.isRow }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:7px;">
+                    <span style="{{ pt.dotStyle }}"></span>
+                    <i class="{{ pt.iconClass }}" style="{{ pt.iconStyle }}"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                    <span style="flex:none; font-size:9.5px; color:#6B7280; white-space:nowrap;">{{ pt.meta }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isCheck }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:7px;">
+                    <i class="ph ph-square" style="flex:none; font-size:12px; color:#4B5563;"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-size:9px; font-weight:700; color:#1D4ED8;">
+                      <span style="width:9px; height:9px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ pt.meta }}
+                    </span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isSearch }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:7px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:7px; padding:6px 9px;">
+                    <i class="ph ph-magnifying-glass" style="flex:none; font-size:11px; color:#6B7280;"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isSources }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; align-items:center; gap:6px; padding-top:7px; border-top:1px solid #F3F4F6;">
+                    <span style="flex:none; font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#6B7280;">{{ pt.label }}</span>
+                    <sc-for list="{{ pt.icons }}" as="ic" hint-placeholder-count="3">
+                      <i class="{{ ic.cls }}" style="{{ ic.style }}"></i>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ pt.isLink }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; color:#5C28A4; white-space:nowrap;"><i class="{{ pt.iconClass }}" style="font-size:12px;"></i>{{ pt.text }}</span>
+                </sc-if>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; justify-content:center; margin-top:26px;">
+      <span style="display:inline-flex; align-items:center; gap:11px; background:rgba(255,255,255,.04); border:1px solid rgba(143,91,215,.34); border-radius:9999px; padding:13px 26px;">
+        <span style="flex:none; width:19px; height:19px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
+        <span style="font-size:15px; font-weight:600; color:#fff; text-wrap:pretty;">{{ footer }}</span>
+      </span>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1800}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'Before Quely / With Quely',
+    headline: 'Stop searching across tools to understand the work.',
+    body: 'Quely connects each work item to the discussions, meetings, documents, decisions, dependencies, and updates around it, so the team can find the information it needs from one Space.',
+    beforeLabel: 'Before Quely',
+    afterLabel: 'With Quely',
+    footer: 'One Space. Full context. No more searching. Just the answers.',
+
+    rows: [
+      {
+        icon: 'ph ph-magnifying-glass',
+        job: 'Understand a task',
+        beforeCopy: 'Open the ticket, search chat, check documents, and review meeting notes to find the requirements, changes, and decisions.',
+        beforeParts: [
+          { k: 'note', label: 'Jira · PROJ-1287', text: 'Add saved payment methods' },
+          { k: 'note', label: '#payments', text: 'We’re only storing cards for returning customers.' },
+          { k: 'note', label: 'Meeting notes', text: 'Scope changed to remove wallet and ACH.' },
+          { k: 'logos', logos: ['jira', 'slack', 'notion', 'figma'], more: '+3' }
+        ],
+        afterCopy: 'Open the Space to see the work item and the information that explains it together.',
+        afterParts: [
+          { k: 'title', text: 'Checkout flow', icon: 'ph-fill ph-cards', tint: '#5C28A4' },
+          { k: 'meta', text: 'PROJ-1287', meta: 'In progress' },
+          { k: 'answer', text: 'Add saved payment methods' },
+          { k: 'tabs', tabs: ['Chat', 'Docs', 'Meetings', 'Decisions', 'Files'] },
+          { k: 'msg', who: 'RS', name: 'Ritika', meta: 'Nov 18', text: 'We’re removing wallet and ACH to make the renewal date.' },
+          { k: 'row', text: 'Scope change doc', icon: 'ph-fill ph-file-text', tint: '#2563EB' }
+        ]
+      },
+      {
+        icon: 'ph ph-question',
+        job: 'Find why a decision was made',
+        beforeCopy: 'Search old threads or ask someone who attended the discussion.',
+        beforeParts: [
+          { k: 'search', text: 'scope change decision' },
+          { k: 'row', text: '#checkout-discussion', meta: 'Nov 18', icon: 'ph-fill ph-chat-circle', tint: 'rgba(167,139,250,.7)' },
+          { k: 'row', text: 'Planning call notes', meta: 'Nov 18', icon: 'ph-fill ph-note-blank', tint: 'rgba(251,191,36,.7)' },
+          { k: 'row', text: 'Ritika Sharma', meta: 'Nov 18', icon: 'ph-fill ph-user', tint: 'rgba(248,113,113,.7)' },
+          { k: 'note', label: 'Decision', text: 'remove wallet and ACH' }
+        ],
+        afterCopy: 'Ask Orbit what was decided, why it was chosen, and which options were considered.',
+        afterParts: [
+          { k: 'title', text: 'Orbit', icon: 'ph-fill ph-sparkle', tint: '#5C28A4' },
+          { k: 'bubble', text: 'Why did we remove wallet and ACH?' },
+          { k: 'answer', text: 'Decided in the Nov 18 planning call to narrow scope to card checkout only, so the renewal date could hold. Wallet and ACH moved to the next cycle.' },
+          { k: 'answer', text: 'Options considered: keep all methods (higher risk), or card only (faster, lower risk) ✓' },
+          { k: 'sources', label: 'Sources', icons: [
+            { cls: 'ph-fill ph-microphone-stage', tint: '#8F5BD7' },
+            { cls: 'ph-fill ph-chat-circle', tint: '#5C28A4' },
+            { cls: 'ph-fill ph-file-text', tint: '#2563EB' }
+          ] }
+        ]
+      },
+      {
+        icon: 'ph ph-shield-warning',
+        job: 'Identify delivery risks',
+        beforeCopy: 'Compare updates across tickets, conversations, and meetings to find blockers and dependencies.',
+        beforeParts: [
+          { k: 'row', text: 'Jira', meta: '3 open dependencies', logo: 'jira', dot: '#F87171' },
+          { k: 'row', text: '#eng-frontend', meta: '2 blockers', logo: 'slack', dot: '#F87171' },
+          { k: 'row', text: 'Planning call', meta: 'Risk noted', icon: 'ph-fill ph-microphone-stage', tint: 'rgba(192,132,252,.7)', dot: '#FBBF24' },
+          { k: 'row', text: 'Doc', meta: 'Waiting on API spec', icon: 'ph-fill ph-file-text', tint: 'rgba(52,211,153,.7)', dot: '#FBBF24' }
+        ],
+        afterCopy: 'Orbit reads across the Space and surfaces the risks and dependencies that need attention.',
+        afterParts: [
+          { k: 'title', text: 'Risks & dependencies', icon: 'ph-fill ph-warning', tint: '#B91C1C' },
+          { k: 'row', text: '2 blockers', dot: '#B91C1C' },
+          { k: 'row', text: '3 dependencies', dot: '#B45309' },
+          { k: 'row', text: '1 unanswered question', dot: '#5C28A4' },
+          { k: 'link', text: 'View details', icon: 'ph-bold ph-arrow-right' }
+        ]
+      },
+      {
+        icon: 'ph ph-check-square',
+        job: 'Turn discussions into tracked work',
+        beforeCopy: 'Review meeting notes and chat threads, then create the follow-up tasks manually.',
+        beforeParts: [
+          { k: 'title', text: 'Action items from notes' },
+          { k: 'check', text: 'Update API spec' },
+          { k: 'check', text: 'Add card vaulting' },
+          { k: 'check', text: 'Write tests' },
+          { k: 'btn', text: 'Create tasks' }
+        ],
+        afterCopy: 'Review the action items Orbit extracts and push the relevant ones into the project-management tool.',
+        afterParts: [
+          { k: 'title', text: 'Action items', icon: 'ph-fill ph-list-checks', tint: '#5C28A4' },
+          { k: 'check', text: 'Update API spec', meta: 'PROJ-1312' },
+          { k: 'check', text: 'Add card vaulting', meta: 'PROJ-1313' },
+          { k: 'check', text: 'Write tests', meta: 'PROJ-1314' },
+          { k: 'link', text: 'Push to Jira', icon: 'ph-fill ph-paper-plane-right' }
+        ]
+      },
+      {
+        icon: 'ph ph-user',
+        job: 'Bring someone new up to speed',
+        beforeCopy: 'Ask a long-tenured teammate to explain the system, previous decisions, and recent changes.',
+        beforeParts: [
+          { k: 'bubble', text: 'Can you quickly walk me through why we changed this?' },
+          { k: 'dots' }
+        ],
+        afterCopy: 'Search the Space for the project’s decisions, discussions, meetings, changes, and supporting documents.',
+        afterParts: [
+          { k: 'search', text: 'Search in this Space' },
+          { k: 'tabs', tabs: ['All', 'Decisions', 'Meetings', 'Docs', 'Changes'] },
+          { k: 'row', text: 'Decision: remove wallet and ACH', meta: 'Nov 18', icon: 'ph-fill ph-seal-check', tint: '#15803D' },
+          { k: 'row', text: 'Planning call transcript', meta: 'Nov 18', icon: 'ph-fill ph-microphone-stage', tint: '#8F5BD7' },
+          { k: 'row', text: 'Scope change doc', meta: 'Nov 18', icon: 'ph-fill ph-file-text', tint: '#2563EB' },
+          { k: 'row', text: 'Checkout flow v2 diagram', meta: 'Nov 18', icon: 'ph-fill ph-flow-arrow', tint: '#B91C1C' }
+        ]
+      }
+    ]
+  };
+
+  LOGO = { jira:'/assets/logos/jira.svg', slack:'/assets/logos/slack.svg', notion:'/assets/logos/notion.svg',
+           figma:'/assets/logos/figma.svg', linear:'/assets/logos/linear.svg' };
+
+  part(pt, dark) {
+    const o = {
+      isTitle:false, isRow:false, isNote:false, isSearch:false, isCheck:false, isBubble:false,
+      isDots:false, isLogos:false, isBtn:false, isMeta:false, isTabs:false, isMsg:false,
+      isAnswer:false, isSources:false, isLink:false,
+      text: pt.text || '', meta: pt.meta || '', label: pt.label || '', who: pt.who || '', name: pt.name || '',
+      iconClass: pt.icon || 'ph', iconStyle: 'display:none;',
+      markStyle: 'display:none;', dotStyle: 'display:none;',
+      tabs: [], icons: [], logos: [], more: pt.more || ''
+    };
+    o['is' + pt.k.charAt(0).toUpperCase() + pt.k.slice(1)] = true;
+
+    if (pt.icon) o.iconStyle = 'flex:none; font-size:12px; color:' + (pt.tint || (dark ? 'rgba(255,255,255,.5)' : '#6B7280')) + ';';
+    if (pt.logo) o.markStyle = 'flex:none; width:13px; height:13px; background:url(\'' + (this.LOGO[pt.logo] || '') + '\') center/contain no-repeat;';
+    if (pt.dot) o.dotStyle = 'flex:none; width:7px; height:7px; border-radius:50%; background:' + pt.dot + ';';
+    if (pt.tabs) o.tabs = pt.tabs.map((t, i) => ({
+      name: t,
+      style: 'flex:none; white-space:nowrap; font-size:10px; font-weight:' + (i === 0 ? '700' : '500') + ';'
+        + ' color:' + (i === 0 ? '#111827' : '#6B7280') + ';'
+        + (i === 0 ? ' box-shadow:inset 0 -1.5px #111827; padding-bottom:2px;' : '')
+    }));
+    if (pt.icons) o.icons = pt.icons.map((ic) => ({ cls: ic.cls, style: 'flex:none; font-size:12px; color:' + ic.tint + ';' }));
+    if (pt.logos) o.logos = pt.logos.map((l) => ({
+      style: 'flex:none; width:26px; height:26px; border-radius:7px; background:rgba(255,255,255,.07)'
+        + ' url(\'' + (this.LOGO[l] || '') + '\') center/15px no-repeat;'
+    }));
+    return o;
+  }
+
+  componentDidMount() {
+    const start = () => {
+      const node = document.querySelector('[data-qba]');
+      if (!node) { this._poll = setTimeout(start, 120); return; }
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        node.setAttribute('data-go', ''); return;
+      }
+      // Imperative attribute flip drives the CSS animation (style-attribute holes do
+      // not re-apply on re-render). Plays once when it first enters view.
+      const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
+      if ('IntersectionObserver' in window) {
+        this.io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { this._t = setTimeout(play, 260); } });
+        }, { threshold: 0.08 });
+        this.io.observe(node);
+      }
+      this._safety = setTimeout(play, 2400);
+    };
+    this._played = false;
+    start();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._poll); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const raw = p.rows && p.rows.length ? p.rows : D.rows;
+    const last = raw.length - 1;
+
+    const rows = raw.map((r, i) => ({
+      icon: r.icon, job: r.job, beforeCopy: r.beforeCopy, afterCopy: r.afterCopy,
+      beforeParts: (r.beforeParts || []).map((pt) => this.part(pt, true)),
+      afterParts: (r.afterParts || []).map((pt) => this.part(pt, false)),
+      rowStyle: 'display:grid; grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);'
+        + (i < last ? ' border-bottom:1px solid rgba(255,255,255,.09);' : '')
+        + ' opacity:0; transform:translateY(10px); --d:' + (140 + i * 120) + 'ms;'
+    }));
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      beforeLabel: p.beforeLabel ?? D.beforeLabel,
+      afterLabel: p.afterLabel ?? D.afterLabel,
+      footer: p.footer ?? D.footer,
+      cols: '150px minmax(0,1fr) minmax(0,1fr)',
+      rows: rows
+    };
+  }
+}
+</script>
+</body>
+</html>
