@@ -12,16 +12,19 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
 
   /* One movement: six full tool surfaces are absorbed into the one empty task,
      which then opens into a Space holding all of it. Driven by [data-go]. */
   @keyframes qcv-absorb { to { left:50%; top:50%; transform:translate(-50%,-50%) rotate(0deg) scale(.46); opacity:0; } }
-  @keyframes qcv-widen  { to { width:600px; } }
-  @keyframes qcv-open   { to { max-height:640px; } }
+  @keyframes qcv-widen  { to { width:780px; } }
+  @keyframes qcv-appear { to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+  @keyframes qcv-open   { to { max-height:700px; } }
   @keyframes qcv-shed   { to { max-height:0; opacity:0; margin-top:0; } }
   @keyframes qcv-dim    { to { opacity:0; } }
   @keyframes qcv-lift   { to { opacity:1; transform:translateY(0); } }
@@ -31,8 +34,8 @@
   /* ~1.6s dwell on the scattered state, then absorb one surface at a time */
   [data-qcv] [data-el="frag"] { animation:qcv-drift 7s ease-in-out var(--dd) infinite; }
   [data-qcv][data-go] [data-el="frag"] { animation:qcv-absorb 1150ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
-  [data-qcv][data-go] [data-el="bars"] { animation:qcv-shed 480ms cubic-bezier(.3,0,0,1) 2400ms forwards; }
-  [data-qcv][data-go] [data-el="card"] { animation:qcv-widen 950ms cubic-bezier(.3,0,0,1) 2400ms forwards; }
+  [data-qcv][data-go] [data-el="card"] { animation:qcv-widen 950ms cubic-bezier(.3,0,0,1) 2400ms forwards,
+                                                    qcv-appear 520ms cubic-bezier(.3,0,0,1) 2300ms forwards; }
   [data-qcv][data-go] [data-el="body"] { animation:qcv-open 1150ms cubic-bezier(.3,0,0,1) 2450ms forwards; }
   [data-qcv][data-go] [data-el="pool"] { animation:qcv-dim 900ms ease-out 2450ms forwards; }
   [data-qcv][data-go] [data-el="rise"] { animation:qcv-lift 650ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
@@ -41,15 +44,15 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:56px 40px 62px; display:flex; justify-content:center;">
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
 
     <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
       <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
         <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
-        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#C9C1F2;">{{ eyebrow }}</span>
       </div>
-      <h2 style="margin:0 0 20px; max-width:900px; font-size:32px; line-height:1.08; letter-spacing:-.028em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
+      <h2 style="margin:0 0 20px; max-width:900px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.08; letter-spacing:-.04em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
       <p style="margin:0; max-width:780px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.62); text-wrap:pretty;">{{ body }}</p>
     </div>
 
@@ -72,7 +75,7 @@
                 <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
                   <span style="flex:none; width:18px; height:18px; border-radius:50%; background:#5C28A4; color:#fff; font-size:8.5px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">{{ f.metaInitial }}</span>
                   <span style="font-size:11px; font-weight:600; color:#374151;">{{ f.metaName }}</span>
-                  <span style="font-size:10.5px; color:#4B5563;">{{ f.metaWhen }}</span>
+                  <span style="font-size:10.5px; color:#5C5345;">{{ f.metaWhen }}</span>
                 </div>
               </sc-if>
 
@@ -82,7 +85,7 @@
                   <span style="flex:1; display:flex; align-items:flex-end; gap:2px; height:14px;">
                     <sc-for list="{{ f.wave }}" as="w" hint-placeholder-count="14"><span style="{{ w.style }}"></span></sc-for>
                   </span>
-                  <span style="flex:none; font-size:10px; font-weight:600; color:#4B5563;">{{ f.metaWhen }}</span>
+                  <span style="flex:none; font-size:10px; font-weight:600; color:#5C5345;">{{ f.metaWhen }}</span>
                 </div>
               </sc-if>
 
@@ -97,77 +100,76 @@
               <sc-if value="{{ f.isStatus }}" hint-placeholder-val="{{ false }}">
                 <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
                   <span style="{{ f.dotStyle }}"></span>
-                  <span style="font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#6B7280;">{{ f.metaName }}</span>
-                  <span style="font-size:10.5px; color:#4B5563;">{{ f.metaWhen }}</span>
+                  <span style="font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#5C5345;">{{ f.metaName }}</span>
+                  <span style="font-size:10.5px; color:#5C5345;">{{ f.metaWhen }}</span>
                 </div>
               </sc-if>
 
               <div style="{{ f.textStyle }}">{{ f.text }}</div>
-              <div style="margin-top:9px; padding-top:8px; border-top:1px solid #F3F4F6; font-size:9.5px; font-weight:700; letter-spacing:.05em; color:#4B5563;">{{ f.taskRef }}</div>
+              <div style="margin-top:9px; padding-top:8px; border-top:1px solid #F3F4F6; font-size:9.5px; font-weight:700; letter-spacing:.05em; color:#5C5345;">{{ f.taskRef }}</div>
             </div>
           </div>
         </div>
       </sc-for>
 
       <!-- the task: the one surface with nothing in it. It becomes the answer. -->
-      <div data-el="card" style="position:absolute; left:50%; top:50%; width:320px; transform:translate(-50%,-50%); z-index:5;">
+      <div data-el="card" style="position:absolute; left:50%; top:50%; width:320px; opacity:0; transform:translate(-50%,-50%) scale(.94); z-index:5;">
         <div data-el="body" style="box-sizing:border-box; width:100%; overflow:hidden; max-height:196px; background:#fff; border-radius:18px; box-shadow:0 44px 96px -30px rgba(0,0,0,.86), 0 0 0 1px rgba(255,255,255,.12), 0 0 66px -14px rgba(143,91,215,.42);">
-          <div style="padding:20px 22px 18px;">
-
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-              <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#2563EB;"><img src="/assets/logos/jira.svg" alt="" style="width:13px; height:13px;">{{ ticketId }}</span>
-              <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#B45309;"><i class="ph-fill ph-circle-half" style="font-size:11px;"></i>{{ ticketStatus }}</span>
-            </div>
-
-            <div style="font-size:23px; font-weight:800; letter-spacing:-.018em; color:#111827;">{{ ticketTitle }}</div>
-
-            <!-- the empty description, shed as the real context lands -->
-            <div data-el="bars" style="overflow:hidden; max-height:64px; opacity:1; margin-top:14px;">
-              <div style="display:flex; flex-direction:column; gap:7px;">
-                <div style="height:7px; width:88%; border-radius:9999px; background:#EEF0F4;"></div>
-                <div style="height:7px; width:41%; border-radius:9999px; background:#EEF0F4;"></div>
+          <div style="padding:22px 24px 20px;">
+            <div data-el="rise" style="{{ lensHeadStyle }}">
+              <div style="display:flex; align-items:center; gap:11px;">
+                <span style="font-family:'Geist',sans-serif; font-size:29px; font-weight:800; letter-spacing:-.03em; color:#111827;">{{ lensTitle }}</span>
+                <span style="flex:none; background:#F3F4F6; border-radius:9999px; padding:3px 11px; font-size:14px; font-weight:600; color:#4B5563;">{{ lensCount }}</span>
               </div>
-              <div style="display:inline-flex; align-items:center; gap:6px; margin-top:12px; font-size:12.5px; font-weight:600; color:#B91C1C;">
-                <i class="ph-fill ph-question" style="font-size:14px;"></i>{{ ticketGap }}
+              <div style="display:flex; align-items:center; gap:7px; margin-top:7px;">
+                <span style="font-size:14px; color:#B45309;">&#10022;</span>
+                <span style="font-size:14px; color:#4B5563;">{{ lensSource }}</span>
+              </div>
+  
+              <div style="display:flex; align-items:center; gap:11px; margin-top:16px;">
+                <span style="flex:1; min-width:0; display:flex; align-items:center; gap:9px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:11px; padding:11px 14px;">
+                  <i class="ph ph-magnifying-glass" style="flex:none; font-size:16px; color:#6B7280;"></i>
+                  <span style="font-size:14px; color:#6B7280;">{{ lensSearch }}</span>
+                </span>
+                <span style="flex:none; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:11px; padding:11px 15px; font-size:14px; font-weight:600; color:#111827; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+                  <i class="ph ph-graph" style="font-size:16px; color:#5C28A4;"></i>{{ lensMap }}
+                </span>
+              </div>
+  
+              <div style="display:flex; align-items:center; gap:9px; margin-top:13px; flex-wrap:wrap;">
+                <sc-for list="{{ lensPills }}" as="p" hint-placeholder-count="5">
+                  <span style="{{ p.style }}"><span style="{{ p.dot }}"></span>{{ p.label }} <b style="font-weight:600; opacity:.6;">{{ p.count }}</b></span>
+                </sc-for>
+                <i class="ph ph-arrows-down-up" style="margin-left:auto; font-size:15px; color:#6B7280;"></i>
               </div>
             </div>
-
-            <!-- what the task actually requires, in full -->
-            <div style="display:flex; flex-direction:column; gap:15px; margin-top:16px;">
-              <sc-for list="{{ facts }}" as="ft" hint-placeholder-count="3">
-                <div data-el="rise" style="{{ ft.riseStyle }}">
-                  <div style="display:flex; align-items:center; gap:7px; margin-bottom:5px;">
-                    <i class="{{ ft.labelIcon }}" style="font-size:13px; color:{{ ft.labelColor }};"></i>
-                    <span style="font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">{{ ft.label }}</span>
+  
+            <div data-el="rise" style="{{ lensListStyle }}">
+              <div style="display:flex; align-items:center; gap:10px; padding:14px 0 11px; border-top:1px solid #F3F4F6;">
+                <span style="flex:none; width:10px; height:10px; border-radius:50%; background:#2563EB;"></span>
+                <span style="flex:none; font-size:16px; font-weight:700; color:#111827;">{{ lensGroup }}</span>
+                <span style="flex:1; min-width:0; font-size:15px; color:#6B7280;">{{ lensGroupCount }}</span>
+                <i class="ph ph-caret-down" style="flex:none; font-size:15px; color:#6B7280;"></i>
+              </div>
+  
+              <div style="display:flex; flex-direction:column;">
+                <sc-for list="{{ lensRows }}" as="r" hint-placeholder-count="4">
+                  <div style="{{ r.rowStyle }}">
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-size:14.5px; line-height:1.5; color:#1A1611; text-wrap:pretty;">{{ r.text }}</div>
+                      <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                        <i class="ph ph-flag" style="flex:none; font-size:13px; color:#4B5563;"></i>
+                        <span style="flex:none; font-size:12.5px; color:#6B7280;">{{ r.when }}</span>
+                        <span style="{{ r.badgeStyle }}"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i>{{ r.badge }}</span>
+                      </div>
+                    </div>
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:12.5px; color:#4B5563;">
+                      <i class="ph ph-broadcast" style="font-size:14px;"></i>{{ r.signals }}
+                    </span>
                   </div>
-                  <div style="font-size:14.5px; line-height:1.5; color:#111827; text-wrap:pretty;">{{ ft.text }}</div>
-                  <div style="display:flex; align-items:center; gap:6px; margin-top:5px;">
-                    <span style="{{ ft.markStyle }}"></span>
-                    <i class="{{ ft.iconClass }}" style="{{ ft.iconStyle }}"></i>
-                    <span style="font-size:11.5px; color:#4B5563;">{{ ft.source }}</span>
-                  </div>
-                </div>
-              </sc-for>
-            </div>
-
-            <div data-el="rise" style="{{ attachStyle }}">
-              <div style="font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280; margin-bottom:8px;">{{ attachLabel }}</div>
-              <div style="display:flex; flex-wrap:wrap; gap:7px;">
-                <sc-for list="{{ attachments }}" as="a" hint-placeholder-count="3">
-                  <span style="display:inline-flex; align-items:center; gap:6px; background:#F9FAFB; border:1px solid #F3F4F6; border-radius:9999px; padding:5px 11px; font-size:11.5px; font-weight:600; color:#374151; white-space:nowrap;">
-                    <span style="{{ a.markStyle }}"></span>
-                    <i class="{{ a.iconClass }}" style="{{ a.iconStyle }}"></i>{{ a.name }}
-                  </span>
                 </sc-for>
               </div>
             </div>
-
-            <div data-el="rise" style="{{ orbitStyle }}">
-              <img src="/assets/quely-orbit-mascot.png" alt="" style="flex:none; width:26px; height:auto;">
-              <span style="font-size:13px; font-weight:600; color:#5C28A4;">{{ orbitLabel }}</span>
-              <i class="ph-bold ph-arrow-right" style="margin-left:auto; font-size:14px; color:#5C28A4;"></i>
-            </div>
-
           </div>
         </div>
       </div>
@@ -176,8 +178,22 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1120}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1120},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One Space for the whole task&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Understand what any task requires without searching across multiple tools.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Get a Space for every task where conversations, decisions, dependencies, supporting documents, and assets stay connected, so anyone can quickly find the information they need to move the work forward.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CHECKOUT-1428&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketStatus&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;In progress&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Fix checkout flow&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketGap&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Fix what, exactly?&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;attachLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Attached&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ask Orbit anything about this task&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;taskRef&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CHECKOUT-1428&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fragments&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{tool:string;logo?:string;icon?:string;color?:string;tint:string;tone:string;meta:'person'|'wave'|'thumbs'|'status';metaName?:string;metaWhen?:string;dot?:string;text:string;x:number;y:number;rot:number;w:number;depth:'near'|'mid'|'far';dx?:string;dy?:string}&gt;&quot;},&quot;facts&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;labelIcon:string;labelColor:string;text:string;source:string;logo?:string;icon?:string;color?:string}&gt;&quot;},&quot;attachments&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;logo?:string;icon?:string;color?:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'One Space for the whole task',
     headline: 'Understand what any task requires without searching across multiple tools.',
@@ -192,7 +208,7 @@ class Component extends DCLogic {
     // Each is a real tool surface, full of context. Same skeleton, own accent.
     fragments: [
       { tool: 'Slack', logo: '/assets/logos/slack.svg', tint: '#F6F2FB', tone: '#6B4E8C',
-        meta: 'person', metaName: 'Priya', metaWhen: '2d', text: 'Scope narrowed to card only — wallet can wait.',
+        meta: 'person', metaName: 'Priya', metaWhen: '2d', text: 'Scope narrowed to card only \u2014 wallet can wait.',
         x: 15, y: 13, rot: -7, w: 210, depth: 'near', dx: '-6px', dy: '7px' },
       { tool: 'Customer call', icon: 'ph-fill ph-phone-call', color: '#8B4FA8', tint: '#FAF3FD', tone: '#8B4FA8',
         meta: 'wave', metaWhen: '41 min', text: 'Needs card checkout before renewal.',
@@ -201,7 +217,7 @@ class Component extends DCLogic {
         meta: 'person', metaName: 'Sam', metaWhen: 'Mar 8', text: 'Decision: defer wallet and ACH.',
         x: 14, y: 44, rot: 4, w: 184, depth: 'far', dx: '7px', dy: '-8px' },
       { tool: 'Figma', logo: '/assets/logos/figma.svg', tint: '#FDF2F5', tone: '#A03A56',
-        meta: 'thumbs', text: 'Card checkout flow — approved.',
+        meta: 'thumbs', text: 'Card checkout flow \u2014 approved.',
         x: 86, y: 42, rot: -6, w: 204, depth: 'near', dx: '-7px', dy: '-6px' },
       { tool: 'Notion', logo: '/assets/logos/notion.svg', tint: '#F4F4F5', tone: '#3F3F46',
         meta: 'status', metaName: 'v3', metaWhen: 'updated 2d ago', dot: '#4B5563', text: 'Checkout requirements.',
@@ -213,13 +229,13 @@ class Component extends DCLogic {
     facts: [
       { label: 'Why it matters', labelIcon: 'ph-fill ph-target', labelColor: '#B91C1C',
         text: 'A customer needs card checkout working before their renewal date.',
-        source: 'Customer call · Mar 6', icon: 'ph-fill ph-phone-call', color: '#C084FC' },
-      { label: 'Decided', labelIcon: 'ph-fill ph-seal-check', labelColor: '#15803D',
+        source: 'Customer call \u00b7 Mar 6', icon: 'ph-fill ph-phone-call', color: '#C084FC' },
+      { label: 'Decided', labelIcon: 'ph-fill ph-seal-check', labelColor: '#12652F',
         text: 'Scope narrowed to card checkout only. Wallet and ACH deferred to the next cycle.',
-        source: 'Planning · Mar 8 · Priya, Sam', icon: 'ph-fill ph-note-blank', color: '#FBBF24' },
-      { label: 'Blocking', labelIcon: 'ph-fill ph-warning', labelColor: '#B45309',
+        source: 'Planning \u00b7 Mar 8 \u00b7 Priya, Sam', icon: 'ph-fill ph-note-blank', color: '#FBBF24' },
+      { label: 'Blocking', labelIcon: 'ph-fill ph-warning', labelColor: '#8A3D06',
         text: 'The payment tokenization dependency is still open, with no owner assigned.',
-        source: 'Linear · PAY-311', logo: '/assets/logos/linear.svg' }
+        source: 'Linear \u00b7 PAY-311', logo: '/assets/logos/linear.svg' }
     ],
     attachments: [
       { name: 'Checkout requirements v3', logo: '/assets/logos/notion.svg' },
@@ -243,7 +259,7 @@ class Component extends DCLogic {
           iconClass: 'ph', iconStyle: 'display:none;' }
       : { markStyle: 'display:none;',
           iconClass: f.icon || 'ph-fill ph-file',
-          iconStyle: 'font-size:' + (px - 1) + 'px; color:' + (f.color || '#8F5BD7') + ';' };
+          iconStyle: 'font-size:' + (px - 1) + 'px; color:' + (f.color || '#9385E6') + ';' };
   }
 
   // ~1.6s scattered dwell + staggered absorb + card opening ends ~5050ms in
@@ -275,15 +291,13 @@ class Component extends DCLogic {
       }, { threshold: 0.25 });
       this.io.observe(node);
     } else { this._visible = true; cycle(); }
-    // never leave the movement unplayed if IntersectionObserver never fires
-    this._safety = setTimeout(() => { if (!this._visible) { this._visible = true; cycle(); } }, 1600);
     this._onVis = () => { if (document.visibilityState === 'visible' && this._visible) { clearTimeout(this._t); cycle(); } };
     document.addEventListener('visibilitychange', this._onVis);
   }
   componentWillUnmount() {
     if (this.io) this.io.disconnect();
     if (this._onVis) document.removeEventListener('visibilitychange', this._onVis);
-    clearTimeout(this._t); clearTimeout(this._safety);
+    clearTimeout(this._t);
   }
 
   rise(delay) { return 'opacity:0; transform:translateY(10px); --d:' + delay + 'ms;'; }
@@ -317,7 +331,7 @@ class Component extends DCLogic {
           + ' background:' + (f.tint || '#F4F4F5') + '; border-bottom:1px solid rgba(3,7,18,.06);',
         toolStyle: 'font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;'
           + ' color:' + (f.tone || '#3F3F46') + '; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;',
-        textStyle: 'font-size:12.5px; line-height:1.45; color:#1F2937;'
+        textStyle: 'font-size:12.5px; line-height:1.45; color:#1A1611;'
           + ' display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;'
       });
     });
@@ -327,10 +341,50 @@ class Component extends DCLogic {
       text: ft.text, source: ft.source, riseStyle: this.rise(2950 + i * 230)
     }));
 
+
+    var S = this.surf();
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
+      lensTitle: 'Lenses',
+      lensCount: '37',
+      lensSource: 'Synthesized from 2 sources',
+      lensSearch: 'Search lenses...',
+      lensMap: 'Lens Map',
+      lensGroup: 'Action Items',
+      lensGroupCount: '17',
+      lensHeadStyle: 'opacity:0; transform:translateY(10px); --d:2600ms;',
+      lensListStyle: 'margin-top:14px; opacity:0; transform:translateY(10px); --d:2780ms;',
+      lensPills: [
+        { label:'All', count:'37' },
+        { label:'Decisions', count:'1', dot:'#16A34A' },
+        { label:'Action Items', count:'17', dot:'#2563EB', on:true },
+        { label:'Risks', count:'10', dot:'#DC2626' },
+        { label:'Opportunities', count:'9', dot:'#B45309' }
+      ].map(function (p) {
+        return { label:p.label, count:p.count,
+          style: 'display:inline-flex; align-items:center; gap:7px; white-space:nowrap; border-radius:9999px;'
+            + ' padding:7px 14px; font-size:14px; font-weight:600;'
+            + (p.on ? ' background:#fff; border:1.5px solid #8F5BD7; color:#111827;'
+                    : ' background:#F3F4F6; border:1px solid transparent; color:#374151;'),
+          dot: p.dot ? ('flex:none; width:8px; height:8px; border-radius:50%; background:' + p.dot + ';') : 'display:none;' };
+      }),
+      lensRows: [
+        { text:'Ronma to continue refining outreach based on prospect responses, objections, and described workflows to move qualified interest toward Quely pilots.', signals:'2' },
+        { text:'Ronma to generate 100 new prospects every week through LinkedIn Sales Navigator and/or Apollo, targeting Quely ICP champions and potential users, with an initial focus on AI software engineers and product managers.', signals:'2' },
+        { text:'Ronma to provide OJ with a weekly list of accounts showing interest so OJ can run account-level decision-maker outreach.', signals:'3', badge:'Decided' },
+        { text:'Ronma to continue outreach to Quely LinkedIn Page visitors while reconciling against OJ\u2019s previous outreach to avoid duplication.', signals:'2' }
+      ].map(function (r, i, all) {
+        return { text:r.text, when:'11 days ago', signals:r.signals, badge:r.badge || '',
+          rowStyle: 'display:flex; align-items:flex-start; gap:14px; padding:13px 0;'
+            + (i < all.length - 1 ? ' border-bottom:1px solid #F6F7F9;' : ''),
+          badgeStyle: r.badge
+            ? 'flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#DCFCE7;'
+              + ' border-radius:9999px; padding:3px 9px; font-size:12px; font-weight:600; color:#15803D;'
+            : 'display:none;' };
+      }),
       ticketId: p.ticketId ?? D.ticketId,
       ticketStatus: p.ticketStatus ?? D.ticketStatus,
       ticketTitle: p.ticketTitle ?? D.ticketTitle,

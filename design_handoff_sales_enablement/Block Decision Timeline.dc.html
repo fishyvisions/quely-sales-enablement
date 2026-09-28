@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#FFFFFF; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+</style>
+</helmet>
+<div style="background:#FFFFFF; padding:96px 40px 104px; display:flex; justify-content:center; font-family:'Inter',sans-serif; color:#111827;">
+  <div style="width:100%; max-width:940px;">
+    <div style="max-width:820px; margin:0 auto; text-align:center;">
+    <div style="font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C28A4; margin-bottom:16px;">{{ workItemLabel }}</div>
+    <h2 style="margin:0 0 14px; font-size:40px; line-height:1.08; letter-spacing:-.02em; font-weight:800; color:#111827;">{{ titleText }}</h2>
+    <p style="margin:0 0 48px; font-size:18px; line-height:1.55; color:#4B5563; max-width:720px; text-wrap:pretty;">{{ introText }}</p>
+      </div>
+    <div style="display:flex; flex-direction:column; gap:0;">
+      <sc-for list="{{ rows }}" as="ev" hint-placeholder-count="7">
+        <div style="display:flex; gap:22px; align-items:stretch;">
+          <div style="flex:none; width:96px; display:flex; flex-direction:column; align-items:flex-end; padding-top:22px;">
+            <div style="font-size:14px; font-weight:700; letter-spacing:-.01em; color:{{ ev.dateColor }};">{{ ev.date }}</div>
+          </div>
+          <div style="flex:none; width:22px; display:flex; flex-direction:column; align-items:center;">
+            <span style="{{ ev.dotStyle }}"></span>
+            <span style="{{ ev.lineStyle }}"></span>
+          </div>
+          <div style="flex:1; min-width:0; padding-bottom:26px;">
+            <button onClick="{{ ev.toggle }}" style="{{ ev.cardStyle }}" style-hover="border-color:#C4B5DD;">
+              <div style="display:flex; align-items:center; gap:9px; margin-bottom:9px; flex-wrap:wrap;">
+                <span style="{{ ev.sourceChipStyle }}"><i class="{{ ev.sourceIcon }}" style="font-size:13px;"></i>{{ ev.sourceLabel }}</span>
+                <sc-if value="{{ ev.showLost }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#4B5563; background:#F3F4F6; border:1px dashed #D1D5DB; padding:3px 9px; border-radius:9999px;"><i class="ph-fill ph-link-break" style="font-size:11px;"></i>reasoning not kept</span></sc-if>
+                <sc-if value="{{ ev.unanswered }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#B91C1C; background:#FEE2E2; border:1px solid #FECACA; padding:3px 9px; border-radius:9999px;"><i class="ph-fill ph-question" style="font-size:11px;"></i>unanswered</span></sc-if>
+                <i class="{{ ev.caret }}" style="margin-left:auto; font-size:15px; color:#4B5563;"></i>
+              </div>
+              <div style="{{ ev.titleStyle }}">{{ ev.title }}</div>
+              <sc-if value="{{ ev.open }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:10px; font-size:15px; line-height:1.55; text-wrap:pretty; color:{{ ev.detailColor }};">{{ ev.detail }}</div>
+                <div style="margin-top:12px; display:flex; align-items:center; gap:8px; font-size:13px; color:#6B7280;"><span style="{{ ev.actorStyle }}">{{ ev.actorInitials }}</span>{{ ev.actor }}</div>
+                <sc-if value="{{ ev.note }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px; padding:10px 13px; background:#FAF7FE; border-left:3px solid #8F5BD7; border-radius:0 8px 8px 0; font-size:13px; line-height:1.45; font-weight:600; color:#5C28A4;">{{ ev.note }}</div></sc-if>
+              </sc-if>
+            </button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:1500},&quot;workItem&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;NOTIF-2314 · Real-time in-app notifications&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Watch the reasoning come apart.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;intro&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One work item, seven weeks.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;events&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{id:string;date:string;kind:string;source:string;actor:string;sourceLabel:string;title:string;detail:string;kept?:boolean;note?:string;unanswered?:boolean}&gt;&quot;},&quot;people&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;initials:string;color:string}&gt;&quot;},&quot;onEvent&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(id:string)=&gt;void&quot;}}">
+class Component extends DCLogic {
+  state = { open: {} };
+
+  SOURCE = {
+    doc:     { icon:'ph-fill ph-file-text',        color:'#15803D', bg:'#ECFDF5', bd:'#A7F3D0' },
+    jira:    { icon:'ph-fill ph-kanban',           color:'#2563EB', bg:'#EFF6FF', bd:'#BFDBFE' },
+    meeting: { icon:'ph-fill ph-microphone-stage', color:'#B45309', bg:'#FFFBEB', bd:'#FDE68A' },
+    slack:   { icon:'ph-fill ph-chat-circle',      color:'#7C3AED', bg:'#F5F3FF', bd:'#DDD6FE' }
+  };
+
+  DEMO = {
+    workItem: 'NOTIF-2314 · Real-time in-app notifications',
+    title: 'Watch the reasoning come apart.',
+    intro: 'One work item, seven weeks. Every step was written down somewhere. Follow what survives — and what quietly detaches from the ticket.',
+    people: [
+      { name:'Priya', initials:'PR', color:'#5C28A4' },
+      { name:'Elena', initials:'EL', color:'#2563EB' },
+      { name:'Marcus', initials:'MA', color:'#15803D' },
+      { name:'Tomás', initials:'TO', color:'#B45309' }
+    ],
+    events: [
+      { id:'e1', date:'Mar 3',  kind:'requirement', source:'doc',     actor:'Priya',  sourceLabel:'Notifications PRD · Notion', title:'The original requirement', detail:'Notifications must arrive in real time, under two seconds, on web and mobile — delivered over WebSockets.', kept:true },
+      { id:'e2', date:'Mar 10', kind:'build',       source:'jira',    actor:'Marcus', sourceLabel:'NOTIF-2314 · Jira', title:'Work starts', detail:'Ticket created and picked up by the Platform squad. Acceptance criteria: real-time via WebSockets.', kept:true },
+      { id:'e3', date:'Mar 14', kind:'discussion',  source:'meeting', actor:'Elena',  sourceLabel:'Infra review · transcript', title:'Something changes the direction', detail:'Persistent connections at current tenant scale need a three-week connection-gateway project and about 4× the infra cost.', kept:true },
+      { id:'e4', date:'Mar 15', kind:'decision',    source:'meeting', actor:'Priya, Marcus, Elena', sourceLabel:'Decided in the review · recorded nowhere', title:'The decision and the trade-off', detail:'Ship 30-second polling for V1, defer WebSockets to Q3. Up to 30s delay accepted in exchange for shipping five weeks sooner.', kept:false, note:'This is the moment the reasoning separates from the work.' },
+      { id:'e5', date:'Mar 16', kind:'scopeChange', source:'slack',   actor:'Marcus', sourceLabel:'#platform-eng · Slack', title:'The scope change', detail:'“Retitling the ticket to polling MVP and updating the acceptance criteria.” No reason given in the thread.', kept:false },
+      { id:'e6', date:'Apr 2',  kind:'ticketState', source:'jira',    actor:'—',      sourceLabel:'NOTIF-2314 · Jira', title:'What the ticket kept', detail:'Notifications: polling MVP · 30-second interval · Done. The outcome survived. The reasoning did not.', kept:false },
+      { id:'e7', date:'May 21', kind:'question',    source:'slack',   actor:'Tomás',  sourceLabel:'#platform-eng · Slack', title:'Nine weeks later', detail:'“Why is notifications polling? WebSockets seems obviously better — should I fix this?” Nobody in the thread remembers the details.', kept:false, unanswered:true }
+    ]
+  };
+
+  renderVals() {
+    const self = this;
+    const events = (this.props.events && this.props.events.length) ? this.props.events : this.DEMO.events;
+    const people = this.props.people || this.DEMO.people;
+    const byName = {};
+    people.forEach((p) => { byName[p.name] = p; });
+
+    const rows = events.map((ev, i, arr) => {
+      const src = this.SOURCE[ev.source] || this.SOURCE.doc;
+      const last = i === arr.length - 1;
+      const lost = ev.kept === false;
+      const person = byName[ev.actor] || null;
+      const openState = this.state.open[ev.id];
+      const isOpen = openState !== undefined ? openState : (ev.kind === 'decision' || !!ev.unanswered || i === 0);
+      const accent = ev.unanswered ? '#B91C1C' : (ev.kind === 'decision' ? '#8F5BD7' : (lost ? '#D1D5DB' : '#5C28A4'));
+      const ring = ev.kind === 'decision' ? 'rgba(143,91,215,.18)' : (ev.unanswered ? 'rgba(220,38,38,.16)' : 'rgba(92,40,164,.10)');
+      return {
+        date: ev.date,
+        dateColor: ev.unanswered ? '#B91C1C' : (lost ? '#4B5563' : '#374151'),
+        dotStyle: 'flex:none; width:13px; height:13px; margin-top:24px; border-radius:50%; background:' + accent + '; box-shadow:0 0 0 4px ' + ring + ';',
+        lineStyle: last ? 'display:none;' : ('flex:1; width:2px; margin-top:6px; background:' + (lost ? 'repeating-linear-gradient(180deg,#E5E7EB 0 5px,transparent 5px 11px)' : '#E4D3F5') + ';'),
+        sourceIcon: src.icon,
+        sourceLabel: ev.sourceLabel,
+        sourceChipStyle: 'display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:' + src.color + '; background:' + src.bg + '; border:1px solid ' + src.bd + '; padding:4px 10px; border-radius:9999px;',
+        showLost: lost && !ev.unanswered,
+        unanswered: !!ev.unanswered,
+        title: ev.title,
+        titleStyle: 'font-size:19px; line-height:1.25; font-weight:700; letter-spacing:-.01em; text-align:left; color:' + (ev.unanswered ? '#B91C1C' : (lost && ev.kind !== 'decision' ? '#6B7280' : '#111827')) + ';',
+        detail: ev.detail,
+        detailColor: lost ? '#6B7280' : '#374151',
+        note: ev.note || '',
+        actor: ev.actor,
+        actorInitials: person ? person.initials : '··',
+        actorStyle: 'flex:none; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; background:' + (person ? person.color : '#4B5563') + ';',
+        open: isOpen,
+        caret: isOpen ? 'ph-bold ph-caret-up' : 'ph-bold ph-caret-down',
+        cardStyle: 'width:100%; text-align:left; font-family:inherit; cursor:pointer; background:' + (ev.kind === 'decision' ? '#FDFCFF' : (ev.unanswered ? '#FFFBFB' : '#fff')) + '; border:1px solid ' + (ev.kind === 'decision' ? '#D9C7F0' : (ev.unanswered ? '#FECACA' : '#E5E7EB')) + '; border-radius:14px; padding:20px 22px; box-shadow:' + (ev.kind === 'decision' ? '0 10px 26px -14px rgba(92,40,164,.28)' : '0 1px 2px rgba(3,7,18,.05)') + '; transition:border-color .18s, box-shadow .18s;',
+        toggle: () => {
+          const open = Object.assign({}, self.state.open);
+          open[ev.id] = !isOpen;
+          self.setState({ open });
+          if (typeof self.props.onEvent === 'function') self.props.onEvent(ev.id);
+        }
+      };
+    });
+
+    return {
+      workItemLabel: this.props.workItem ?? this.DEMO.workItem,
+      titleText: this.props.title ?? this.DEMO.title,
+      introText: this.props.intro ?? this.DEMO.intro,
+      rows
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -12,237 +12,68 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#F9FAFB; font-family:'Inter',sans-serif; }
-  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
 
-  @keyframes qmt-row { to { opacity:1; transform:translateY(0); } }
   @keyframes qmt-in  { to { opacity:1; transform:translateY(0); } }
-  [data-qmt][data-go] [data-el="row"] { animation:qmt-row 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
-  [data-qmt][data-go] [data-el="in"]  { animation:qmt-in 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qmt][data-go][data-el="in"],
+  [data-qmt][data-go] [data-el="in"] { animation:qmt-in 460ms cubic-bezier(.3,0,0,1) 160ms forwards; }
   @media (prefers-reduced-motion: reduce) {
-    [data-qmt] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+    [data-qmt][data-el], [data-qmt] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#F9FAFB; padding:80px 40px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:80px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
   <div style="position:absolute; top:250px; left:50%; width:1100px; height:600px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.14), rgba(143,91,215,0)); filter:blur(8px); pointer-events:none; z-index:0;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
 
     <div style="max-width:820px; margin:0 auto; text-align:center;">
-      <div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">{{ eyebrow }}</div>
-      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">{{ headline }}</h2>
-      <p style="margin:0; font-size:16px; line-height:1.6; color:#4B5563; text-wrap:pretty;">{{ body }}</p>
-    </div>
-
-    <!-- the two halves of the story, named where they happen -->
-    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:26px;">
-      <span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:7px 14px; font-size:13px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><i class="ph-fill ph-squares-four" style="font-size:14px; color:#5C28A4;"></i>{{ claimOne }}</span>
-      <span style="display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:7px 14px; font-size:13px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><i class="ph-fill ph-chats-circle" style="font-size:14px; color:#5C28A4;"></i>{{ claimTwo }}</span>
+      <div style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">{{ eyebrow }}</div>
+      <h2 style="margin:0 0 14px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.15; letter-spacing:-.04em; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#5C5345; text-wrap:pretty;">{{ body }}</p>
     </div>
 
     <!-- ============ ONE SPACE ============ -->
-    <div data-qmt style="margin-top:18px; background:#fff; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 24px 48px rgba(3,7,18,.18), 0 12px 24px rgba(3,7,18,.10);">
-
-      <div style="display:flex; align-items:center; gap:11px; padding:10px 16px; border-bottom:1px solid #F3F4F6;">
-        <span style="flex:none; width:19px; height:19px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
-        <span style="flex:none; font-size:12.5px; font-weight:500; color:#6B7280;">Home</span>
-        <span style="flex:none; font-size:12.5px; color:#6B7280;">/</span>
-        <span style="flex:none; font-size:12.5px; font-weight:600; color:#111827;">{{ spaceName }}</span>
-        <span style="flex:1 1 auto; min-width:0;"></span>
-        <span style="flex:none; background:#EFEAFB; border-radius:7px; padding:5px 11px; font-size:12.5px; font-weight:700; letter-spacing:.09em; color:#5C28A4; font-variant-numeric:tabular-nums;">{{ timerValue }}</span>
-        <span style="{{ crowdStyle }}">
-          <sc-for list="{{ crowd }}" as="cw" hint-placeholder-count="5"><span style="{{ cw.style }}">{{ cw.initials }}</span></sc-for>
-        </span>
-      </div>
-
-      <!-- min-height (not padding) reserves the overlay's space, so all three columns
-           stretch the full card height behind the Queue instead of stopping short -->
-      <div style="position:relative; display:flex; align-items:stretch; min-height:560px;">
-
-        <!-- icon rail -->
-        <div style="flex:none; width:48px; box-sizing:border-box; border-right:1px solid #F3F4F6; padding:13px 0; display:flex; flex-direction:column; align-items:center; gap:17px;">
-          <span style="width:20px; height:20px; border-radius:6px; background:#03070F;"></span>
-          <i class="ph ph-magnifying-glass" style="font-size:16px; color:#4B5563;"></i>
-          <span style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; background:#F3EEFB;"><i class="ph-fill ph-cards" style="font-size:16px; color:#5C28A4;"></i></span>
-          <i class="ph ph-list-checks" style="font-size:16px; color:#4B5563;"></i>
-          <i class="ph ph-calendar-blank" style="font-size:16px; color:#4B5563;"></i>
-          <i class="ph ph-buildings" style="font-size:16px; color:#4B5563;"></i>
+        <!-- the product itself: a Space with the Queue open over it -->
+        <div data-qmt data-el="in" style="margin-top:18px; opacity:0; transform:translateY(10px); border:2px solid #1A1611; overflow:hidden; background:#F8F5FB; box-shadow:6px 6px 0 #1A1611;">
+          <img src="/assets/quely-queue-space.webp" alt="A Quely Space with the Queue open, holding work pulled from Jira, Linear, Trello and other tools" style="display:block; width:100%; height:auto;">
         </div>
-
-        <!-- the work item this Space is about -->
-        <div style="flex:1 1 320px; min-width:210px; box-sizing:border-box; padding:14px 16px;">
-          <div style="display:flex; align-items:flex-start; gap:9px;">
-            <i class="ph-bold ph-caret-down" style="flex:none; margin-top:5px; font-size:12px; color:#6B7280;"></i>
-            <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px; background:#2563EB;"><i class="ph-fill ph-ticket" style="font-size:12px; color:#fff;"></i></span>
-            <span style="flex:1 1 auto; min-width:0; font-size:15px; line-height:1.3; font-weight:700; letter-spacing:-.014em; color:#111827; text-wrap:pretty;">{{ itemTitle }}</span>
-          </div>
-          <div style="margin-top:14px; font-size:12.5px; font-weight:700; color:#111827;">{{ descLabel }}</div>
-          <div style="margin-top:6px; font-size:11.5px; line-height:1.6; color:#4B5563; text-wrap:pretty;">{{ itemDescription }}</div>
-        </div>
-
-        <!-- the people, from every one of those teams -->
-        <div style="flex:0 1 282px; min-width:250px; box-sizing:border-box; border-left:1px solid #E5E7EB; border-radius:0 0 14px 0; background:#FDFDFE; display:flex; flex-direction:column;">
-          <div style="padding:11px 13px 9px;">
-            <span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #C4B5DD; border-radius:9px; padding:5px 11px 5px 7px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
-              <span style="width:18px; height:18px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
-              <span style="font-size:12px; font-weight:700; color:#111827;">{{ askOrbitLabel }}</span>
-            </span>
-          </div>
-
-          <div style="display:flex; flex-direction:column; border-top:1px solid #F3F4F6;">
-            <sc-for list="{{ threads }}" as="th" hint-placeholder-count="4">
-              <div data-el="in" style="{{ th.wrapStyle }}">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
-                  <span style="{{ th.avatarStyle }}">{{ th.initials }}</span>
-                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827; white-space:nowrap;">{{ th.who }}</span>
-                  <span style="{{ th.teamStyle }}">{{ th.team }}</span>
-                </div>
-                <div style="font-size:11px; line-height:1.5; color:#1F2937; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">{{ th.text }}</div>
-              </div>
-            </sc-for>
-          </div>
-
-          <!-- composer, as the product draws it: prompt above, tool row beneath -->
-          <div style="margin-top:auto; border-top:1px solid #E5E7EB; padding:12px 13px 11px;">
-            <div style="display:flex; justify-content:center; margin-bottom:9px;">
-              <span style="width:30px; height:4px; border-radius:9999px; background:#E5E7EB;"></span>
-            </div>
-            <div style="font-size:12.5px; color:#4B5563; margin-bottom:11px;">{{ composerLabel }}</div>
-            <div style="display:flex; align-items:center; gap:11px;">
-              <span style="flex:none; width:17px; height:17px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
-              <i class="ph ph-paperclip" style="flex:none; font-size:15px; color:#374151;"></i>
-              <i class="ph-fill ph-calendar-plus" style="flex:none; font-size:15px; color:#111827;"></i>
-              <i class="ph-fill ph-smiley" style="flex:none; font-size:15px; color:#F5B93B;"></i>
-              <i class="ph-fill ph-microphone" style="flex:none; font-size:15px; color:#111827;"></i>
-              <i class="ph-fill ph-text-align-left" style="flex:none; font-size:15px; color:#374151;"></i>
-              <span style="flex:none; font-size:12.5px; font-weight:500; color:#6B7280;">Aa</span>
-              <span style="flex:1; min-width:0;"></span>
-              <span style="flex:none; width:1px; height:16px; background:#E5E7EB;"></span>
-              <i class="ph-fill ph-paper-plane-right" style="flex:none; font-size:16px; color:#111827;"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============ THE QUEUE, OPEN OVER THE SPACE ============ -->
-        <div data-el="in" style="{{ queuePanelStyle }}">
-          <div style="display:flex; align-items:center; gap:10px; padding:12px 15px;">
-            <i class="ph ph-list-magnifying-glass" style="flex:none; font-size:16px; color:#374151;"></i>
-            <span style="flex:1; min-width:0; font-size:13.5px; font-weight:700; color:#111827;">{{ queueLabel }}</span>
-          </div>
-
-          <div style="display:flex; align-items:center; gap:8px; padding:0 15px 11px; flex-wrap:wrap;">
-            <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:5px 11px; font-size:11.5px; font-weight:600; color:#374151;"><i class="ph ph-squares-four" style="font-size:12px;"></i>{{ statusLabel }} <b style="color:#6B7280;">4</b></span>
-            <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:5px 11px; font-size:11.5px; font-weight:600; color:#374151;"><i class="ph ph-user-circle" style="font-size:12px;"></i>{{ assigneeLabel }} <b style="color:#6B7280;">6</b></span>
-            <span style="flex:1 1 120px; min-width:110px; display:inline-flex; align-items:center; gap:7px; background:#fff; border:1.5px solid #C4B5DD; border-radius:8px; padding:5px 10px; font-size:11.5px; color:#4B5563;"><i class="ph ph-magnifying-glass" style="flex:none; font-size:12px;"></i>Search</span>
-          </div>
-
-          <div style="display:flex; align-items:center; gap:10px; padding:8px 15px; background:#F9FAFB; border-top:1px solid #F3F4F6; border-bottom:1px solid #F3F4F6;">
-            <span style="flex:none; font-size:12.5px; font-weight:700; color:#111827;">{{ queueLabel }}</span>
-            <span style="flex:none; background:#E5E7EB; border-radius:9999px; padding:1px 9px; font-size:11px; font-weight:700; color:#374151;">{{ queueCount }}</span>
-            <span style="flex:1 1 auto; min-width:0;"></span>
-            <span style="flex:none; font-size:11.5px; font-weight:600; color:#5C28A4; white-space:nowrap;">{{ sourceSummary }}</span>
-          </div>
-
-          <div style="display:flex; flex-direction:column;">
-            <sc-for list="{{ items }}" as="it" hint-placeholder-count="7">
-              <div data-el="row" style="{{ it.rowStyle }}">
-                <i class="ph ph-dots-six-vertical" style="flex:none; font-size:14px; color:#6B7280;"></i>
-                <span style="{{ it.keyStyle }}">
-                  <span style="{{ it.markStyle }}"></span>{{ it.key }}
-                  <i class="ph ph-arrow-square-out" style="font-size:10px; color:#6B7280;"></i>
-                </span>
-                <span style="flex:1 1 150px; min-width:130px; font-size:12px; line-height:1.35; color:#111827; text-wrap:pretty;">{{ it.name }}</span>
-                <span style="{{ it.avatarStyle }}">{{ it.initials }}</span>
-                <span style="{{ it.teamStyle }}">{{ it.team }}</span>
-              </div>
-            </sc-for>
-          </div>
-
-          <div style="display:flex; align-items:center; gap:10px; padding:11px 15px; border-top:1px solid #E5E7EB;">
-            <span style="flex:1 1 auto; min-width:0; font-size:12.5px; font-weight:700; color:#111827;">{{ totalLabel }}</span>
-            <i class="ph-fill ph-check-circle" style="flex:none; font-size:15px; color:#15803D;"></i>
-            <span style="flex:none; font-size:12px; font-weight:600; color:#4B5563; white-space:nowrap;">{{ totalValue }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:880},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One Space across your project tools&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Bring all the work behind a project into one shared view.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Bring related work items from Jira, Linear, Monday.com, Trello, Azure DevOps, GitHub Issues, and Wrike into the same Quely Space. Each team can continue using its own project-management tool, while everyone gets one place to see the work, dependencies, and progress across the project.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;claimOne&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Work from every team's own tool&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;claimTwo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Everyone following the same thread&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;valueLine&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Everyone working on it can follow the same thread, whichever tool their own work lives in.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spaceName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Session Builder launch&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;itemTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;[DESIGN] Session Builder&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;itemDescription&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Design a new AI-powered feature that lets a team create and initialise Sessions by providing context, goals, and connected data sources.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;queueLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Queue&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;queueCount&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;7&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sourceSummary&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;From 7 tools&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;totalLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Total Estimate&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;totalValue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;26 Points&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;askOrbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ask Orbit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;items&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{key:string;name:string;who:string;tint:string;team:string;logo:string}&gt;&quot;},&quot;threads&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{who:string;team:string;tint:string;logo:string;text:string}&gt;&quot;},&quot;crowd&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{initials:string;tint:string}&gt;&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1120},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One Space across your project tools&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Bring every team's part of the project into one place.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Pull work from the tools each team uses into a Space, so everyone can see the full project, discuss the work, schedule meetings, and find what they need in one place.&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'One Space across your project tools',
-    headline: 'Bring all the work behind a project into one shared view.',
-    body: 'Bring related work items from Jira, Linear, Monday.com, Trello, Azure DevOps, GitHub Issues, and Wrike into the same Quely Space. Each team can continue using its own project-management tool, while everyone gets one place to see the work, dependencies, and progress across the project.',
+    headline: 'Bring every team’s part of the project into one place.',
+    body: 'Pull work from the tools each team uses into a Space, so everyone can see the full project, discuss the work, schedule meetings, and find what they need in one place.',
 
-    claimOne: 'Work from every team’s own tool',
-    claimTwo: 'Everyone following the same thread',
-
-    spaceName: 'Session Builder launch',
-    timerValue: '00:42:18',
-    itemTitle: '[DESIGN] Session Builder',
-    descLabel: 'Description',
-    itemDescription: 'Design a new AI-powered feature that lets a team create and initialise Sessions by providing context, goals, and connected data sources.',
-
-    crowd: [
-      { initials: 'MO', tint: '#5C28A4' },
-      { initials: 'DR', tint: '#2563EB' },
-      { initials: 'AR', tint: '#B45309' },
-      { initials: 'SE', tint: '#15803D' },
-      { initials: 'TF', tint: '#0E7490' }
-    ],
-    askOrbitLabel: 'Ask Orbit',
-    composerLabel: "What's on your mind?",
-    threads: [
-      { who: 'Dev Raman', team: 'Platform', tint: '#2563EB', logo: '/assets/logos/linear.svg',
-        text: 'The data model lands this week, so the API client is unblocked from Thursday.' },
-      { who: 'Ana Ruiz', team: 'Marketing', tint: '#B45309', logo: '/assets/logos/monday.svg',
-        text: 'Launch page copy depends on the final scope. Are we shipping the AI draft in v1?' },
-      { who: 'Sam Ellis', team: 'Data', tint: '#15803D', logo: '/assets/logos/azuredevops.svg',
-        text: 'Analytics pipeline needs the event names before I can finish instrumentation.' },
-      { who: 'Maya Osei', team: 'Design', tint: '#5C28A4', logo: '/assets/logos/jira.svg',
-        text: 'Confirmed: manual builder only for v1. Updating the ticket and the launch scope now.' },
-      { who: 'Tom Ford', team: 'Ops', tint: '#0E7490', logo: '/assets/logos/trello.svg',
-        text: 'Noted. I will hold the support briefing until the scope change lands.' }
-    ],
-
-    queueLabel: 'Queue',
-    queueCount: '7',
-    statusLabel: 'Status',
-    assigneeLabel: 'Assignee',
-    sourceSummary: 'From 7 tools',
-    items: [
-      { key: 'QUEL-1065', name: '[DESIGN] Session Builder',           who: 'Maya Osei', tint: '#5C28A4', team: 'Design',    logo: '/assets/logos/jira.svg' },
-      { key: 'ENG-241',   name: 'Session data model',                 who: 'Dev Raman', tint: '#2563EB', team: 'Platform',  logo: '/assets/logos/linear.svg' },
-      { key: '#4182',     name: 'Session builder API client',         who: 'Tom Ford',  tint: '#0E7490', team: 'Mobile',    logo: '/assets/logos/github.svg' },
-      { key: 'AB-773',    name: 'Session analytics pipeline',         who: 'Sam Ellis', tint: '#15803D', team: 'Data',      logo: '/assets/logos/azuredevops.svg' },
-      { key: 'MKT-88',    name: 'Launch page and emails',             who: 'Ana Ruiz',  tint: '#B45309', team: 'Marketing', logo: '/assets/logos/monday.svg' },
-      { key: 'OPS-19',    name: 'Rollout and support plan',           who: 'Tom Ford',  tint: '#0E7490', team: 'Ops',       logo: '/assets/logos/trello.svg' },
-      { key: 'WR-4021',   name: 'Legal review of retention',          who: 'Dev Raman', tint: '#2563EB', team: 'Legal',     logo: '/assets/logos/wrike.png' }
-    ],
-    totalLabel: 'Total Estimate',
-    totalValue: '26 Points',
-
-    valueLine: 'Everyone working on it can follow the same thread, whichever tool their own work lives in.'
   };
 
-  logoMark(src, px) {
-    return 'flex:none; width:' + px + 'px; height:' + px + 'px;'
-      + ' background:url(\'' + src + '\') center/contain no-repeat;';
-  }
-  avatar(tint, px, fs, ring) {
-    return 'flex:none; width:' + px + 'px; height:' + px + 'px; border-radius:50%; background:' + tint
-      + '; color:#fff; font-size:' + fs + 'px; font-weight:700; display:inline-flex;'
-      + ' align-items:center; justify-content:center;' + (ring ? ' box-shadow:0 0 0 2px #fff;' : '');
-  }
-  initialsOf(n) { return (n || '?').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase(); }
-
   componentDidMount() {
+    // The stage may not be in the DOM yet at mount in this runtime, so poll for it
+    // instead of early-returning, and guarantee reveal with an unconditional fallback.
     this._played = false;
     const play = () => {
       if (this._played) return;
@@ -277,73 +108,13 @@ class Component extends DCLogic {
   renderVals() {
     const p = this.props || {}, D = this.DEMO;
 
-    const crowd = (p.crowd && p.crowd.length ? p.crowd : D.crowd).map((cw, i) => ({
-      initials: cw.initials,
-      style: this.avatar(cw.tint, 24, 8.5, true) + (i > 0 ? ' margin-left:-7px;' : '')
-    }));
-
-    const threads = (p.threads && p.threads.length ? p.threads : D.threads).map((th, i) => ({
-      who: th.who, team: th.team, text: th.text,
-      initials: this.initialsOf(th.who),
-      avatarStyle: this.avatar(th.tint, 20, 8, false),
-      markStyle: this.logoMark(th.logo, 11),
-      teamStyle: 'flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;'
-        + ' margin-left:auto; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px;'
-        + ' padding:2px 8px; font-size:9.5px; font-weight:700; color:#4B5563;',
-      wrapStyle: 'padding:10px 13px 9px;'
-        + (i < (p.threads || D.threads).length - 1 ? ' border-bottom:1px solid #F3F4F6;' : '')
-        + ' opacity:0; transform:translateY(8px); --d:' + (1050 + i * 130) + 'ms;'
-    }));
-
-    const raw = p.items && p.items.length ? p.items : D.items;
-    const items = raw.map((it, i) => ({
-      key: it.key, name: it.name, team: it.team,
-      markStyle: this.logoMark(it.logo, 13),
-      initials: this.initialsOf(it.who),
-      avatarStyle: this.avatar(it.tint, 21, 8, false),
-      rowStyle: 'display:flex; align-items:center; flex-wrap:wrap; gap:9px; padding:8px 15px;'
-        + (i < raw.length - 1 ? ' border-bottom:1px solid #F6F7F9;' : '')
-        + ' opacity:0; transform:translateY(-8px); --d:' + (340 + i * 95) + 'ms;',
-      keyStyle: 'flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;'
-        + ' background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:4px 9px;'
-        + ' font-size:11px; font-weight:700; color:#111827; box-shadow:0 1px 2px rgba(3,7,18,.05);',
-      teamStyle: 'flex:none; white-space:nowrap; background:#F3EEFB; border:1px solid #E4D3F5;'
-        + ' border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; color:#4B1F88;'
-    }));
+    var S = this.surf();
 
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
-      body: p.body ?? D.body,
-      claimOne: p.claimOne ?? D.claimOne,
-      claimTwo: p.claimTwo ?? D.claimTwo,
-      valueLine: p.valueLine ?? D.valueLine,
-
-      spaceName: p.spaceName ?? D.spaceName,
-      timerValue: p.timerValue ?? D.timerValue,
-      itemTitle: p.itemTitle ?? D.itemTitle,
-      descLabel: p.descLabel ?? D.descLabel,
-      itemDescription: p.itemDescription ?? D.itemDescription,
-      crowd: crowd,
-      crowdStyle: 'flex:none; display:inline-flex; align-items:center;',
-
-      askOrbitLabel: p.askOrbitLabel ?? D.askOrbitLabel,
-      composerLabel: p.composerLabel ?? D.composerLabel,
-      threads: threads,
-
-      queueLabel: p.queueLabel ?? D.queueLabel,
-      queueCount: p.queueCount ?? D.queueCount,
-      statusLabel: p.statusLabel ?? D.statusLabel,
-      assigneeLabel: p.assigneeLabel ?? D.assigneeLabel,
-      sourceSummary: p.sourceSummary ?? D.sourceSummary,
-      items: items,
-      totalLabel: p.totalLabel ?? D.totalLabel,
-      totalValue: p.totalValue ?? D.totalValue,
-
-      queuePanelStyle: '--d:200ms; position:absolute; left:58px; right:296px; top:66px; z-index:5;'
-        + ' box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px;'
-        + ' box-shadow:0 24px 48px rgba(3,7,18,.18), 0 12px 24px rgba(3,7,18,.10);'
-        + ' opacity:0; transform:translateY(10px);'
+      body: p.body ?? D.body
     };
   }
 }

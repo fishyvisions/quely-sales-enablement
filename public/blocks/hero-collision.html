@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
 
   /* Orbit reads each message in turn, then its conclusion settles in. */
   @keyframes qhc-mark  { from { opacity:.18; transform:scale(.7); box-shadow:0 0 0 0 rgba(143,91,215,0); }
@@ -32,7 +34,7 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:56px 40px 62px; display:flex; justify-content:center;">
   <div style="position:absolute; top:40%; right:6%; width:660px; height:460px; border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.20), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none; animation:qhc-glow 8s ease-in-out infinite;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
@@ -40,10 +42,10 @@
     <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
       <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
         <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
-        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#C9C1F2;">{{ eyebrow }}</span>
       </div>
-      <h1 style="margin:0 0 18px; max-width:900px; font-size:50px; line-height:1.06; letter-spacing:-.03em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h1>
-      <p style="margin:0; max-width:760px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.6); text-wrap:pretty;">{{ body }}</p>
+      <h1 style="margin:0 0 18px; max-width:900px; font-family:'Geist',sans-serif; font-size:50px; line-height:1.06; letter-spacing:-.04em; font-weight:800; color:{{ sInk }}; text-wrap:pretty;">{{ headline }}</h1>
+      <p style="margin:0; max-width:760px; font-size:18px; line-height:1.6; color:{{ sDim }}; text-wrap:pretty;">{{ body }}</p>
     </div>
 
     <!-- asymmetric: the thread speaks on the left, Orbit concludes on the right -->
@@ -65,14 +67,14 @@
                 <span style="{{ m.avatarStyle }}">{{ m.initials }}</span>
                 <div style="flex:1; min-width:0; background:#fff; border-radius:13px; padding:12px 15px 12px; box-shadow:0 18px 40px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.11);">
                   <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:5px;">
-                    <span style="flex:none; font-size:12.5px; font-weight:700; color:#111827; white-space:nowrap;">{{ m.name }}</span>
-                    <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.role }}</span>
-                    <span style="flex:none; font-size:10.5px; color:#4B5563; white-space:nowrap;">{{ m.when }}</span>
+                    <span style="flex:none; font-size:12.5px; font-weight:700; color:#1A1611; white-space:nowrap;">{{ m.name }}</span>
+                    <span style="flex:1; min-width:0; font-size:11px; color:#5C5345; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.role }}</span>
+                    <span style="flex:none; font-size:10.5px; color:#5C5345; white-space:nowrap;">{{ m.when }}</span>
                   </div>
-                  <div style="font-size:13.5px; line-height:1.5; color:#1F2937; text-wrap:pretty;">{{ m.text }}</div>
+                  <div style="font-size:13.5px; line-height:1.5; color:#1A1611; text-wrap:pretty;">{{ m.text }}</div>
                   <div style="display:flex; align-items:center; gap:6px; margin-top:9px;">
                     <i class="ph-fill ph-paperclip" style="flex:none; font-size:11px; color:#5C28A4;"></i>
-                    <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.anchor }}</span>
+                    <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:#5C5345; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.anchor }}</span>
                   </div>
                 </div>
                 <!-- the marker Orbit lights as it reads this message -->
@@ -95,22 +97,13 @@
         <div style="background:#5C28A4; border-radius:18px; overflow:hidden; box-shadow:0 24px 48px rgba(3,7,18,.18), 0 40px 84px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(171,132,225,.34), 0 0 70px -18px rgba(143,91,215,.5);">
 
           <div style="display:flex; align-items:center; gap:10px; padding:15px 19px; border-bottom:1px solid rgba(255,255,255,.12);">
-            <img src="/assets/quely-orbit-mascot.png" alt="" style="flex:none; width:26px; height:auto;">
+            <img src="/assets/quely-orbit-pet.png" alt="" style="flex:none; width:26px; height:auto;">
             <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ orbitLabel }}</span>
             <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:rgba(248,113,113,.18); border:1px solid rgba(248,113,113,.42); border-radius:9999px; padding:4px 10px; font-size:10.5px; font-weight:700; color:#FECACA;"><i class="ph-fill ph-warning" style="font-size:11px;"></i>{{ severity }}</span>
           </div>
 
           <div style="padding:18px 20px 20px;">
             <div style="font-size:19px; line-height:1.45; font-weight:600; color:#fff; letter-spacing:-.008em; text-wrap:pretty;">{{ insight }}</div>
-
-            <div data-el="rise" style="{{ sourcesStyle }}">
-              <span style="flex:none; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.76);">{{ sourcesLabel }}</span>
-              <sc-for list="{{ sources }}" as="s" hint-placeholder-count="3">
-                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.14); border-radius:9999px; padding:3px 10px 3px 4px; font-size:10.5px; font-weight:600; color:rgba(255,255,255,.9);">
-                  <span style="{{ s.avatarStyle }}">{{ s.initials }}</span>{{ s.name }}
-                </span>
-              </sc-for>
-            </div>
 
             <div data-el="rise" style="{{ actionsStyle }}">
               <span style="flex:none; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; background:#fff; border-radius:9px; padding:9px 14px; font-size:12.5px; font-weight:700; color:#5C28A4;">
@@ -129,13 +122,27 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:700},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Spot delivery risks early&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See what could delay delivery before it does.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Quely's AI reads across the conversations, meetings, work items, and dependencies in your Quely Space to reveal blockers, the work they affect, and where action is needed.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spaceLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Space · Q3 platform release&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit flagged a delivery risk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;severity&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;High risk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;insight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Refunds sits on the critical path, is behind schedule, and depends on an API that freezes first. The release will slip unless the dependency is assigned this week.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sourcesLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sources&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionPush&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Create issue&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionMeet&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Schedule a meeting&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Both remain anchored to the task.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;messages&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;role:string;when:string;tint?:string;text:string;anchor:string}&gt;&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:700},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Spot delivery risks early&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See what could delay delivery before it does.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Quely's AI reads across the conversations, meetings, work items, and dependencies in your Quely Space to reveal blockers, the work they affect, and where action is needed.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spaceLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Space · Q3 platform release&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit flagged a delivery risk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;severity&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;High risk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;insight&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Refunds sits on the critical path, is behind schedule, and depends on an API that freezes first. The release will slip unless the dependency is assigned this week.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionPush&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Create issue&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionMeet&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Schedule a meeting&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;actionNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Both remain anchored to the task.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;messages&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;role:string;when:string;tint?:string;text:string;anchor:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'Spot delivery risks early',
     headline: 'See what could delay delivery before it does.',
-    body: 'Quely’s AI reads across the conversations, meetings, work items, and dependencies in your Quely Space to reveal blockers, the work they affect, and where action is needed.',
-    spaceLabel: 'Space · Q3 platform release',
+    body: 'Quely\u2019s AI reads across the conversations, meetings, work items, and dependencies in your Quely Space to reveal blockers, the work they affect, and where action is needed.',
+    spaceLabel: 'Space \u00b7 Q3 platform release',
     messages: [
       { name: 'Maya Osei', role: 'Release manager', when: '9d ago', tint: '#5C28A4',
         text: 'The payments API freeze lands mid-Q3. Anything depending on it has to merge before then.',
@@ -143,14 +150,13 @@ class Component extends DCLogic {
       { name: 'Dev Raman', role: 'Platform', when: '6d ago', tint: '#2563EB',
         text: 'Checkout and refunds both depend on that same API window. Refunds is behind.',
         anchor: 'Payments API freeze' },
-      { name: 'Sam Ellis', role: 'Engineer', when: '3d ago', tint: '#15803D',
+      { name: 'Sam Ellis', role: 'Engineer', when: '3d ago', tint: '#12652F',
         text: 'Refunds tokenization is still open, and nobody owns the dependency yet.',
         anchor: 'Refunds tokenization' }
     ],
     orbitLabel: 'Orbit flagged a delivery risk',
     severity: 'High risk',
     insight: 'Refunds sits on the critical path, is behind schedule, and depends on an API that freezes first. The release will slip unless the dependency is assigned this week.',
-    sourcesLabel: 'Sources',
     actionPush: 'Create issue',
     actionMeet: 'Schedule a meeting',
     actionNote: 'Both remain anchored to the task.'
@@ -170,7 +176,12 @@ class Component extends DCLogic {
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       node.setAttribute('data-go', ''); return;
     }
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Loops only while on screen.
     this._visible = false;
+    // Plays ONCE per entry into view, then holds the resolved state indefinitely —
+    // the insight is the payoff, so it must not disappear. Replays only when the
+    // block is scrolled away and back, or when the tab becomes visible again.
     const play = () => {
       node.removeAttribute('data-go');
       void node.offsetWidth;
@@ -187,6 +198,7 @@ class Component extends DCLogic {
     } else { this._visible = true; play(); }
     this._onVis = () => { if (document.visibilityState === 'visible' && this._visible) { clearTimeout(this._t); play(); } };
     document.addEventListener('visibilitychange', this._onVis);
+    // never leave the payload hidden if IntersectionObserver never fires
     this._safety = setTimeout(() => { this._visible = true; play(); }, 1200);
   }
   componentWillUnmount() {
@@ -201,21 +213,20 @@ class Component extends DCLogic {
     const messages = raw.map((m, i) => ({
       name: m.name, role: m.role, when: m.when, text: m.text, anchor: m.anchor,
       initials: this.initialsOf(m.name),
-      avatarStyle: this.avatar(m.tint || '#5C28A4', 32, 11) + ' margin-top:2px; box-shadow:0 0 0 3px #03070F;',
+      avatarStyle: this.avatar(m.tint || '#5C28A4', 32, 11) + ' margin-top:2px; box-shadow:0 0 0 3px ' + this.surf().bg + ';',
       rowStyle: 'display:flex; align-items:flex-start; gap:11px;'
         + (i === 1 ? ' padding-left:22px;' : '') + (i === 2 ? ' padding-left:44px;' : ''),
-      markStyle: 'flex:none; align-self:center; width:8px; height:8px; border-radius:50%; background:#AB84E1;'
+      markStyle: 'flex:none; align-self:center; width:8px; height:8px; border-radius:50%; background:#C9C1F2;'
         + ' margin-left:9px; opacity:.18; transform:scale(.7); --d:' + (900 + i * 340) + 'ms;',
+      // Spine segment per row: extent is this row's own geometry, so the spine can
+      // only ever run first-connector-centre -> last-connector-centre. GAP = row-gap.
       spineStyle: 'position:absolute; right:0; width:1.5px; background:rgba(143,91,225,.36); pointer-events:none;'
         + (i === 0 ? ' top:50%; bottom:-14px;'
           : (i === raw.length - 1 ? ' top:0; height:50%;' : ' top:0; bottom:-14px;'))
     }));
-    const sources = raw.map((m) => ({
-      name: (m.name || '').split(/\s+/)[0],
-      initials: this.initialsOf(m.name),
-      avatarStyle: this.avatar(m.tint || '#5C28A4', 17, 8)
-    }));
+    var S = this.surf();
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
@@ -223,14 +234,10 @@ class Component extends DCLogic {
       orbitLabel: p.orbitLabel ?? D.orbitLabel,
       severity: p.severity ?? D.severity,
       insight: p.insight ?? D.insight,
-      sourcesLabel: p.sourcesLabel ?? D.sourcesLabel,
       actionPush: p.actionPush ?? D.actionPush,
       actionMeet: p.actionMeet ?? D.actionMeet,
       actionNote: p.actionNote ?? D.actionNote,
       messages: messages,
-      sources: sources,
-      sourcesStyle: 'display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:16px; padding-top:14px;'
-        + ' border-top:1px solid rgba(255,255,255,.13); opacity:0; transform:translateY(8px); --d:2750ms;',
       actionsStyle: 'display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin-top:16px;'
         + ' opacity:0; transform:translateY(8px); --d:3050ms;',
       noteStyle: 'margin-top:10px; font-size:10.5px; color:rgba(255,255,255,.74);'

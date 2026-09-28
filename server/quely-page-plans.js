@@ -588,6 +588,9 @@
      Hero blocks (Scatter / Thread) are the page's own hero treatment, so the
      narrative set below lists the mechanism + outcome blocks the page mounts. */
   const BLOCK_FILES = {
+    cost:       'Block Cost Of Hunting',
+    timeline:   'Block Decision Timeline',
+    outcome:    'Block Outcome',
     thread:     'Block Hero Thread',
     collision:  'Block Hero Collision',
     bottleneck: 'Block Hero Bottleneck',
@@ -599,7 +602,6 @@
     record:     'Block Decision Record',
     lenses:     'Block Orbit Lenses',
     planning:   'Block Sprint Planning',
-    review:     'Block Sprint Review',
     roles:      'Block Team Roles',
     beforeafter:'Block Before After',
     howitworks: 'Block How It Works',
@@ -612,24 +614,33 @@
 
   /* problem topic -> ordered visual blocks. Several topics share a set, with
      their own copy, which is the point of a block library. */
+  /* Every page follows the same spine, unless the plan says otherwise:
+       1. HERO      introduce the problem or value proposition
+       2. PROBLEM   expand it, make the pain concrete for this audience
+       3. SOLVE     how Quely addresses THIS problem — shaped to the problem, not
+                    defaulted to Orbit; Orbit appears only where it is the answer
+       4. PRE-FOOTER a strong close: reinforce the value, give the next step
+       5. FOOTER    (rendered by the viewer)
+     An extra block may be added where it genuinely strengthens the story. */
   const BLOCK_SETS = {
-    'context-fragmentation': ['scatter', 'anatomy', 'roles', 'ctaFrag'],
-    'work-before-work':      ['converge', 'howitworks', 'ctaFrag'],
-    'conflicting-info':      ['multitool', 'beforeafter', 'ctaFrag'],
-    'human-search-engine':   ['converge', 'lenses', 'beforeafter', 'ctaFrag'],
-    'repeated-translation':  ['anatomy', 'roles', 'ctaFrag'],
+    //                         HERO          PROBLEM        SOLVE          PRE-FOOTER
+    'context-fragmentation': ['converge',    'beforeafter', 'anatomy',     'ctaFrag'],
+    'work-before-work':      ['converge',    'beforeafter', 'anatomy',     'ctaFrag'],
+    'conflicting-info':      ['converge',    'beforeafter', 'multitool',   'ctaFrag'],
+    'human-search-engine':   ['converge',    'beforeafter', 'anatomy',     'ctaFrag'],
+    'repeated-translation':  ['converge',    'beforeafter', 'roles',       'ctaFrag'],
 
-    'decision-traceability': ['thread', 'record', 'lenses', 'ctaDec'],
-    'unexplained-change':    ['thread', 'record', 'beforeafter', 'ctaDec'],
-    'onboarding':            ['bottleneck', 'record', 'anatomy', 'ctaKnow'],
-    'knowledge-loss':        ['bottleneck', 'record', 'lenses', 'ctaKnow'],
+    'decision-traceability': ['thread',      'beforeafter', 'record',      'ctaDec'],
+    'unexplained-change':    ['thread',      'beforeafter', 'record',      'ctaDec'],
+    'onboarding':            ['bottleneck',  'beforeafter', 'record',      'ctaKnow'],
+    'knowledge-loss':        ['bottleneck',  'beforeafter', 'record',      'ctaKnow'],
 
-    'risk-dependencies':     ['collision', 'relmap', 'lenses', 'ctaRisk'],
-    'status-chasing':        ['collision', 'lenses', 'roles', 'ctaRisk'],
-    'distributed-async':     ['collision', 'multitool', 'anatomy', 'ctaRisk'],
+    'risk-dependencies':     ['collision',   'beforeafter', 'relmap',      'ctaRisk'],
+    'status-chasing':        ['collision',   'beforeafter', 'relmap',      'ctaRisk'],
+    'distributed-async':     ['collision',   'beforeafter', 'multitool',   'ctaRisk'],
 
-    'ceremony-loss':         ['handoff', 'lenses', 'review', 'ctaAction'],
-    'retro-followthrough':   ['handoff', 'review', 'planning', 'ctaAction']
+    'ceremony-loss':         ['handoff',     'beforeafter', 'lenses',      'ctaAction'],
+    'retro-followthrough':   ['handoff',     'beforeafter', 'ctaAction']
   };
 
   function blockKeysFor(topic) {
@@ -639,15 +650,20 @@
   /* Which beats each block owns. The viewer derives BOTH mounting and suppression
      from this, so a plan stored before these fields existed still behaves correctly. */
   const OWNS = {
-    converge:{space:true}, anatomy:{space:true}, multitool:{space:true}, relmap:{space:true},
-    collision:{problem:true}, thread:{problem:true}, bottleneck:{problem:true},
-    handoff:{problem:true}, scatter:{problem:true},
-    lenses:{orbit:true, lenses:true}, review:{proof:true},
-    planning:{features:true}, roles:{features:true}, howitworks:{features:true},
-    record:{}, ctaFrag:{cta:true}, ctaDec:{cta:true}, ctaRisk:{cta:true},
-    ctaKnow:{cta:true}, ctaAction:{cta:true}
+    // HERO blocks own the opening; converge is also the fragmentation hero
+    converge:{space:true, problem:true}, collision:{problem:true}, thread:{problem:true},
+    bottleneck:{problem:true}, handoff:{problem:true},
+    // PROBLEM slot on every page: stands the inline problem section down
+    beforeafter:{problem:true},
+    // SOLVE blocks are problem-specific, so the generic six-card grid stands down
+    anatomy:{space:true, features:true}, multitool:{space:true, features:true},
+    relmap:{space:true, features:true}, roles:{features:true}, record:{features:true},
+    lenses:{orbit:true, lenses:true, features:true}, review:{proof:true, features:true},
+    planning:{features:true}, howitworks:{features:true},
+    // PRE-FOOTER
+    ctaFrag:{cta:true}, ctaDec:{cta:true}, ctaRisk:{cta:true}, ctaKnow:{cta:true}, ctaAction:{cta:true}
   };
-  const HERO_KEYS = ['collision','thread','bottleneck','handoff','scatter'];
+  const HERO_KEYS = ['collision','thread','bottleneck','handoff','converge'];
 
   /* Computed from the LIVE block keys, never from persisted plan fields. */
   function ownedSections(keys) {
@@ -657,6 +673,50 @@
       const o = OWNS[k] || {};
       Object.keys(o).forEach(function (sec) { out[sec] = true; });
       if (HERO_KEYS.indexOf(k) !== -1) out.hero = true;
+    });
+    return out;
+  }
+
+
+  /* ---------------------------------------------- SURFACE RHYTHM
+     The default page establishes the colour order every page must follow:
+       ink -> paper -> ink -> lilac -> paper -> violet -> ink
+     An assembled page inherits that order by POSITION, not by whatever colour a
+     block happens to ship with: assignSurfaces() hands each slot its surface and
+     the block repaints itself to match. No two adjacent slots can be alike. */
+
+  const BLOCK_POLARITY = {
+    thread:'dark', collision:'dark', bottleneck:'dark', handoff:'dark', scatter:'dark',
+    converge:'dark', record:'dark', lenses:'dark', beforeafter:'dark',
+    ctaDec:'dark', ctaKnow:'dark',
+    anatomy:'light', relmap:'light', multitool:'light', planning:'light',
+    review:'light', roles:'light', howitworks:'light', timeline:'light',
+    cost:'light', outcome:'light', timeline:'light', beforeafter:'dark',
+    ctaFrag:'dark', ctaRisk:'dark', ctaAction:'dark'
+  };
+  const DARKS = ['ink', 'violet'];
+  const LIGHTS = ['paper', 'lilac'];
+  const SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', dark:true  }
+  };
+  /* the default page's own sequence, used verbatim then repeated */
+  const RHYTHM = ['ink', 'paper', 'ink', 'lilac', 'paper', 'violet', 'ink'];
+
+  function assignSurfaces(order) {
+    const out = [];
+    var di = 0, li = 0;
+    (order || []).forEach(function (key, i) {
+      var pol = BLOCK_POLARITY[key] || 'light';
+      var pool = pol === 'dark' ? DARKS : LIGHTS;
+      var want = pool[(pol === 'dark' ? di++ : li++) % pool.length];
+      // never repeat the previous slot's surface
+      if (i > 0 && want === out[i - 1]) {
+        want = pool[(pol === 'dark' ? di++ : li++) % pool.length];
+      }
+      out.push(want);
     });
     return out;
   }
@@ -732,6 +792,7 @@
       primaryDemo: F.primaryDemo || 'orbit',
       blockKeys: blockKeys,
       blockOrder: blockKeys.map(function (k) { return BLOCK_FILES[k]; }),
+      surfaces: assignSurfaces(blockKeys),
       // a hero block owns the opening, so the page's own hero stands down
       ownsHero: blockKeys.some(function (k) { return /^(collision|thread|bottleneck|handoff|scatter)$/.test(k); }),
       // CTA blocks are terminal: they render after every inline section
@@ -752,7 +813,7 @@
     };
   }
 
-  const API = { FAMILIES: FAMILIES, TOPIC_FAMILY: TOPIC_FAMILY, BLOCK_FILES: BLOCK_FILES, BLOCK_SETS: BLOCK_SETS, blockKeysFor: blockKeysFor, INACTIVE_FAMILIES: INACTIVE_FAMILIES, activeFamilyKeys: activeFamilyKeys, familyFor: familyFor, OWNS: OWNS, ownedSections: ownedSections, buildPagePlan: buildPagePlan };
+  const API = { FAMILIES: FAMILIES, TOPIC_FAMILY: TOPIC_FAMILY, BLOCK_FILES: BLOCK_FILES, BLOCK_SETS: BLOCK_SETS, blockKeysFor: blockKeysFor, INACTIVE_FAMILIES: INACTIVE_FAMILIES, activeFamilyKeys: activeFamilyKeys, familyFor: familyFor, SURFACES: SURFACES, RHYTHM: RHYTHM, assignSurfaces: assignSurfaces, OWNS: OWNS, ownedSections: ownedSections, buildPagePlan: buildPagePlan };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   if (typeof window !== 'undefined') window.QuelyPagePlans = API;
 })();

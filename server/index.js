@@ -50,6 +50,8 @@ app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets'), { maxAge: 0, 
 app.use('/js', express.static(path.join(PUBLIC_DIR, 'js'), { maxAge: 0 }));
 // Marketing/visual blocks (public, framework-free page sections ported from the design's Block library)
 app.use('/blocks', express.static(path.join(PUBLIC_DIR, 'blocks'), { maxAge: 0, extensions: ['html'] }));
+// Browsers auto-request /favicon.ico even though pages set <link rel="icon">; serve the brand mark so it doesn't 404.
+app.get('/favicon.ico', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'assets', 'quely-mark-brand.svg')));
 
 function requireAuth(req, res, next) {
   if (req.session && req.session.authed) return next();
@@ -104,7 +106,10 @@ app.post('/api/prospects', requireAuth, (req, res) => {
 
 // Options for the dashboard's Advanced generator (problem topics, roles).
 app.get('/api/generate/options', requireAuth, (req, res) => {
-  res.json({ topics: generate.TOPICS, roles: generate.ROLES, aiEnabled: generate.aiEnabled });
+  res.json({
+    topics: generate.TOPICS, roles: generate.ROLES, aiEnabled: generate.aiEnabled,
+    blockLibrary: generate.blockLibrary
+  });
 });
 
 // Generate a tailored PagePlan for review (rep edits/approves before creating the link).

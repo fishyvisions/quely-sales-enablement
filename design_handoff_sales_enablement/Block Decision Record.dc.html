@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#0A0518; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
+  @keyframes qbob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(5px); } }
+  @keyframes qorbit { to { transform:rotate(360deg); } }
+  @keyframes qhalo { 0%,100% { opacity:.55; transform:scale(1); } 50% { opacity:.9; transform:scale(1.045); } }
+  @keyframes qspark { 0% { stroke-dashoffset:0; opacity:0; } 12% { opacity:1; } 88% { opacity:1; } 100% { stroke-dashoffset:-340px; opacity:0; } }
+  @keyframes qsheen { 0% { transform:translateX(-120%); } 55%,100% { transform:translateX(320%); } }
+</style>
+</helmet>
+<div style="position:relative; overflow:hidden; background:{{ sBg }}; padding:54px 40px 60px; display:flex; justify-content:center; font-family:'Inter',sans-serif;">
+
+  <div style="position:absolute; top:22%; left:50%; width:1180px; height:760px; margin-left:-590px; border-radius:50%; background:radial-gradient(closest-side, rgba(151,71,255,.30), rgba(151,71,255,0)); filter:blur(46px); pointer-events:none; z-index:0;"></div>
+  <div style="position:absolute; inset:0; background:radial-gradient(130% 80% at 50% 100%, rgba(10,5,24,0) 40%, rgba(10,5,24,.85) 100%); pointer-events:none; z-index:0;"></div>
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1120px; display:flex; flex-direction:column; align-items:center;">
+
+    <!-- SECTION COPY -->
+    <div style="width:100%; max-width:840px; text-align:center; margin-bottom:26px;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:11px;">
+        <img src="assets/quely-mark-brand.svg" alt="" style="width:20px; height:20px;">
+        <span style="font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#C9AEF0;">{{ eyebrowText }}</span>
+      </div>
+      <h2 style="margin:0 0 10px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.1; letter-spacing:-.04em; font-weight:800; color:#fff; text-wrap:pretty;">{{ titleText }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.55; color:rgba(240,234,250,.66); text-wrap:pretty;">{{ bodyText }}</p>
+    </div>
+
+    <!-- ASK -->
+    <div style="width:100%; max-width:1000px; display:flex; align-items:center; gap:18px; box-sizing:border-box; padding:13px 17px 13px 18px; border-radius:16px; background:linear-gradient(180deg, rgba(58,32,110,.72), rgba(30,16,62,.72)); border:1px solid rgba(171,132,225,.34); box-shadow:0 22px 54px -26px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.07);">
+      <span style="flex:none; width:32px; height:32px; border-radius:10px; background:rgba(151,71,255,.18); border:1px solid rgba(171,132,225,.32); display:inline-flex; align-items:center; justify-content:center;"><i class="ph-bold ph-magnifying-glass" style="font-size:18px; color:#C9AEF0;"></i></span>
+      <span style="flex:1; min-width:0; font-size:18.5px; font-weight:600; letter-spacing:-.01em; color:#F4F1FB; text-wrap:pretty;">{{ questionText }}</span>
+      <span style="flex:none; display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:#8BE9B0; background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.3); border-radius:9999px; padding:7px 13px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i>{{ foundLabel }}</span>
+    </div>
+
+    <!-- CONVERGENCE -->
+    <div style="position:relative; width:100%; height:84px;">
+      <svg viewBox="0 0 1000 118" preserveAspectRatio="none" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%;">
+        <defs>
+          <linearGradient id="qbeamgrad" gradientUnits="userSpaceOnUse" x1="0" y1="118" x2="0" y2="0">
+            <stop offset="0" stop-color="#D8C4F7" stop-opacity=".95"></stop>
+            <stop offset="0.5" stop-color="#C9C1F2" stop-opacity=".38"></stop>
+            <stop offset="1" stop-color="#9747FF" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#qbeamgrad)" stroke-width="1.7" stroke-linecap="round" vector-effect="non-scaling-stroke">
+          <sc-for list="{{ beamList }}" as="b" hint-placeholder-count="7">
+            <path d="{{ b.d }}" vector-effect="non-scaling-stroke"></path>
+          </sc-for>
+        </g>
+      </svg>
+    </div>
+
+    <!-- ORBIT DAIS -->
+    <div style="position:relative; display:flex; flex-direction:column; align-items:center; margin-top:-6px;">
+      <div style="position:relative; box-sizing:border-box; padding:11px 26px 12px; border-radius:19px; background:linear-gradient(180deg, rgb(92,56,161), rgb(48,24,99)); border:1px solid rgba(186,150,240,.44); box-shadow:0 26px 52px -22px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.18), 0 0 40px -6px rgba(151,71,255,.42); display:flex; flex-direction:column; align-items:center; gap:3px;">
+        <div style="display:inline-flex; align-items:center; gap:12px;">
+          <span style="position:relative; flex:none; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 400 400" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; animation:qorbit 44s linear infinite;"><g fill="#C9AEF0" opacity=".5"><ellipse cx="200" cy="80" rx="17" ry="40"></ellipse><ellipse cx="200" cy="320" rx="17" ry="40"></ellipse><ellipse cx="80" cy="200" rx="40" ry="17"></ellipse><ellipse cx="320" cy="200" rx="40" ry="17"></ellipse><ellipse cx="115" cy="115" rx="17" ry="40" transform="rotate(45 115 115)"></ellipse><ellipse cx="285" cy="285" rx="17" ry="40" transform="rotate(45 285 285)"></ellipse><ellipse cx="285" cy="115" rx="17" ry="40" transform="rotate(-45 285 115)"></ellipse><ellipse cx="115" cy="285" rx="17" ry="40" transform="rotate(-45 115 285)"></ellipse></g></svg>
+            <img src="assets/quely-orbit-pet.png" alt="" style="position:relative; z-index:1; width:28px; height:auto; filter:drop-shadow(0 0 13px rgba(201,174,240,.85)); animation:qbob 5s ease-in-out infinite;">
+          </span>
+          <span style="font-size:17px; font-weight:800; letter-spacing:-.01em; color:#fff;">{{ orbitLabel }}</span>
+        </div>
+        <div style="font-size:13px; color:rgba(240,234,250,.92);">{{ orbitSub }}</div>
+      </div>
+    </div>
+
+
+          <!-- ORBIT -> ANSWER -->
+          <div style="position:relative; width:100%; height:78px; margin-top:-2px; margin-bottom:-4px;">
+            <svg viewBox="0 0 1000 118" preserveAspectRatio="none" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%;">
+              <defs>
+                <!-- arrives bright: the beam must reach the answer, not fade before it -->
+                <linearGradient id="qbeamdown" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="118">
+                  <stop offset="0" stop-color="#9747FF" stop-opacity=".22"></stop>
+                  <stop offset="0.5" stop-color="#C9C1F2" stop-opacity=".55"></stop>
+                  <stop offset="1" stop-color="#D8C4F7" stop-opacity=".95"></stop>
+                </linearGradient>
+              </defs>
+              <g fill="none" stroke="url(#qbeamdown)" stroke-width="1.7" stroke-linecap="round" vector-effect="non-scaling-stroke">
+                <sc-for list="{{ downList }}" as="b" hint-placeholder-count="7">
+                  <path d="{{ b.d }}" vector-effect="non-scaling-stroke"></path>
+                </sc-for>
+              </g>
+              <g fill="none" stroke="#F0E4FF" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 340">
+                <sc-for list="{{ downSpark }}" as="s" hint-placeholder-count="3">
+                  <path d="{{ s.d }}" style="{{ s.style }}" vector-effect="non-scaling-stroke"></path>
+                </sc-for>
+              </g>
+            </svg>
+          </div>
+
+    <!-- ANSWER -->
+    <div style="position:relative; width:100%; margin-top:0; box-sizing:border-box; padding:22px 24px 24px; border-radius:20px; background:linear-gradient(180deg, #FFFFFF, #FBFAFE); box-shadow:0 46px 90px -34px rgba(0,0,0,.86), 0 0 0 1px rgba(171,132,225,.22), inset 0 1px 0 #fff;">
+      <div style="position:absolute; top:0; left:0; right:0; height:2px; border-radius:20px 20px 0 0; overflow:hidden; pointer-events:none;"><span style="position:absolute; top:0; left:0; width:34%; height:100%; background:linear-gradient(90deg, rgba(151,71,255,0), #9747FF, rgba(151,71,255,0)); animation:qsheen 7s ease-in-out infinite;"></span></div>
+
+      <div style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:#12652F; margin-bottom:9px;"><i class="ph-fill ph-seal-check" style="font-size:17px; color:#12652F;"></i>{{ statusLabel }}</div>
+      <h3 style="margin:0 0 9px; font-size:25px; line-height:1.16; letter-spacing:-.022em; font-weight:800; color:#0E0B1A; text-wrap:pretty;">{{ decisionText }}</h3>
+      <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap; font-size:13.5px; color:#5F5A70;"><i class="ph-fill ph-key" style="font-size:15px; color:#8D4BF6;"></i>{{ provenanceText }}</div>
+
+      <div style="display:flex; flex-wrap:wrap; gap:11px; margin-top:18px; align-items:stretch;">
+        <sc-for list="{{ facetList }}" as="f" hint-placeholder-count="3">
+          <div style="flex:1 1 178px; min-width:0; box-sizing:border-box; padding:12px 13px 13px; border-radius:13px; background:#F7F5FC; border:1px solid #EBE5F6; box-shadow:inset 0 1px 0 #fff;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;"><i class="{{ f.icon }}" style="{{ f.iconStyle }}"></i><span style="font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#4A4358;">{{ f.label }}</span></div>
+            <div style="font-size:13.5px; line-height:1.5; color:#211C31; text-wrap:pretty;">{{ f.text }}</div>
+          </div>
+        </sc-for>
+        <div style="flex:0 1 154px; min-width:0; box-sizing:border-box; padding:12px 13px 13px; border-radius:13px; background:#F7F5FC; border:1px solid #EBE5F6; box-shadow:inset 0 1px 0 #fff;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:11px;"><i class="ph-fill ph-user-circle" style="font-size:16px; color:#8D4BF6;"></i><span style="font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#4A4358;">{{ ownerLabel }}</span></div>
+          <div style="display:flex; align-items:center; gap:10px;"><span style="{{ ownerAvatarStyle }}">{{ ownerInitials }}</span><span style="font-size:15px; font-weight:700; color:#211C31;">{{ ownerName }}</span></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SOURCE TRAY -->
+    <div style="width:100%; margin-top:16px; box-sizing:border-box; padding:20px; border-radius:26px; background:linear-gradient(180deg, rgb(46,26,96), rgb(24,13,52)); border:1px solid rgba(171,132,225,.26); box-shadow:0 40px 80px -34px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.09);">
+      <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:stretch;">
+
+        <div style="flex:1 1 232px; min-width:0; box-sizing:border-box; padding:15px 16px 8px; border-radius:16px; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.1);">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:13px;"><i class="ph-fill ph-chat-circle-dots" style="flex:none; font-size:16px; color:#A78BFA;"></i><span style="flex:none; font-size:13.5px; font-weight:700; color:#F0EAFA; white-space:nowrap;">{{ discTitle }}</span><span style="margin-left:auto; flex:none; font-size:11.5px; color:rgba(255,255,255,.62); white-space:nowrap;">{{ discMeta }}</span></div>
+          <div style="display:flex; flex-direction:column; gap:11px;">
+            <sc-for list="{{ discList }}" as="m" hint-placeholder-count="3">
+              <div style="display:flex; gap:10px;">
+                <span style="{{ m.avatarStyle }}">{{ m.initials }}</span>
+                <div style="min-width:0;">
+                  <div style="display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;"><span style="font-size:12.5px; font-weight:700; color:#E4DCF4;">{{ m.who }}</span><span style="font-size:11px; color:rgba(255,255,255,.62);">{{ m.when }}</span></div>
+                  <div style="font-size:13px; line-height:1.42; color:rgba(255,255,255,.76); text-wrap:pretty;">{{ m.text }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:4px; padding:11px 0 9px;"><span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.28);"></span><span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.28);"></span><span style="width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.28);"></span></div>
+        </div>
+
+        <div style="flex:1 1 232px; min-width:0; box-sizing:border-box; padding:15px 16px 16px; border-radius:16px; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.1);">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:13px;"><i class="ph-fill ph-video-camera" style="flex:none; font-size:16px; color:#A78BFA;"></i><span style="flex:none; font-size:13.5px; font-weight:700; color:#F0EAFA; white-space:nowrap;">{{ meetTitle }}</span><span style="margin-left:auto; flex:none; font-size:11.5px; color:rgba(255,255,255,.62); white-space:nowrap;">{{ meetDuration }}</span></div>
+          <div style="position:relative; border-radius:11px; overflow:hidden; border:1px solid rgba(255,255,255,.1); background:#140C2B;">
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px;">
+              <sc-for list="{{ meetTiles }}" as="t" hint-placeholder-count="4">
+                <div style="{{ t.tileStyle }}">{{ t.initials }}</div>
+              </sc-for>
+            </div>
+            <span style="position:absolute; top:50%; left:50%; width:42px; height:42px; margin:-21px 0 0 -21px; border-radius:50%; background:rgba(255,255,255,.94); box-shadow:0 8px 22px -6px rgba(0,0,0,.7); display:inline-flex; align-items:center; justify-content:center;"><i class="ph-fill ph-play" style="font-size:17px; color:#1B1230; margin-left:2px;"></i></span>
+          </div>
+          <div style="margin-top:12px; font-size:14px; font-weight:700; color:#F0EAFA;">{{ meetName }}</div>
+          <div style="margin-top:3px; font-size:12.5px; color:rgba(255,255,255,.62);">{{ meetMeta }}</div>
+          <div style="margin-top:12px; display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:#C9AEF0; background:rgba(151,71,255,.14); border:1px solid rgba(171,132,225,.3); border-radius:9px; padding:7px 12px;"><i class="ph-fill ph-file-text" style="font-size:14px;"></i>{{ meetCta }}</div>
+        </div>
+
+        <div style="flex:1 1 232px; min-width:0; box-sizing:border-box; padding:15px 16px 16px; border-radius:16px; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.1);">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:13px;"><i class="ph-fill ph-files" style="flex:none; font-size:16px; color:#A78BFA;"></i><span style="flex:none; font-size:13.5px; font-weight:700; color:#F0EAFA; white-space:nowrap;">{{ docsTitle }}</span><span style="margin-left:auto; flex:none; font-size:11.5px; color:rgba(255,255,255,.62); white-space:nowrap;">{{ docsMeta }}</span></div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <sc-for list="{{ docsList }}" as="d" hint-placeholder-count="3">
+              <div style="display:flex; gap:11px; align-items:flex-start;">
+                <span style="{{ d.iconWrapStyle }}"><i class="{{ d.icon }}" style="font-size:15px;"></i></span>
+                <div style="min-width:0;">
+                  <div style="font-size:13.5px; font-weight:600; color:#EFEAF9; text-wrap:pretty;">{{ d.name }}</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,.62);">{{ d.meta }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#1B1038"/><rect x="22" y="26" width="56" height="26" rx="4" fill="#fff"/><rect x="28" y="33" width="34" height="4" rx="2" fill="#0E0B1A"/><rect x="28" y="42" width="24" height="3" rx="1.5" fill="#B9AECD"/><circle cx="50" cy="62" r="7" fill="#9747FF"/><rect x="24" y="72" width="52" height="14" rx="4" fill="#2E1A60"/></svg>
+</template>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:1120},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One searchable history for every piece of work&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Find decisions easily.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Everything around the work, like discussions, meeting recordings, docs, and more, is in one place, so decisions are easy to find. If you need something specific, our AI assistant Orbit can retrieve it in seconds.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;question&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Why did we ship polling instead of WebSockets?&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;status&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Decided&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;decision&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ship 30-second polling for V1 and defer WebSockets to Q3.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;provenance&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Infra review · Mar 14 · Priya, Marcus, Elena&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;owner&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Marcus&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit (AI)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitSub&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Synthesizing across your Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;found&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Found in this Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;facets&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;icon:string;color:string;text:string}&gt;&quot;},&quot;rows&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{kind:string;who:string;when:string;text:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
+  DEMO = {
+    eyebrow: 'How Quely keeps it',
+    title: 'Find decisions easily.',
+    body: 'Everything around the work, like discussions, meeting recordings, docs, and more, is in one place, so decisions are easy to find. If you need something specific, our AI assistant Orbit can retrieve it in seconds.',
+    question: 'Why did we ship polling instead of WebSockets?',
+    found: 'Found in this Space',
+    status: 'Decided',
+    decision: 'Ship 30-second polling for V1 and defer WebSockets to Q3.',
+    provenance: 'Infra review \u00b7 Mar 14 \u00b7 Priya, Marcus, Elena',
+    owner: 'Marcus',
+    facets: [
+      { label:'Why',       icon:'ph-fill ph-lightbulb', color:'#8A3D06', text:'A gateway project would have added three weeks and ~4\u00d7 infra cost.' },
+      { label:'Trade-off', icon:'ph-fill ph-scales',    color:'#6366F1', text:'30s of delay accepted to ship five weeks sooner.' },
+      { label:'Next step', icon:'ph-fill ph-arrow-right', color:'#2563EB', text:'Scope the Q3 gateway work \u2014 Marcus.' }
+    ],
+    disc: [
+      { who:'Priya',  when:'Mar 10 10:32 AM', text:'WebSockets needs gateway changes.' },
+      { who:'Marcus', when:'Mar 10 10:47 AM', text:"That's ~3 weeks of work." },
+      { who:'Elena',  when:'Mar 10 11:02 AM', text:'Polling gets us to V1 faster.' }
+    ],
+    docs: [
+      { name:'Notifications PRD',   meta:'V2.3 \u00b7 Updated Mar 9', icon:'ph-fill ph-file-doc',  color:'#60A5FA' },
+      { name:'Gateway architecture',meta:'V1.1 \u00b7 Updated Mar 8', icon:'ph-fill ph-squares-four', color:'#A78BFA' },
+      { name:'Cost comparison',     meta:'XLSX \u00b7 Updated Mar 7', icon:'ph-fill ph-table',     color:'#4ADE80' }
+    ]
+  };
+  PALETTE = ['#7C3AED','#2563EB','#0E7490','#DB2777','#8A3D06','#12652F'];
+
+  initials(name) {
+    return String(name || '').trim().split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+  }
+  avatar(name, i, size) {
+    var s = size || 26;
+    return 'flex:none; width:' + s + 'px; height:' + s + 'px; border-radius:50%; background:' + this.PALETTE[i % this.PALETTE.length]
+      + '; color:#fff; font-size:' + Math.round(s * 0.4) + 'px; font-weight:700; letter-spacing:.02em; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 2px 8px -2px rgba(0,0,0,.6);';
+  }
+
+  // Accept the legacy `rows` shape (label/icon/color/text) and derive the composed view.
+  fromRows(rows) {
+    var pick = function (re) { return (rows || []).find(function (r) { return re.test(String(r.label || '')); }) || null; };
+    var dec = pick(/decision/i), why = pick(/rationale|why/i), tr = pick(/trade/i), by = pick(/decided by|owner/i), src = pick(/source/i);
+    var facets = [];
+    if (why) facets.push({ label:'Why', icon:'ph-fill ph-lightbulb', color:'#8A3D06', text:why.text });
+    if (tr) facets.push({ label:'Trade-off', icon:'ph-fill ph-scales', color:'#6366F1', text:tr.text });
+    (rows || []).forEach(function (r) {
+      if (/next step/i.test(r.label || '')) facets.push({ label:'Next step', icon:'ph-fill ph-arrow-right', color:'#2563EB', text:r.text });
+    });
+    var ownerName = '';
+    if (by) ownerName = String(by.text).split(/[,(]/)[0].trim();
+    return {
+      decision: dec ? dec.text : null,
+      provenance: src ? src.text : (by ? by.text : null),
+      facets: facets.length ? facets : null,
+      owner: ownerName || null
+    };
+  }
+
+  renderVals() {
+    var self = this, D = this.DEMO;
+    var derived = (this.props.rows && this.props.rows.length) ? this.fromRows(this.props.rows) : {};
+
+    var facets = (this.props.facets && this.props.facets.length) ? this.props.facets : (derived.facets || D.facets);
+    var ownerName = this.props.owner ?? derived.owner ?? D.owner;
+    var disc = (this.props.discussion && this.props.discussion.length) ? this.props.discussion : D.disc;
+    var docs = (this.props.documents && this.props.documents.length) ? this.props.documents : D.docs;
+
+    // Convergence beams: curved paths from the dais apex up to each facet card's
+    // x-position, drawn in a stretched viewBox so they span the full card row.
+    var targets = [62, 208, 354, 500, 646, 792, 938];
+    var beamList = targets.map(function (tx) {
+      return {
+        d: 'M500 118 C 500 72, ' + tx + ' 64, ' + tx + ' 0',
+        style: 'animation:qbeam 5.2s ease-in-out infinite;'
+      };
+    });
+    // Mirrored fan below the dais: Orbit delivering its answer. Only this half
+    // carries the travelling spark, so the motion reads as one direction of flow.
+    var downList = targets.map(function (tx) {
+      return { d: 'M500 0 C 500 46, ' + tx + ' 54, ' + tx + ' 118' };
+    });
+    var downSpark = [208, 500, 792].map(function (tx, i) {
+      return {
+        d: 'M500 0 C 500 46, ' + tx + ' 54, ' + tx + ' 118',
+        style: 'animation:qspark 3.6s ease-in-out infinite; animation-delay:' + (i * 1.1).toFixed(2) + 's;'
+      };
+    });
+
+    var meetPeople = disc.slice(0, 3).map(function (m) { return m.who; });
+    while (meetPeople.length < 4) meetPeople.push(ownerName || 'Guest');
+
+    var S = this.surf();
+    return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
+      eyebrowText: this.props.eyebrow ?? D.eyebrow,
+      titleText: this.props.title ?? D.title,
+      questionText: this.props.question ?? D.question,
+      foundLabel: this.props.found ?? D.found,
+      statusLabel: this.props.status ?? D.status,
+      decisionText: this.props.decision ?? derived.decision ?? this.props.title ?? D.decision,
+      provenanceText: this.props.provenance ?? derived.provenance ?? D.provenance,
+      bodyText: this.props.body ?? D.body,
+
+      facetList: facets.map(function (f) {
+        return { label:f.label, text:f.text, icon:f.icon || 'ph-fill ph-dot',
+                 iconStyle:'font-size:16px; flex:none; color:' + (f.color || '#8D4BF6') + ';' };
+      }),
+      ownerLabel: this.props.ownerLabel ?? 'Owner',
+      ownerName: ownerName,
+      ownerInitials: this.initials(ownerName),
+      ownerAvatarStyle: this.avatar(ownerName, 1, 30),
+
+      beamList: beamList,
+      downList: downList,
+      downSpark: downSpark,
+
+      orbitLabel: this.props.orbitLabel ?? 'Orbit (AI)',
+      orbitSub: this.props.orbitSub ?? 'Synthesizing across your Space',
+
+      discTitle: this.props.discTitle ?? 'Async discussion',
+      discMeta: this.props.discMeta ?? (disc.length >= 3 ? '24 messages' : disc.length + ' messages'),
+      discList: disc.map(function (m, i) {
+        return { who:m.who, when:m.when, text:m.text, initials:self.initials(m.who), avatarStyle:self.avatar(m.who, i, 26) };
+      }),
+
+      meetTitle: this.props.meetTitle ?? 'Meeting recording',
+      meetDuration: this.props.meetDuration ?? '38 min',
+      meetName: this.props.meetName ?? 'Infrastructure review',
+      meetMeta: this.props.meetMeta ?? 'Mar 14 \u00b7 38 min',
+      meetCta: this.props.meetCta ?? 'View transcript',
+      meetTiles: meetPeople.slice(0, 4).map(function (n, i) {
+        return { initials:self.initials(n),
+                 tileStyle:'aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff;'
+                   + ' background:linear-gradient(160deg, ' + self.PALETTE[i % self.PALETTE.length] + ', rgba(20,12,43,.9));' };
+      }),
+
+      docsTitle: this.props.docsTitle ?? 'Documents',
+      docsMeta: this.props.docsMeta ?? (docs.length + ' items'),
+      docsList: docs.map(function (d) {
+        return { name:d.name, meta:d.meta, icon:d.icon || 'ph-fill ph-file-text',
+                 iconWrapStyle:'flex:none; width:28px; height:28px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;'
+                   + ' color:' + (d.color || '#A78BFA') + '; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

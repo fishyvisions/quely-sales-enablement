@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#5C28A4; font-family:'Inter',sans-serif; }
+  a { color:#fff; } a:hover { color:#C9C1F2; }
+  @keyframes qca-in { to { opacity:1; transform:translateY(0); } }
+  [data-qca][data-go] [data-el="copy"] { animation:qca-in 500ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qca] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:52px clamp(20px, 4vw, 40px) 56px; display:flex; justify-content:center;">
+  <div style="position:absolute; top:-60%; left:50%; width:1000px; height:520px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(255,255,255,.09), rgba(255,255,255,0)); pointer-events:none;"></div>
+
+  <!-- compact bar: the quietest CTA in the set, deliberately short -->
+  <div data-qca style="position:relative; z-index:1; width:100%; max-width:1180px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:22px;">
+
+    <div data-el="copy" style="{{ copyStyle }}">
+      <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px;">
+        <span style="flex:none; width:18px; height:18px; background:url('assets/quely-mark-brand.svg') center/contain no-repeat; filter:brightness(0) invert(1);"></span>
+        <span style="min-width:0; font-family:'Geist Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:rgba(255,255,255,.84); text-wrap:pretty;">{{ eyebrow }}</span>
+      </div>
+      <h2 style="{{ headlineStyle }}">{{ headline }}</h2>
+      <p style="{{ bodyStyle }}">{{ body }}</p>
+    </div>
+
+    <div data-el="copy" style="{{ actionsStyle }}">
+      <a href="{{ primaryHref }}" style="text-decoration:none;">
+        <span style="display:inline-flex; align-items:center; justify-content:center; gap:9px; background:#fff; border:1px solid transparent; border-radius:8px; padding:14px 24px; font-size:15px; font-weight:700; color:#41186F; box-shadow:0 24px 48px rgba(3,7,18,.18);">
+          {{ primaryCta }}<i class="ph-bold ph-arrow-right" style="font-size:15px;"></i>
+        </span>
+      </a>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:300},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Decisions &amp; next steps&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Turn discussions into clear next steps.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit, Quely’s AI assistant, surfaces decisions, open questions, risks, and action items from the conversations around the work, so everyone knows what needs to happen next.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;primaryCta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Try Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;primaryHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&amp;utm_medium=block&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  DEFAULT_SURFACE = 'violet';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
+  DEMO = {
+    eyebrow: 'Decisions & next steps',
+    headline: 'Turn discussions into clear next steps.',
+    body: 'Orbit, Quely’s AI assistant, surfaces decisions, open questions, risks, and action items from the conversations around the work, so everyone knows what needs to happen next.',
+    primaryCta: 'Try Quely',
+    primaryHref: 'https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=block',
+  };
+
+  componentDidMount() {
+    const start = () => {
+      const node = document.querySelector('[data-qca]');
+      if (!node) { this._poll = setTimeout(start, 120); return; }
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        node.setAttribute('data-go', ''); return;
+      }
+      // Imperative attribute flip drives the CSS animation (style-attribute holes do
+      // not re-apply on re-render). Plays once when it first enters view.
+      const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
+      if ('IntersectionObserver' in window) {
+        this.io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { this._t = setTimeout(play, 220); } });
+        }, { threshold: 0.2 });
+        this.io.observe(node);
+      }
+      this._safety = setTimeout(play, 2200);
+    };
+    this._played = false;
+    start();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._poll); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    var S = this.surf();
+    return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      primaryCta: p.primaryCta ?? D.primaryCta,
+      primaryHref: p.primaryHref ?? D.primaryHref,
+
+      copyStyle: 'max-width:760px; text-align:center; opacity:0; transform:translateY(10px); --d:100ms;',
+      // smallest headline in the set: this CTA is a bar, not an arrival
+      headlineStyle: 'margin:0 auto; max-width:660px; font-size:clamp(24px, 2.4vw, 30px); line-height:1.16;'
+        + ' letter-spacing:-.022em; font-weight:700; color:#fff; text-wrap:pretty; overflow-wrap:anywhere;',
+      bodyStyle: 'margin:12px auto 0; max-width:660px; font-size:15px; line-height:1.6; color:rgba(255,255,255,.8);'
+        + ' text-wrap:pretty;',
+      actionsStyle: 'display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:11px;'
+        + ' opacity:0; transform:translateY(10px); --d:240ms;'
+    };
+  }
+}
+</script>
+</body>
+</html>

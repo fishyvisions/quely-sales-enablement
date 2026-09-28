@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
 
   /* Origin stays visible: the Lenses rail is never hidden. The item is chosen,
      then the dialog builds beside it carrying that item's provenance. */
@@ -23,11 +25,11 @@
   @keyframes qhd-in    { to { opacity:1; transform:translateY(0); } }
   @keyframes qhd-slide { to { opacity:1; transform:translateX(0); } }
   @keyframes qhd-fill  { to { opacity:1; } }
-  @keyframes qhd-sel   { to { background:#F7F3FD; box-shadow:inset 0 0 0 1.5px #8F5BD7; } }
-  @keyframes qhd-press { to { background:#F3EEFB; } }
+  @keyframes qhd-sel   { to { background:#F7F3FD; box-shadow:inset 0 0 0 1.5px #9385E6; } }
+  @keyframes qhd-press { to { background:#F8F5FB; } }
   @keyframes qhd-recede{ to { opacity:.35; } }
   @keyframes qhd-out   { to { opacity:0; transform:scale(.94); } }
-  @keyframes qhd-press2{ 0% { background:#5C28A4; } 40% { background:#4B1F88; } 100% { background:#5C28A4; } }
+  @keyframes qhd-press2{ 0% { background:#5C28A4; } 40% { background:#41186F; } 100% { background:#5C28A4; } }
   @keyframes qhd-done  { to { opacity:1; transform:translateY(0) scale(1); } }
   @keyframes qhd-chip  { to { opacity:1; transform:scale(1); } }
   @keyframes qhd-glow  { 0%,100% { opacity:.3; } 50% { opacity:.62; } }
@@ -60,7 +62,7 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:56px 40px 62px; display:flex; justify-content:center;">
   <div style="position:absolute; top:58%; left:50%; width:900px; height:420px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.18), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none; animation:qhd-glow 8s ease-in-out infinite;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
@@ -68,9 +70,9 @@
     <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
       <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
         <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
-        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#C9C1F2;">{{ eyebrow }}</span>
       </div>
-      <h1 style="margin:0 0 18px; max-width:900px; font-size:50px; line-height:1.06; letter-spacing:-.03em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h1>
+      <h1 style="margin:0 0 18px; max-width:900px; font-family:'Geist',sans-serif; font-size:50px; line-height:1.06; letter-spacing:-.04em; font-weight:800; color:{{ sInk }}; text-wrap:pretty;">{{ headline }}</h1>
       <p style="margin:0; max-width:820px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ body }}</p>
     </div>
 
@@ -83,15 +85,15 @@
         <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 30px 66px -26px rgba(0,0,0,.82), 0 0 0 1px rgba(255,255,255,.12);">
           <div style="padding:15px 16px 12px; border-bottom:1px solid #F3F4F6;">
             <div style="display:flex; align-items:center; gap:9px;">
-              <span style="font-size:16px; font-weight:800; letter-spacing:-.015em; color:#111827;">{{ lensTitle }}</span>
+              <span style="font-size:16px; font-weight:800; letter-spacing:-.015em; color:#1A1611;">{{ lensTitle }}</span>
               <span style="flex:none; background:#F3F4F6; border-radius:9999px; padding:2px 9px; font-size:11px; font-weight:700; color:#374151;">{{ lensCount }}</span>
               <span style="flex:none; margin-left:auto; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:5px 10px; font-size:11.5px; font-weight:600; color:#374151;">
                 <i class="ph ph-graph" style="font-size:13px; color:#5C28A4;"></i>{{ lensMapLabel }}
               </span>
             </div>
             <div style="display:flex; align-items:center; gap:6px; margin-top:6px;">
-              <span style="flex:none; font-size:12px; color:#B45309;">&#10022;</span>
-              <span style="flex:1; min-width:0; font-size:11.5px; color:#4B5563;">{{ lensSource }}</span>
+              <span style="flex:none; font-size:12px; color:#8A3D06;">&#10022;</span>
+              <span style="flex:1; min-width:0; font-size:11.5px; color:#5C5345;">{{ lensSource }}</span>
             </div>
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px; margin-top:11px;">
               <sc-for list="{{ pills }}" as="pl" hint-placeholder-count="3">
@@ -102,25 +104,25 @@
 
           <div style="padding:11px 6px 12px;">
             <div style="display:flex; align-items:center; gap:8px; padding:0 11px 7px;">
-              <span style="flex:none; width:7px; height:7px; border-radius:50%; background:#8F5BD7;"></span>
-              <span style="flex:1; min-width:0; font-size:13px; font-weight:700; color:#111827;">{{ groupLabel }}</span>
-              <span style="flex:none; font-size:11.5px; font-weight:700; color:#6B7280;">{{ groupCount }}</span>
+              <span style="flex:none; width:7px; height:7px; border-radius:50%; background:#9385E6;"></span>
+              <span style="flex:1; min-width:0; font-size:13px; font-weight:700; color:#1A1611;">{{ groupLabel }}</span>
+              <span style="flex:none; font-size:11.5px; font-weight:700; color:#5C5345;">{{ groupCount }}</span>
             </div>
 
             <sc-for list="{{ lensItems }}" as="li" hint-placeholder-count="4">
               <div data-el="{{ li.rowEl }}" style="{{ li.rowStyle }}">
                 <div style="display:flex; align-items:flex-start; gap:9px;">
                   <div style="flex:1; min-width:0;">
-                    <div style="font-size:12.5px; line-height:1.5; color:#111827; text-wrap:pretty;">{{ li.text }}</div>
+                    <div style="font-size:12.5px; line-height:1.5; color:#1A1611; text-wrap:pretty;">{{ li.text }}</div>
                     <div style="display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:5px;">
-                      <i class="ph ph-flag" style="flex:none; font-size:11px; color:#4B5563;"></i>
-                      <span style="flex:none; font-size:10.5px; color:#4B5563;">{{ li.when }}</span>
+                      <i class="ph ph-flag" style="flex:none; font-size:11px; color:#5C5345;"></i>
+                      <span style="flex:none; font-size:10.5px; color:#5C5345;">{{ li.when }}</span>
                       <span data-el="{{ li.chipEl }}" style="{{ li.chipStyle }}">
                         <span style="{{ issueKeyMark }}"></span>{{ issueKey }}
                       </span>
                     </div>
                   </div>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-size:10.5px; color:#4B5563;">
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-size:10.5px; color:#5C5345;">
                     <i class="ph ph-broadcast" style="font-size:12px;"></i>{{ li.sources }}
                   </span>
                 </div>
@@ -141,15 +143,15 @@
       <!-- the link between them -->
       <div data-el="link" style="{{ linkStyle }}">
         <span style="flex:1; height:1.5px; background:linear-gradient(90deg, rgba(143,91,225,.15), rgba(143,91,225,.55));"></span>
-        <i class="ph-bold ph-caret-right" style="flex:none; font-size:13px; color:#AB84E1;"></i>
+        <i class="ph-bold ph-caret-right" style="flex:none; font-size:13px; color:#C9C1F2;"></i>
       </div>
 
       <!-- WHERE IT GOES: the push dialog, carrying that item's provenance -->
       <div data-el="panel" style="{{ panelStyle }}">
         <div style="display:flex; align-items:stretch; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 24px 48px rgba(3,7,18,.18), 0 30px 66px -26px rgba(0,0,0,.82), 0 0 0 1px rgba(255,255,255,.12);">
 
-          <div style="flex:none; align-self:flex-start; width:202px; box-sizing:border-box; background:#F9FAFB; border-right:1px solid #E5E7EB; border-bottom:1px solid #E5E7EB; border-bottom-right-radius:12px; padding:14px 8px;">
-            <div style="font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:#4B5563; padding:0 5px 7px;">{{ appsLabel }}</div>
+          <div style="flex:none; align-self:flex-start; width:202px; box-sizing:border-box; background:#ECE7F2; border-right:1px solid #E5E7EB; border-bottom:1px solid #E5E7EB; border-bottom-right-radius:12px; padding:14px 8px;">
+            <div style="font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:#5C5345; padding:0 5px 7px;">{{ appsLabel }}</div>
             <div style="display:flex; flex-direction:column; gap:1px;">
               <sc-for list="{{ apps }}" as="ap" hint-placeholder-count="8">
                 <span style="{{ ap.style }}">
@@ -164,8 +166,8 @@
 
           <div style="flex:1 1 320px; min-width:250px; box-sizing:border-box; padding:13px 15px 12px;">
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:11px;">
-              <span style="flex:1 1 auto; min-width:0; font-size:16px; font-weight:800; letter-spacing:-.015em; color:#111827;">{{ modalTitle }}</span>
-              <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:9999px; padding:3px 9px; font-size:10.5px; font-weight:700; color:#15803D;">
+              <span style="flex:1 1 auto; min-width:0; font-size:16px; font-weight:800; letter-spacing:-.015em; color:#1A1611;">{{ modalTitle }}</span>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:9999px; padding:3px 9px; font-size:10.5px; font-weight:700; color:#12652F;">
                 <i class="ph-fill ph-check-circle" style="font-size:11px;"></i>{{ connectedLabel }}
               </span>
             </div>
@@ -183,31 +185,31 @@
                 <span style="flex:none; margin-top:1px; font-size:12px; color:#5C28A4;">&#10022;</span>
                 <div style="flex:1; min-width:0;">
                   <div style="font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#5C28A4; margin-bottom:3px;">{{ toLabel }}</div>
-                  <div style="font-size:12.5px; line-height:1.4; font-weight:700; color:#4B1F88; text-wrap:pretty;">{{ issueTitle }}</div>
+                  <div style="font-size:12.5px; line-height:1.4; font-weight:700; color:#41186F; text-wrap:pretty;">{{ issueTitle }}</div>
                 </div>
               </div>
             </div>
 
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
               <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:#374151;">{{ titleLabel }}</span>
-              <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#F3EEFB; border:1px solid #E4D3F5; border-radius:7px; padding:4px 9px; font-size:10.5px; font-weight:700; color:#4B1F88;">
+              <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#F8F5FB; border:1px solid #C9C1F2; border-radius:7px; padding:4px 9px; font-size:10.5px; font-weight:700; color:#41186F;">
                 <span style="font-size:10.5px;">&#10022;</span>{{ aiSuggestLabel }}
               </span>
             </div>
-            <div style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:8px 10px; margin-bottom:12px; font-size:12.5px; line-height:1.4; font-weight:600; color:#111827; box-shadow:inset 0 2px rgba(3,7,18,.05); text-wrap:pretty;">
+            <div style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:8px 10px; margin-bottom:12px; font-size:12.5px; line-height:1.4; font-weight:600; color:#1A1611; box-shadow:inset 0 2px rgba(3,7,18,.05); text-wrap:pretty;">
               <span data-el="field" style="{{ issueTitleStyle }}">{{ issueTitle }}</span>
             </div>
 
-            <div style="font-size:12px; font-weight:700; color:#111827; margin-bottom:8px;">{{ configLabel }}</div>
+            <div style="font-size:12px; font-weight:700; color:#1A1611; margin-bottom:8px;">{{ configLabel }}</div>
             <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px;">
               <sc-for list="{{ fields }}" as="fd" hint-placeholder-count="5">
                 <div>
-                  <div style="font-size:10px; font-weight:600; color:#4B5563; margin-bottom:3px;">{{ fd.label }}</div>
+                  <div style="font-size:10px; font-weight:600; color:#5C5345; margin-bottom:3px;">{{ fd.label }}</div>
                   <div style="display:flex; align-items:center; gap:5px; box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:6px 8px;">
                     <span style="{{ fd.markStyle }}"></span>
                     <i class="{{ fd.iconClass }}" style="{{ fd.iconStyle }}"></i>
                     <span data-el="field" style="{{ fd.valueStyle }}">{{ fd.value }}</span>
-                    <i class="ph ph-caret-down" style="flex:none; font-size:10px; color:#4B5563;"></i>
+                    <i class="ph ph-caret-down" style="flex:none; font-size:10px; color:#5C5345;"></i>
                   </div>
                 </div>
               </sc-for>
@@ -215,11 +217,11 @@
 
             <div style="display:flex; align-items:center; gap:7px; margin:12px 0 5px;">
               <span style="flex:none; font-size:10.5px; font-weight:600; color:#374151;">{{ descLabel }}</span>
-              <span style="flex:none; background:#F3EEFB; border:1px solid #E4D3F5; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; color:#4B1F88;">{{ aiGenLabel }}</span>
+              <span style="flex:none; background:#F8F5FB; border:1px solid #C9C1F2; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; color:#41186F;">{{ aiGenLabel }}</span>
             </div>
             <div data-el="field" style="{{ descStyle }}">
-              <div style="font-size:11px; font-weight:700; color:#111827; margin-bottom:3px;">{{ descHead }}</div>
-              <div style="font-size:11px; line-height:1.5; color:#4B5563; text-wrap:pretty;">{{ descBody }}</div>
+              <div style="font-size:11px; font-weight:700; color:#1A1611; margin-bottom:3px;">{{ descHead }}</div>
+              <div style="font-size:11px; line-height:1.5; color:#5C5345; text-wrap:pretty;">{{ descBody }}</div>
             </div>
 
             <div style="position:relative; min-height:37px; margin-top:12px;">
@@ -229,9 +231,9 @@
               </div>
               <!-- the payoff: a real issue now exists -->
               <div data-el="created" style="{{ createdStyle }}">
-                <i class="ph-fill ph-check-circle" style="flex:none; font-size:17px; color:#15803D;"></i>
-                <span style="flex:1 1 auto; min-width:0; font-size:12.5px; font-weight:700; color:#15803D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ createdLabel }}</span>
-                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:7px; padding:4px 9px; font-size:11px; font-weight:700; color:#111827;">
+                <i class="ph-fill ph-check-circle" style="flex:none; font-size:17px; color:#12652F;"></i>
+                <span style="flex:1 1 auto; min-width:0; font-size:12.5px; font-weight:700; color:#12652F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ createdLabel }}</span>
+                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:7px; padding:4px 9px; font-size:11px; font-weight:700; color:#1A1611;">
                   <span style="{{ issueKeyMark }}"></span>{{ issueKey }}
                 </span>
               </div>
@@ -244,12 +246,26 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:900}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:900},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Turn discussions into action items&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Extract next steps from every conversation and meeting.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit, Quely's AI assistant, reads the conversations and meeting transcripts in each Space, identifies decisions, follow-ups, and action items, and lets you push the tasks you choose into your project management tool in one click.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;originLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Where the task comes from&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;destLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Where it goes&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lenses&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensCount&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;36&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensSource&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Synthesized from 1 source&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;groupLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Next Steps&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;modalTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Push to Jira&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fromLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;From this Next Step&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;issueTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Implement Activation-to-Revenue Funnel Dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;descBody&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Design and implement a dashboard to track activation-to-revenue funnel KPIs like session creation rate, AI-flow completion rate, and median time to first successful session.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;createLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Create in Jira&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lensItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{text:string;when:string;sources:string;selected?:boolean}&gt;&quot;},&quot;pills&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;count:string;active?:boolean}&gt;&quot;},&quot;apps&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;logo:string;state:'connected'|'live'|'soon'}&gt;&quot;},&quot;fields&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;value:string;logo?:string;icon?:string;color?:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'Turn discussions into action items',
     headline: 'Extract next steps from every conversation and meeting.',
-    body: 'Orbit, Quely’s AI assistant, reads the conversations and meeting transcripts in each Space, identifies decisions, follow-ups, and action items, and lets you push the tasks you choose into your project management tool in one click.',
+    body: 'Orbit, Quely\u2019s AI assistant, reads the conversations and meeting transcripts in each Space, identifies decisions, follow-ups, and action items, and lets you push the tasks you choose into your project management tool in one click.',
 
     toLabel: 'Orbit wrote this issue',
     createdLabel: 'Created in Jira',
@@ -285,11 +301,11 @@ class Component extends DCLogic {
       { name: 'Jira',          logo: '/assets/logos/jira.svg',        state: 'connected' },
       { name: 'Linear',        logo: '/assets/logos/linear.svg',      state: 'live' },
       { name: 'Todoist',       logo: '/assets/logos/todoist.svg',     state: 'live' },
-      { name: 'Azure DevOps',  logo: '/assets/logos/azuredevops.svg', state: 'soon' },
+      { name: 'Azure DevOps',  logo: '/assets/logos/azuredevops.svg', state: 'live' },
       { name: 'GitHub Issues', logo: '/assets/logos/github.svg',      state: 'soon' },
-      { name: 'Wrike',         logo: '/assets/logos/wrike.png',       state: 'soon' },
-      { name: 'monday.com',    logo: '/assets/logos/monday.svg',      state: 'soon' },
-      { name: 'Trello',        logo: '/assets/logos/trello.svg',      state: 'soon' }
+      { name: 'Wrike',         logo: '/assets/logos/wrike.png',       state: 'live' },
+      { name: 'monday.com',    logo: '/assets/logos/monday.svg',      state: 'live' },
+      { name: 'Trello',        logo: '/assets/logos/trello.svg',      state: 'live' }
     ],
     modalTitle: 'Push to Jira',
     connectedLabel: 'Connected',
@@ -355,10 +371,10 @@ class Component extends DCLogic {
       style: 'display:inline-flex; align-items:center; gap:5px; white-space:nowrap; border-radius:9999px;'
         + ' padding:3px 9px; font-size:10.5px; font-weight:600;'
         + (pl.active
-            ? ' background:#F3EEFB; border:1px solid #8F5BD7; color:#4B1F88;'
-            : ' background:#fff; border:1px solid #E5E7EB; color:#4B5563;'),
+            ? ' background:#F8F5FB; border:1px solid #9385E6; color:#41186F;'
+            : ' background:#fff; border:1px solid #E5E7EB; color:#5C5345;'),
       dotStyle: 'flex:none; width:5px; height:5px; border-radius:50%; background:'
-        + (pl.active ? '#8F5BD7' : '#C4B5DD') + ';'
+        + (pl.active ? '#9385E6' : '#C9C1F2') + ';'
     }));
 
     const rawItems = p.lensItems && p.lensItems.length ? p.lensItems : D.lensItems;
@@ -380,7 +396,7 @@ class Component extends DCLogic {
         chipStyle: sel
           ? 'display:inline-flex; align-items:center; gap:5px; white-space:nowrap;'
             + ' background:#F0FDF4; border:1px solid #BBF7D0; border-radius:9999px; padding:2px 8px;'
-            + ' font-size:9.5px; font-weight:700; color:#15803D; opacity:0; transform:scale(.88);'
+            + ' font-size:9.5px; font-weight:700; color:#12652F; opacity:0; transform:scale(.88);'
           : 'display:none;',
         pushEl: sel ? 'pushbtn' : 'none',
         pushStyle: 'display:inline-flex; padding:5px; border-radius:6px; background:transparent;',
@@ -404,15 +420,15 @@ class Component extends DCLogic {
         markStyle: this.logoMark(ap.logo, 15, soon),
         style: 'display:flex; align-items:center; gap:8px; border-radius:8px; padding:7px 8px;'
           + ' font-size:11.5px; font-weight:' + (sel ? '700' : '500') + ';'
-          + ' color:' + (soon ? '#4B5563' : (sel ? '#4B1F88' : '#374151')) + ';'
-          + (sel ? ' background:#F3EEFB; border:1px solid #E4D3F5;' : ' border:1px solid transparent;'),
+          + ' color:' + (soon ? '#4B5563' : (sel ? '#41186F' : '#374151')) + ';'
+          + (sel ? ' background:#F8F5FB; border:1px solid #C9C1F2;' : ' border:1px solid transparent;'),
         badge: soon ? 'Soon' : '',
         badgeStyle: soon
           ? 'flex:none; white-space:nowrap; background:#F3F4F6; border-radius:9999px; padding:2px 6px;'
-            + ' font-size:8.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#4B5563;'
+            + ' font-size:8.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#5C5345;'
           : 'display:none;',
         checkIcon: sel ? 'ph-fill ph-check-circle' : 'ph',
-        checkStyle: sel ? 'flex:none; font-size:13px; color:#15803D;' : 'display:none;'
+        checkStyle: sel ? 'flex:none; font-size:13px; color:#12652F;' : 'display:none;'
       };
     });
 
@@ -421,12 +437,14 @@ class Component extends DCLogic {
       markStyle: fd.logo ? this.logoMark(fd.logo, 13, false) : 'display:none;',
       iconClass: fd.icon || 'ph',
       iconStyle: fd.logo ? 'display:none;' : ('flex:none; font-size:12px; color:' + (fd.color || '#6B7280') + ';'),
-      valueStyle: 'flex:1; min-width:0; font-size:11.5px; font-weight:600; color:#111827;'
+      valueStyle: 'flex:1; min-width:0; font-size:11.5px; font-weight:600; color:#1A1611;'
         + ' white-space:nowrap; overflow:hidden; text-overflow:ellipsis; opacity:0;'
         + ' --d:' + (2800 + i * 150) + 'ms;'
     }));
 
+    var S = this.surf();
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
@@ -466,7 +484,7 @@ class Component extends DCLogic {
       aiGenLabel: p.aiGenLabel ?? D.aiGenLabel,
       descHead: p.descHead ?? D.descHead,
       descBody: p.descBody ?? D.descBody,
-      descStyle: 'background:#F9FAFB; border:1px solid #F3F4F6; border-radius:9px; padding:10px 12px;'
+      descStyle: 'background:#ECE7F2; border:1px solid #F3F4F6; border-radius:9px; padding:10px 12px;'
         + ' opacity:0; --d:3600ms;',
       cancelLabel: p.cancelLabel ?? D.cancelLabel,
       createLabel: p.createLabel ?? D.createLabel,

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#F1EDFB; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  @keyframes qhw-in { to { opacity:1; transform:translateY(0); } }
+  [data-qhw][data-go] [data-el="s"] { animation:qhw-in 540ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qhw] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="background:#F1EDFB; padding:76px clamp(20px,3.4vw,40px) 84px;">
+
+  <div style="max-width:860px; margin:0 auto 42px; text-align:center;">
+    <div style="font-size:12.5px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:#5C28A4; margin-bottom:16px;">{{ eyebrow }}</div>
+    <h2 style="margin:0; font-family:'Geist',sans-serif; font-size:clamp(32px,4vw,48px); line-height:1.04; letter-spacing:-.04em; font-weight:800; color:#1A1240; text-wrap:balance;">{{ headline }}</h2>
+    <p style="margin:18px auto 0; max-width:720px; font-size:17px; line-height:1.55; color:#4B4568; text-wrap:pretty;">{{ body }}</p>
+  </div>
+
+  <div data-qhw style="max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:22px; align-items:stretch;">
+    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+      <div data-el="s" style="{{ s.wrap }}">
+        <div style="{{ s.card }}">
+          <span style="{{ s.num }}">{{ s.n }}</span>
+          <div style="margin-top:15px; font-family:'Geist',sans-serif; font-size:18px; line-height:1.2; letter-spacing:-.02em; font-weight:700; color:#1A1240; text-wrap:pretty;">{{ s.title }}</div>
+          <div style="margin-top:9px; font-size:14px; line-height:1.5; color:#4B4568; text-wrap:pretty;">{{ s.text }}</div>
+
+          <!-- 1 · sources feeding the mark -->
+          <sc-if value="{{ s.isSources }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px; display:flex; align-items:center; gap:10px;">
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
+                <sc-for list="{{ sourceRows }}" as="o" hint-placeholder-count="4">
+                  <span style="{{ o.pill }}"><span style="{{ o.mark }}"></span><i class="{{ o.icon }}" style="{{ o.iconStyle }}"></i>{{ o.name }}</span>
+                </sc-for>
+              </div>
+              <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:13px; background:#5C28A4; box-shadow:0 0 0 7px #EDE7FB;">
+                <span style="width:22px; height:22px; background:url('assets/quely-mark-brand.svg') center/contain no-repeat; filter:brightness(0) invert(1);"></span>
+              </span>
+            </div>
+          </sc-if>
+
+          <!-- 2 · the Space, holding its material -->
+          <sc-if value="{{ s.isSpace }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ mockCard }}">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 11px; border-bottom:1px solid #F1EEF7;">
+                <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:7px; background:#5C28A4;">
+                  <span style="width:12px; height:12px; background:url('assets/quely-mark-brand.svg') center/contain no-repeat; filter:brightness(0) invert(1);"></span>
+                </span>
+                <span style="flex:1; min-width:0; font-size:12px; font-weight:700; color:#1A1240;">Quely</span>
+                <span style="flex:none; font-size:11px; color:#8B8398;">#3421</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; padding:10px 11px 12px;">
+                <sc-for list="{{ spaceRows }}" as="o" hint-placeholder-count="3">
+                  <div style="display:flex; align-items:center; gap:9px;">
+                    <span style="{{ o.tile }}"><i class="{{ o.icon }}" style="font-size:13px;"></i></span>
+                    <div style="flex:1; min-width:0;">
+                      <div style="font-size:11.5px; font-weight:600; color:#1A1240;">{{ o.name }}</div>
+                      <div style="{{ bar }}"></div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- 3 · meeting, then its transcript returning -->
+          <sc-if value="{{ s.isMeet }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ mockCard }}">
+              <div style="display:flex; align-items:flex-start; gap:9px; padding:11px;">
+                <i class="ph-fill ph-calendar-blank" style="flex:none; font-size:17px; color:#5C28A4;"></i>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:12px; font-weight:700; color:#1A1240;">Schedule meeting</div>
+                  <div style="margin-top:2px; font-size:11px; color:#6B6280;">Tomorrow, 10:00 AM</div>
+                  <div style="display:flex; margin-top:9px;">
+                    <sc-for list="{{ crew }}" as="c" hint-placeholder-count="3"><span style="{{ c.style }}">{{ c.i }}</span></sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:center; padding:7px 0;"><i class="ph-bold ph-arrow-down" style="font-size:15px; color:#8F5BD7;"></i></div>
+            <div style="{{ mockCardFlat }}">
+              <div style="display:flex; align-items:center; gap:9px; padding:11px 11px 9px;">
+                <i class="ph-fill ph-file-text" style="flex:none; font-size:16px; color:#5C28A4;"></i>
+                <span style="flex:1; min-width:0; font-size:12px; font-weight:700; color:#1A1240;">Meeting transcript</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px; padding:0 11px 12px;">
+                <sc-for list="{{ lines }}" as="o" hint-placeholder-count="3"><span style="{{ o.style }}"></span></sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- 4 · Orbit answering -->
+          <sc-if value="{{ s.isOrbit }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ mockCard }}">
+              <div style="display:flex; align-items:center; gap:9px; padding:11px 11px 0;">
+                <span style="flex:none; width:22px; height:22px; background:url('assets/quely-orbit-pet.png') center/contain no-repeat;"></span>
+                <span style="flex:1; min-width:0; font-family:'Geist',sans-serif; font-size:14px; font-weight:800; color:#1A1240;">Orbit</span>
+              </div>
+              <div style="margin:10px 11px 0; background:#EDE7FB; border-radius:9px; padding:9px 10px; font-size:11.5px; line-height:1.45; font-weight:600; color:#4B1F88; text-wrap:pretty;">{{ orbitQ }}</div>
+              <div style="margin:9px 11px 12px; font-size:11.5px; line-height:1.5; color:#3F3A52; text-wrap:pretty;">{{ orbitA }}</div>
+            </div>
+          </sc-if>
+
+          <!-- 5 · the outcomes -->
+          <sc-if value="{{ s.isOutcomes }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px; display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ outcomes }}" as="o" hint-placeholder-count="5">
+                <span style="{{ o.pill }}"><i class="{{ o.icon }}" style="{{ o.iconStyle }}"></i>{{ o.name }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <span style="{{ s.link }}"><i class="ph-bold ph-arrow-right" style="font-size:15px; color:#8F5BD7;"></i></span>
+      </div>
+    </sc-for>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1320,&quot;height&quot;:900},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;How Quely works&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;How work moves through Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Bring in the work, discuss it in one Space, meet when needed, and keep every outcome searchable.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitQ&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;What's the status of the checkout flow work?&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;orbitA&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The checkout flow is in development. 2 open questions and 1 risk need attention.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;steps&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{kind:string;title:string;text:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'How Quely works',
+    headline: 'How work moves through Quely',
+    body: 'Bring in the work, discuss it in one Space, meet when needed, and keep every outcome searchable.',
+    steps: [
+      { kind:'sources',  title:'Bring in the work',        text:'Import a task, sprint, project, or start with an idea.' },
+      { kind:'space',    title:'Work through it in one Space', text:'Keep discussion, docs, and context around the work together.' },
+      { kind:'meet',     title:'Meet when needed',         text:'Schedule a meeting from the Space. The transcript comes back when it ends.' },
+      { kind:'orbit',    title:'Orbit reads the context',  text:'Ask Orbit about the work across the whole Space.' },
+      { kind:'outcomes', title:'Get clear outcomes',       text:'Surface decisions, action items, risks, questions, and next steps.' }
+    ],
+    orbitQ: 'What\u2019s the status of the checkout flow work?',
+    orbitA: 'The checkout flow is in development. 2 open questions and 1 risk need attention.'
+  };
+
+  SOURCES = [
+    { name:'Jira',   logo:'assets/logos/jira.svg' },
+    { name:'Linear', logo:'assets/logos/linear.svg' },
+    { name:'GitHub', logo:'assets/logos/github.svg' },
+    { name:'Idea',   icon:'ph-fill ph-lightbulb', tint:'#B45309' }
+  ];
+  SPACE_ROWS = [
+    { name:'Discussion', icon:'ph-fill ph-chat-circle-dots', tint:'#5C28A4', wash:'#EDE7FB' },
+    { name:'Doc',        icon:'ph-fill ph-file-text',        tint:'#1D4ED8', wash:'#EFF6FF' },
+    { name:'Diagram',    icon:'ph-fill ph-git-branch',       tint:'#15803D', wash:'#DCFCE7' }
+  ];
+  OUTCOMES = [
+    { name:'Decision',      icon:'ph-fill ph-check-circle',  tint:'#15803D' },
+    { name:'Action item',   icon:'ph-fill ph-check-square',  tint:'#5C28A4' },
+    { name:'Risk',          icon:'ph-fill ph-warning',       tint:'#B45309' },
+    { name:'Open question', icon:'ph-fill ph-question',      tint:'#1D4ED8' },
+    { name:'Next step',     icon:'ph-bold ph-arrow-right',   tint:'#4338CA' }
+  ];
+
+  componentDidMount() {
+    const start = () => {
+      const node = document.querySelector('[data-qhw]');
+      if (!node) { this._poll = setTimeout(start, 120); return; }
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        node.setAttribute('data-go', ''); return;
+      }
+      // Imperative attribute flip drives the CSS animation (style-attribute holes do
+      // not re-apply on re-render). Plays once when it first enters view.
+      const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
+      if ('IntersectionObserver' in window) {
+        this.io = new IntersectionObserver((es) => {
+          es.forEach((e) => { if (e.isIntersecting) { this._t = setTimeout(play, 220); } });
+        }, { threshold: 0.12 });
+        this.io.observe(node);
+      }
+      this._safety = setTimeout(play, 2200);
+    };
+    this._played = false;
+    start();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._poll); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const raw = (p.steps && p.steps.length) ? p.steps : D.steps;
+    const last = raw.length - 1;
+
+    const PILL = 'display:flex; align-items:center; gap:8px; min-width:0; background:#fff;'
+      + ' border:1px solid #E6E1F0; border-radius:10px; padding:8px 10px; font-size:11.5px;'
+      + ' font-weight:600; color:#1A1240; box-shadow:0 1px 2px rgba(3,7,18,.05);';
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      orbitQ: p.orbitQ ?? D.orbitQ,
+      orbitA: p.orbitA ?? D.orbitA,
+
+      mockCard: 'margin-top:18px; background:#fff; border:1px solid #E6E1F0; border-radius:12px;'
+        + ' overflow:hidden; box-shadow:0 1px 2px rgba(3,7,18,.05);',
+      mockCardFlat: 'background:#fff; border:1px solid #E6E1F0; border-radius:12px; overflow:hidden;'
+        + ' box-shadow:0 1px 2px rgba(3,7,18,.05);',
+      bar: 'margin-top:5px; height:5px; border-radius:9999px; background:#EFECF6;',
+
+      sourceRows: this.SOURCES.map((s) => ({
+        name: s.name, pill: PILL,
+        mark: s.logo
+          ? 'flex:none; width:15px; height:15px; background:url(\'' + s.logo + '\') center/contain no-repeat;'
+          : 'display:none;',
+        icon: s.icon || 'ph',
+        iconStyle: s.logo ? 'display:none;' : ('flex:none; font-size:15px; color:' + (s.tint || '#5C28A4') + ';')
+      })),
+
+      spaceRows: this.SPACE_ROWS.map((r) => ({
+        name: r.name, icon: r.icon,
+        tile: 'flex:none; display:inline-flex; align-items:center; justify-content:center; width:26px;'
+          + ' height:26px; border-radius:8px; background:' + r.wash + '; color:' + r.tint + ';'
+      })),
+
+      crew: [['M','#B45309'],['R','#1D4ED8'],['L','#BE185D']].map(([i, t], n) => ({
+        i: i,
+        style: 'flex:none; display:inline-flex; align-items:center; justify-content:center; width:22px;'
+          + ' height:22px; border-radius:50%; background:' + t + '; color:#fff; font-size:9px;'
+          + ' font-weight:700; border:2px solid #fff;' + (n ? ' margin-left:-6px;' : '')
+      })),
+
+      lines: [100, 84, 62].map((w) => ({
+        style: 'display:block; height:6px; width:' + w + '%; border-radius:9999px; background:#EFECF6;'
+      })),
+
+      outcomes: this.OUTCOMES.map((o) => ({
+        name: o.name, icon: o.icon, pill: PILL,
+        iconStyle: 'flex:none; font-size:15px; color:' + o.tint + ';'
+      })),
+
+      steps: raw.map((s, i) => ({
+        title: s.title, text: s.text, n: String(i + 1),
+        isSources: s.kind === 'sources', isSpace: s.kind === 'space', isMeet: s.kind === 'meet',
+        isOrbit: s.kind === 'orbit', isOutcomes: s.kind === 'outcomes',
+        wrap: 'position:relative; min-width:0; display:flex; align-items:stretch;'
+          + ' opacity:0; transform:translateY(14px); --d:' + (140 + i * 110) + 'ms;',
+        card: 'flex:1; min-width:0; box-sizing:border-box; background:#FBFAFE; border-radius:18px;'
+          + ' padding:22px 18px 24px; box-shadow:0 2px 10px rgba(46,26,96,.06);',
+        num: 'display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px;'
+          + ' border-radius:50%; background:linear-gradient(145deg, #7C3AED, #5C28A4); color:#fff;'
+          + ' font-size:15px; font-weight:800; box-shadow:0 4px 12px rgba(92,40,164,.28);',
+        // the chevron sits in the gutter, so it never consumes column width
+        link: i === last
+          ? 'display:none;'
+          : 'position:absolute; right:-19px; top:50%; margin-top:-8px; z-index:2;'
+            + ' display:flex; align-items:center; justify-content:center; width:24px;'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#F9FAFB; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+</style>
+</helmet>
+<div style="background:#F9FAFB; padding:88px 40px; display:flex; justify-content:center; font-family:'Inter',sans-serif; color:#111827;">
+  <div style="width:100%; max-width:940px;">
+    <div style="max-width:820px; margin:0 auto; text-align:center;">
+    <div style="font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C28A4; margin-bottom:16px;">{{ eyebrowText }}</div>
+    <h2 style="margin:0 0 12px; font-size:38px; line-height:1.1; letter-spacing:-.02em; font-weight:800; color:#111827;">{{ titleText }}</h2>
+    <p style="margin:0 0 36px; font-size:18px; line-height:1.55; color:#4B5563; max-width:680px;">{{ bodyText }}</p>
+      </div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <sc-for list="{{ pointList }}" as="op" hint-placeholder-count="3">
+        <div style="display:flex; gap:14px; align-items:flex-start; background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:18px 20px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+          <i class="{{ op.icon }}" style="font-size:22px; color:#5C28A4; flex:none;"></i>
+          <div style="font-size:17px; line-height:1.45; color:#1F2937; text-wrap:pretty;">{{ op.text }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:520},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The difference&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The next person does not have to ask.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Same team, same trade-off — different ending.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;points&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{icon:string;text:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'The difference',
+    title: 'The next person does not have to ask.',
+    body: 'Same team, same trade-off, same nine-week gap — different ending.',
+    points: [
+      { icon:'ph-fill ph-clock-countdown', text:'A question answered in seconds instead of half a day of archaeology' },
+      { icon:'ph-fill ph-lock-simple',     text:'A settled decision that stays settled, instead of being re-litigated' },
+      { icon:'ph-fill ph-user-check',      text:'No senior engineer pulled away to remember what happened' }
+    ]
+  };
+
+  renderVals() {
+    return {
+      eyebrowText: this.props.eyebrow ?? this.DEMO.eyebrow,
+      titleText: this.props.title ?? this.DEMO.title,
+      bodyText: this.props.body ?? this.DEMO.body,
+      pointList: (this.props.points && this.props.points.length) ? this.props.points : this.DEMO.points
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quely — Space Anatomy</title>
-<link rel="icon" href="/assets/quely-mark-brand.svg">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#F9FAFB; font-family:'Inter',sans-serif; }
-  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
+  ::selection { background:#5C28A4; color:#fff; }
 
   [data-region] { transition:opacity 200ms cubic-bezier(.2,0,0,1), background 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1); }
   [data-card]   { transition:transform 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1), border-color 200ms cubic-bezier(.2,0,0,1); }
@@ -23,52 +32,60 @@
   [data-qsa]:has([data-card="4"]:hover) [data-region="4"],
   [data-qsa]:has([data-card="5"]:hover) [data-region="5"],
   [data-qsa]:has([data-card="6"]:hover) [data-region="6"] {
-    opacity:1; background:#F9F6FE; box-shadow:inset 0 0 0 1.5px #8F5BD7;
+    opacity:1; background:#F4ECFE; box-shadow:inset 0 0 0 2px #5C28A4;
   }
-  [data-card]:hover { transform:translateY(-3px); border-color:#C4B5DD !important; box-shadow:0 10px 22px -10px rgba(3,7,18,.20) !important; }
+  [data-card]:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 #5C28A4 !important; }
 
   /* the locate affordance is visible at rest, and commits to brand on hover */
   [data-el="loc"] { transition:color 200ms cubic-bezier(.2,0,0,1), background 200ms cubic-bezier(.2,0,0,1); }
-  [data-card]:hover [data-el="loc"] { color:#5C28A4; background:#F3EEFB; }
+  [data-card]:hover [data-el="loc"] { color:#fff; background:#5C28A4; border-color:#5C28A4; }
   /* the card's own mark commits too, so lighting a region reads as one gesture */
   [data-el="mark"] { transition:background 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1); }
-  [data-card]:hover [data-el="mark"] { box-shadow:inset 0 0 0 1.5px #C4B5DD; }
+  [data-card]:hover [data-el="mark"] { box-shadow:inset 0 0 0 1.5px #5C28A4; }
 
-  @keyframes qsa-row { to { opacity:1; transform:translateY(0); } }
-  [data-qsa][data-go] [data-el="row"] { animation:qsa-row 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  /* Rows are authored visible. The reveal is an ENHANCEMENT that animates them in
+     from a hidden start; if it never fires, the content is simply already there. */
+  @keyframes qsa-row { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  [data-qsa][data-go] [data-el="row"] { animation:qsa-row 460ms cubic-bezier(.3,0,0,1) var(--d) both; }
   @media (prefers-reduced-motion: reduce) {
     [data-qsa] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
   }
 </style>
-</head>
-<body>
-<section style="position:relative; overflow:hidden; background:#F9FAFB; padding:80px 40px; display:flex; justify-content:center;">
-  <div style="position:absolute; top:210px; left:50%; width:1080px; height:640px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.16), rgba(143,91,215,0)); filter:blur(8px); pointer-events:none; z-index:0;"></div>
+</helmet>
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:clamp(72px,8vw,110px) 40px; display:flex; justify-content:center;">
+  <!-- paper texture: the faint dotted grid the editorial surface always carries -->
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
 
-    <div style="max-width:780px; margin:0 auto; text-align:center;">
-      <div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">Inside a Quely Space</div>
-      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">See the work and everything that explains it in one Space.</h2>
-      <p style="margin:0; font-size:16px; line-height:1.6; color:#4B5563; text-wrap:pretty;">Each Space keeps the work item alongside the conversations, decisions, meeting records, dependencies, documents, and designs around it. Your team can discuss the work, add updates, and ask Orbit questions from the same place.</p>
+    <div style="max-width:860px; margin:0 auto; text-align:center;">
+      <!-- mono kicker: number + label between two hairline rules -->
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:26px;">
+        <span style="flex:1; max-width:80px; height:0; border-top:1px solid rgba(26,22,17,.22);"></span>
+        <span style="flex:none; font-family:'Geist Mono',monospace; font-size:13px; font-weight:600; letter-spacing:.05em; color:#5C28A4;">{{ kickerNum }}</span>
+        <span style="flex:none; font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:#5C5345;">{{ eyebrow }}</span>
+        <span style="flex:1; max-width:80px; height:0; border-top:1px solid rgba(26,22,17,.22);"></span>
+      </div>
+      <h2 style="margin:0 0 18px; font-family:'Geist',sans-serif; font-size:clamp(32px,4.4vw,54px); line-height:1.02; letter-spacing:-.04em; font-weight:600; color:#1A1611; text-wrap:balance;">{{ headline }}</h2>
+      <p style="margin:0 auto; max-width:700px; font-size:clamp(17px,1.5vw,19px); line-height:1.5; color:#5C5345; text-wrap:pretty;">{{ body }}</p>
     </div>
 
     <div data-qsa style="margin-top:36px;">
 
       <!-- ============ THE SPACE, as it actually looks ============ -->
-      <div style="position:relative; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 12px 24px rgba(3,7,18,.10), 0 4px 8px rgba(3,7,18,.06); overflow:hidden;">
+      <div style="position:relative; background:#fff; border:2px solid #1A1611; border-radius:8px; box-shadow:6px 6px 0 #1A1611; overflow:hidden;">
 
         <div style="display:flex; flex-wrap:wrap; align-items:stretch; min-height:498px;">
 
           <!-- icon rail -->
           <div style="flex:none; width:52px; box-sizing:border-box; border-right:1px solid #F3F4F6; padding:12px 0; display:flex; flex-direction:column; align-items:center; gap:16px;">
-            <span style="width:22px; height:22px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
-            <i class="ph ph-magnifying-glass" style="font-size:17px; color:#4B5563;"></i>
-            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:#F3EEFB;"><i class="ph-fill ph-cards" style="font-size:17px; color:#5C28A4;"></i></span>
-            <i class="ph ph-list-checks" style="font-size:17px; color:#4B5563;"></i>
-            <i class="ph ph-calendar-blank" style="font-size:17px; color:#4B5563;"></i>
-            <i class="ph ph-buildings" style="font-size:17px; color:#4B5563;"></i>
-            <i class="ph ph-megaphone-simple" style="font-size:17px; color:#4B5563;"></i>
+            <span style="width:22px; height:22px; background:url('/assets/brand/mark-purple.svg') center/contain no-repeat;"></span>
+            <i class="ph ph-magnifying-glass" style="font-size:17px; color:#5C5345;"></i>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:#F8F5FB;"><i class="ph-fill ph-cards" style="font-size:17px; color:#5C28A4;"></i></span>
+            <i class="ph ph-list-checks" style="font-size:17px; color:#5C5345;"></i>
+            <i class="ph ph-calendar-blank" style="font-size:17px; color:#5C5345;"></i>
+            <i class="ph ph-buildings" style="font-size:17px; color:#5C5345;"></i>
+            <i class="ph ph-megaphone-simple" style="font-size:17px; color:#5C5345;"></i>
           </div>
 
           <!-- main column -->
@@ -76,11 +93,11 @@
 
             <!-- top bar -->
             <div style="display:flex; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid #F3F4F6;">
-              <span style="flex:none; font-size:12.5px; font-weight:500; color:#6B7280;">Home</span>
-              <span style="flex:none; font-size:12.5px; color:#6B7280;">/</span>
-              <span style="flex:none; font-size:12.5px; font-weight:600; color:#111827;">My Space</span>
-              <span style="flex:none; margin-left:auto; background:#EFEAFB; border-radius:7px; padding:5px 11px; font-size:13px; font-weight:700; letter-spacing:.08em; color:#5C28A4; font-variant-numeric:tabular-nums;">00:42:18</span>
-              <i class="ph ph-bell" style="flex:none; font-size:16px; color:#4B5563;"></i>
+              <span style="flex:none; font-size:12.5px; font-weight:500; color:#5C5345;">Home</span>
+              <span style="flex:none; font-size:12.5px; color:#5C5345;">/</span>
+              <span style="flex:none; font-size:12.5px; font-weight:600; color:#1A1611;">{{ spaceName }}</span>
+              <span style="flex:none; margin-left:auto; background:#EFEAFB; border-radius:7px; padding:5px 11px; font-size:13px; font-weight:700; letter-spacing:.08em; color:#5C28A4; font-variant-numeric:tabular-nums;">{{ timerValue }}</span>
+              <i class="ph ph-bell" style="flex:none; font-size:16px; color:#5C5345;"></i>
               <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#1D4ED8; font-size:9px; font-weight:700; color:#fff;">ON</span>
             </div>
 
@@ -88,77 +105,68 @@
             <div data-region="1" style="padding:15px 16px 13px; border-bottom:1px solid #F3F4F6;">
               <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
                 <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:7px; padding:3px 9px; font-size:11px; font-weight:700; color:#1D4ED8;">
-                  <span style="width:11px; height:11px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>QUEL-1065
+                  <span style="width:11px; height:11px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ ticketId }}
                 </span>
-                <span style="flex:1 1 auto; min-width:0; font-size:16px; font-weight:700; letter-spacing:-.012em; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">[DESIGN] Session Builder</span>
-                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:7px; padding:3px 9px; font-size:11px; font-weight:600; color:#374151;">In progress <span style="color:#6B7280;">2d</span></span>
+                <span style="flex:1 1 auto; min-width:0; font-size:16px; font-weight:700; letter-spacing:-.012em; color:#1A1611; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ itemTitle }}</span>
+                <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:7px; padding:3px 9px; font-size:11px; font-weight:600; color:#374151;">{{ itemStatus }} <span style="color:#5C5345;">{{ itemAge }}</span></span>
               </div>
-              <div style="margin-top:9px; font-size:11.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Design an AI-assisted flow for creating and initialising Sessions, so a team can spin one up from context, goals, and connected data sources.</div>
+              <div style="margin-top:9px; font-size:11.5px; line-height:1.5; color:#5C5345; text-wrap:pretty;">{{ itemDescription }}</div>
             </div>
 
             <!-- tabs -->
             <div style="display:flex; align-items:center; gap:18px; padding:0 16px; border-bottom:1px solid #F3F4F6;">
-              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#6B7280;"><i class="ph ph-link-simple" style="font-size:14px;"></i>Attachments <b style="color:#6B7280;">3</b></span>
-              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:700; color:#111827; box-shadow:inset 0 -2px #111827;"><i class="ph ph-graph" style="font-size:14px;"></i>Relationships</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#6B7280;"><i class="ph ph-clock-counter-clockwise" style="font-size:14px;"></i>Activity</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#5C5345;"><i class="ph ph-link-simple" style="font-size:14px;"></i>Attachments <b style="color:#5C5345;">3</b></span>
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:700; color:#1A1611; box-shadow:inset 0 -2px #111827;"><i class="ph ph-graph" style="font-size:14px;"></i>Relationships</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; padding:10px 0; font-size:12px; font-weight:500; color:#5C5345;"><i class="ph ph-clock-counter-clockwise" style="font-size:14px;"></i>Activity</span>
             </div>
 
             <!-- linked units -->
-            <div data-region="3" style="padding:13px 16px 14px; border-bottom:1px solid #F3F4F6;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                <i class="ph ph-link" style="flex:none; font-size:14px; color:#5C28A4;"></i>
-                <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#111827;">Relationships</span>
-              </div>
+      <div data-region="3" style="padding:13px 16px 14px; border-bottom:1px solid #F3F4F6;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:11px;">
+          <i class="ph ph-link" style="flex:none; font-size:15px; color:#5C28A4;"></i>
+          <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#1A1611;">{{ linkedLabel }}</span>
+          <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:#fff; border:1px solid #E5E7EB;"><i class="ph-bold ph-plus" style="font-size:10px; color:#4B5563;"></i></span>
+          <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:#fff; border:1px solid #E5E7EB;"><i class="ph ph-eye-slash" style="font-size:10px; color:#4B5563;"></i></span>
+        </div>
 
-              <div style="display:flex; flex-direction:column; gap:7px;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#F3EEFB; border:1px solid #E4D3F5; color:#4B1F88;">Parent</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
-                    <i class="ph-fill ph-lightning" style="font-size:11px; color:#7C3AED;"></i>QUEL-925
-                  </span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Orbit</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#FEF2F2; border:1px solid #FECACA; color:#B91C1C;">Blocked by</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
-                    <i class="ph-fill ph-check-square" style="font-size:11px; color:#2563EB;"></i>QL-23
-                  </span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Session data model</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="flex:none; white-space:nowrap; border-radius:9999px; padding:2px 8px; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#F0FDF4; border:1px solid #BBF7D0; color:#15803D;">Merged into</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:10.5px; font-weight:700; color:#111827;">
-                    <i class="ph-fill ph-book-bookmark" style="font-size:11px; color:#15803D;"></i>QUEL-1104
-                  </span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">[DESIGN] Homepage story</span>
-                </div>
-              </div>
+        <!-- the focal unit, as the product shows it: violet card, key chip, title -->
+        <div style="background:#F3EEFB; border:1.5px solid #C4B5DD; border-radius:9px; padding:9px 10px;">
+          <div style="display:flex; align-items:center; gap:7px;">
+            <i class="ph-fill ph-book-bookmark" style="flex:none; font-size:13px; color:#15803D;"></i>
+            <span style="flex:none; background:#fff; border:1px solid #E4D3F5; border-radius:5px; padding:2px 7px; font-family:'Geist Mono',monospace; font-size:10.5px; font-weight:600; color:#1A1611;">{{ focalKey }}</span>
+          </div>
+          <div style="margin-top:6px; font-size:12px; font-weight:700; line-height:1.35; color:#4B1F88; text-wrap:pretty;">{{ focalTitle }}</div>
+        </div>
+
+        <!-- one collapsible group per relationship type -->
+        <sc-for list="{{ links }}" as="lk" hint-placeholder-count="2">
+          <div style="margin-top:11px;">
+            <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+              <i class="ph-bold ph-caret-down" style="flex:none; font-size:10px; color:#4B5563;"></i>
+              <span style="flex:none; font-size:11.5px; font-weight:700; color:#1A1611;">{{ lk.rel }}</span>
+              <span style="flex:1; min-width:0; font-size:11px; color:#5C5345;">{{ lk.count }}</span>
             </div>
+            <div style="display:flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:8px; padding:7px 9px;">
+              <i class="{{ lk.icon }}" style="flex:none; font-size:12px; color:{{ lk.color }};"></i>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:5px; padding:2px 6px; font-family:'Geist Mono',monospace; font-size:10px; font-weight:600; color:#1A1611;">{{ lk.key }}<i class="ph ph-arrow-square-out" style="font-size:9px; color:#4B5563;"></i></span>
+              <span style="flex:1; min-width:0; font-size:11px; color:#5C5345; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ lk.name }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
 
             <!-- activity + worklog -->
             <div data-region="4" style="padding:13px 16px 14px; border-bottom:1px solid #F3F4F6;">
               <div style="display:flex; flex-direction:column; gap:8px;">
-                <div style="display:flex; align-items:center; gap:9px;">
-                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#374151; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ME</span>
-                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">2h 30m</span>
-                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Miracle Eseurhobo</span>
-                  <span style="flex:none; font-size:10.5px; color:#6B7280;">14 May</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:9px;">
-                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#374151; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ME</span>
-                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">5h 42m</span>
-                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Miracle Eseurhobo</span>
-                  <span style="flex:none; font-size:10.5px; color:#6B7280;">11 May</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:9px;">
-                  <span style="flex:none; width:20px; height:20px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
-                  <span style="flex:none; font-size:11.5px; font-weight:700; color:#111827;">Estimate &#8594; 6h 10m</span>
-                  <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#4B5563;">Jira</span>
-                  <span style="flex:1; min-width:0; font-size:11px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Sync from tracker</span>
-                  <span style="flex:none; font-size:10.5px; color:#6B7280;">31 May</span>
-                </div>
+                <sc-for list="{{ activity }}" as="ac" hint-placeholder-count="3">
+                  <div style="display:flex; align-items:center; gap:9px;">
+                    <span style="flex:none; width:20px; height:20px; border-radius:50%; background:{{ ac.tint }}; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">{{ ac.initials }}</span>
+                    <span style="flex:none; font-size:11.5px; font-weight:700; color:#1A1611;">{{ ac.figure }}</span>
+                    <span style="flex:none; background:#F3F4F6; border-radius:5px; padding:2px 6px; font-size:9.5px; font-weight:600; color:#5C5345;">{{ ac.src }}</span>
+                    <span style="flex:1; min-width:0; font-size:11px; color:#5C5345; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ ac.who }}</span>
+                    <span style="flex:none; font-size:10.5px; color:#5C5345;">{{ ac.when }}</span>
+                  </div>
+                </sc-for>
               </div>
             </div>
 
@@ -166,25 +174,15 @@
             <div data-region="5" style="flex:1; padding:13px 16px 15px;">
               <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                 <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:#22D3EE;"><i class="ph-fill ph-squares-four" style="font-size:11px; color:#fff;"></i></span>
-                <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#111827;">Tools</span>
+                <span style="flex:1; min-width:0; font-size:12.5px; font-weight:700; color:#1A1611;">{{ toolsLabel }}</span>
               </div>
               <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px;">
-                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <i class="ph-fill ph-clock" style="font-size:17px; color:#4F46E5;"></i>
-                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Time Tracking</span>
-                </div>
-                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <i class="ph-fill ph-lightning" style="font-size:17px; color:#15803D;"></i>
-                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Estimations</span>
-                </div>
-                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <i class="ph-fill ph-flow-arrow" style="font-size:17px; color:#B91C1C;"></i>
-                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Diagram</span>
-                </div>
-                <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <i class="ph-fill ph-file-text" style="font-size:17px; color:#2563EB;"></i>
-                  <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">Document</span>
-                </div>
+                <sc-for list="{{ tools }}" as="tl" hint-placeholder-count="4">
+                  <div style="box-sizing:border-box; border:1px solid #E5E7EB; border-radius:9px; padding:11px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                    <i class="{{ tl.icon }}" style="font-size:17px; color:{{ tl.color }};"></i>
+                    <span style="font-size:10.5px; font-weight:600; color:#374151; text-align:center;">{{ tl.name }}</span>
+                  </div>
+                </sc-for>
               </div>
             </div>
           </div>
@@ -193,9 +191,9 @@
           <div style="flex:1 1 306px; min-width:262px; box-sizing:border-box; border-left:1px solid #E5E7EB; background:#FDFDFE; display:flex; flex-direction:column;">
 
             <div data-region="6" style="padding:12px 14px 11px;">
-              <span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #C4B5DD; border-radius:9px; padding:6px 12px 6px 8px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
-                <span style="width:19px; height:19px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
-                <span style="font-size:12.5px; font-weight:700; color:#111827;">Ask Orbit</span>
+              <span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #C9C1F2; border-radius:9px; padding:6px 12px 6px 8px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+                <span style="width:19px; height:19px; background:url('/assets/quely-orbit-pet.png') center/contain no-repeat;"></span>
+                <span style="font-size:12.5px; font-weight:700; color:#1A1611;">{{ askOrbitLabel }}</span>
               </span>
             </div>
 
@@ -205,39 +203,28 @@
             </div>
 
             <div data-region="2" style="flex:1; display:flex; flex-direction:column; border-top:1px solid #F3F4F6;">
-              <div style="padding:11px 14px 10px; border-bottom:1px solid #F3F4F6;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
-                  <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Onyi Nwankwo</span>
-                  <span style="flex:none; font-size:10px; color:#6B7280;">2d</span>
+              <sc-for list="{{ threads }}" as="th" hint-placeholder-count="2">
+                <div style="padding:11px 14px 10px; border-bottom:1px solid #F3F4F6;">
+                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                    <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
+                    <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#1A1611; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ th.who }}</span>
+                    <span style="flex:none; font-size:10px; color:#5C5345;">{{ th.when }}</span>
+                  </div>
+                  <div style="font-size:11.5px; line-height:1.5; color:#1A1611; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">{{ th.text }}</div>
+                  <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#5C5345;"><i class="ph-fill ph-triangle" style="font-size:8px;"></i>{{ th.votes }}</span>
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#5C5345;"><i class="ph ph-check-circle" style="font-size:10px;"></i>Resolve</span>
+                    <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#5C5345;"><i class="ph ph-chat" style="font-size:10px;"></i>{{ th.replies }}</span>
+                  </div>
                 </div>
-                <div style="font-size:11.5px; line-height:1.5; color:#1F2937; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">Scope check: are we shipping the AI agenda draft in v1, or only the manual builder? Needs a call before estimates land.</div>
-                <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:8px;"></i>4</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:10px;"></i>Resolve</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:10px;"></i>2</span>
-                </div>
-              </div>
-              <div style="padding:11px 14px 10px; border-bottom:1px solid #F3F4F6;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#1D4ED8; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">ON</span>
-                  <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Onyi Nwankwo</span>
-                  <span style="flex:none; font-size:10px; color:#6B7280;">4d</span>
-                </div>
-                <div style="font-size:11.5px; line-height:1.5; color:#1F2937; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;">Decision: data source selection stays limited to meetings, Slack, and Jira for the first release.</div>
-                <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:8px;"></i>2</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:10px;"></i>Resolve</span>
-                  <span style="flex:none; display:inline-flex; align-items:center; gap:4px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:9999px; padding:2px 7px; font-size:9.5px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:10px;"></i>3</span>
-                </div>
-              </div>
+              </sc-for>
             </div>
 
             <div style="display:flex; align-items:center; gap:9px; padding:11px 14px 12px; border-top:1px solid #E5E7EB;">
-              <span style="flex:1; min-width:0; font-size:11.5px; color:#6B7280;">What's on your mind?</span>
-              <i class="ph ph-paperclip" style="flex:none; font-size:14px; color:#4B5563;"></i>
-              <i class="ph ph-calendar-plus" style="flex:none; font-size:14px; color:#4B5563;"></i>
-              <i class="ph ph-microphone" style="flex:none; font-size:14px; color:#4B5563;"></i>
+              <span style="flex:1; min-width:0; font-size:11.5px; color:#5C5345;">{{ composerLabel }}</span>
+              <i class="ph ph-paperclip" style="flex:none; font-size:14px; color:#5C5345;"></i>
+              <i class="ph ph-calendar-plus" style="flex:none; font-size:14px; color:#5C5345;"></i>
+              <i class="ph ph-microphone" style="flex:none; font-size:14px; color:#5C5345;"></i>
               <i class="ph-fill ph-paper-plane-right" style="flex:none; font-size:14px; color:#5C28A4;"></i>
             </div>
           </div>
@@ -246,90 +233,176 @@
 
       <div style="margin-top:34px; display:flex; align-items:center; gap:9px;">
         <i class="ph ph-crosshair-simple" style="flex:none; font-size:15px; color:#5C28A4;"></i>
-        <span style="flex:1 1 auto; min-width:0; font-size:13px; font-weight:600; color:#4B5563; text-wrap:pretty;">Hover over a card to see where each capability appears in the Space.</span>
+        <span style="flex:1 1 auto; min-width:0; font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:#5C5345; text-wrap:pretty;">{{ hintLabel }}</span>
       </div>
 
       <div style="margin-top:12px; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px;">
-        <!-- 1 -->
-        <div data-el="row" data-card="1" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:260ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#EFF6FF; color:#1D4ED8;"><i class="ph-fill ph-kanban" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See what the work is and its progress</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+        <sc-for list="{{ regions }}" as="rg" hint-placeholder-count="6">
+          <div data-el="row" data-card="{{ rg.k }}" style="{{ rg.rowStyle }}">
+            <div style="display:flex; align-items:flex-start; gap:11px;">
+              <span data-el="mark" style="{{ rg.markStyle }}"><i class="{{ rg.icon }}" style="font-size:16px;"></i></span>
+              <div style="flex:1; min-width:0; font-size:15px; line-height:1.3; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ rg.name }}</div>
+              <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#ECE7F2; color:#5C5345;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
+            </div>
+            <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(26,22,17,.16); font-size:13px; line-height:1.55; color:#5C5345; text-wrap:pretty;">{{ rg.detail }}</div>
           </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View the title, description, and status in Quely. Update the status in Quely or your project tool, and it stays synced in both.</div>
-        </div>
-        <!-- 2 -->
-        <div data-el="row" data-card="2" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:390ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#F3EEFB; color:#5C28A4;"><i class="ph-fill ph-chats-circle" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Keep discussions connected to the work</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
-          </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Keep updates, questions, and decisions in one place, so people can find answers without another meeting or interruption.</div>
-        </div>
-        <!-- 3 -->
-        <div data-el="row" data-card="3" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:520ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#FEF2F2; color:#B91C1C;"><i class="ph-fill ph-graph" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See how tasks connect</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
-          </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View related tasks, dependencies, and blockers, and understand what a change may affect.</div>
-        </div>
-        <!-- 4 -->
-        <div data-el="row" data-card="4" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:650ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#EEF2FF; color:#4F46E5;"><i class="ph-fill ph-clock-counter-clockwise" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">See activity and time spent</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
-          </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">View activity and worklogs synced from your project tool, without creating a separate progress report.</div>
-        </div>
-        <!-- 5 -->
-        <div data-el="row" data-card="5" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:780ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#ECFEFF; color:#0E7490;"><i class="ph-fill ph-squares-four" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Develop ideas inside the Space</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
-          </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Use built-in documents, diagrams, and estimates to explain your thinking or map out a flow beside the work.</div>
-        </div>
-        <!-- 6 -->
-        <div data-el="row" data-card="6" style="box-sizing:border-box; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:16px 18px; cursor:default; opacity:0; transform:translateY(10px); --d:910ms;">
-          <div style="display:flex; align-items:flex-start; gap:11px;">
-            <span data-el="mark" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:9px; background:#F3EEFB; color:#5C28A4;"><i class="ph-fill ph-sparkle" style="font-size:16px;"></i></span>
-            <div style="flex:1; min-width:0; font-size:14px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">Ask Orbit about the work</div>
-            <span data-el="loc" style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#F9FAFB; color:#4B5563;"><i class="ph ph-crosshair-simple" style="font-size:14px;"></i></span>
-          </div>
-          <div style="margin-top:10px; padding-top:10px; border-top:1px solid #F3F4F6; font-size:12.5px; line-height:1.5; color:#4B5563; text-wrap:pretty;">Orbit reads everything in the Space and answers questions about updates, decisions, blockers, and history.</div>
-        </div>
+        </sc-for>
       </div>
 
     </div>
   </div>
 </section>
-<script>
-  // Imperative attribute flip drives the CSS stagger (style-attribute holes do not
-  // re-apply on re-render). Plays once when the block first enters view.
-  (function () {
-    var node = document.querySelector('[data-qsa]');
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1020},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Inside a Quely Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See the work and everything that explains it in one Space.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Each Space keeps the work item alongside the conversations, decisions, meeting records, dependencies, documents, and designs around it. Your team can discuss the work, add updates, and ask Orbit questions from the same place.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hintLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Hover over a card to see where each capability appears in the Space.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spaceName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;My Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QUEL-1065&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;itemTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;[DESIGN] Session Builder&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;itemDescription&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Design an AI-assisted flow for creating and initialising Sessions, so a team can spin one up from context, goals, and connected data sources.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;linkedLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Linked units&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focalKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QUEL-560&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focalTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;[DESIGN] Self assign certain items&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;askOrbitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ask Orbit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;regions&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{k:string;name:string;detail:string;icon:string;tint:string;wash:string}&gt;&quot;},&quot;links&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{rel:string;count:string;key:string;name:string;icon:string;color:string}&gt;&quot;},&quot;activity&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{initials:string;tint:string;figure:string;src:string;who:string;when:string}&gt;&quot;},&quot;tools&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;icon:string;color:string}&gt;&quot;},&quot;threads&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{who:string;when:string;text:string;votes:string;replies:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
+  DEMO = {
+    kickerNum: '01',
+    eyebrow: 'Inside a Quely Space',
+    headline: 'See the work and everything that explains it in one Space.',
+    body: 'Each Space keeps the work item alongside the conversations, decisions, meeting records, dependencies, documents, and designs around it. Your team can discuss the work, add updates, and ask Orbit questions from the same place.',
+
+    // the Space surface
+    spaceName: 'My Space',
+    timerValue: '00:42:18',
+    ticketId: 'QUEL-1065',
+    itemTitle: '[DESIGN] Session Builder',
+    itemStatus: 'In progress',
+    itemAge: '2d',
+    itemDescription: 'Design an AI-assisted flow for creating and initialising Sessions, so a team can spin one up from context, goals, and connected data sources.',
+    linkedLabel: 'Linked units',
+    focalKey: 'QUEL-560',
+    focalTitle: '[DESIGN] Self assign certain items',
+    links: [
+      { rel:'Parent', count:'(1)', key:'QUEL-537', name:'Self Assign Stories', icon:'ph-fill ph-lightning', color:'#7C3AED' },
+      { rel:'Is Connected To', count:'(1)', key:'QUEL-841', name:'[DEV] Self assign certain items', icon:'ph-fill ph-book-bookmark', color:'#15803D' }
+    ],
+    activity: [
+      { initials: 'ME', tint: '#374151', figure: '2h 30m', src: 'Jira', who: 'Miracle Eseurhobo', when: '14 May' },
+      { initials: 'ME', tint: '#374151', figure: '5h 42m', src: 'Jira', who: 'Miracle Eseurhobo', when: '11 May' },
+      { initials: 'ON', tint: '#1D4ED8', figure: 'Estimate \u2192 6h 10m', src: 'Jira', who: 'Sync from tracker', when: '31 May' }
+    ],
+    toolsLabel: 'Tools',
+    tools: [
+      { name: 'Time Tracking', icon: 'ph-fill ph-clock',      color: '#4F46E5' },
+      { name: 'Estimations',   icon: 'ph-fill ph-lightning',  color: '#12652F' },
+      { name: 'Diagram',       icon: 'ph-fill ph-flow-arrow', color: '#B91C1C' },
+      { name: 'Document',      icon: 'ph-fill ph-file-text',  color: '#2563EB' }
+    ],
+    askOrbitLabel: 'Ask Orbit',
+    threads: [
+      { who: 'Onyi Nwankwo', when: '2d', votes: '4', replies: '2',
+        text: 'Scope check: are we shipping the AI agenda draft in v1, or only the manual builder? Needs a call before estimates land.' },
+      { who: 'Onyi Nwankwo', when: '4d', votes: '2', replies: '3',
+        text: 'Decision: data source selection stays limited to meetings, Slack, and Jira for the first release.' }
+    ],
+    composerLabel: "What's on your mind?",
+    hintLabel: 'Hover over a card to see where each capability appears in the Space.',
+
+    // the evidence. k pairs each card to its region on the surface.
+    regions: [
+      // each mark carries the colour that thing already uses inside the Space,
+      // so the colour encodes the capability rather than decorating the card
+      { k: '1', name: 'See what the work is and its progress', icon: 'ph-fill ph-kanban', tint: '#5C28A4', wash: '#F8F5FB',
+        detail: 'View the title, description, and status in Quely. Update the status in Quely or your project tool, and it stays synced in both.' },
+      { k: '2', name: 'Keep discussions connected to the work', icon: 'ph-fill ph-chats-circle', tint: '#5C28A4', wash: '#F8F5FB',
+        detail: 'Keep updates, questions, and decisions in one place, so people can find answers without another meeting or interruption.' },
+      { k: '3', name: 'See how tasks connect', icon: 'ph-fill ph-graph', tint: '#41186F', wash: '#E4DBF6',
+        detail: 'View related tasks, dependencies, and blockers, and understand what a change may affect.' },
+      { k: '4', name: 'See activity and time spent', icon: 'ph-fill ph-clock-counter-clockwise', tint: '#6B4FC4', wash: '#E9E4F8',
+        detail: 'View activity and worklogs synced from your project tool, without creating a separate progress report.' },
+      { k: '5', name: 'Develop ideas inside the Space', icon: 'ph-fill ph-squares-four', tint: '#7C6BD8', wash: '#ECE8F9',
+        detail: 'Use built-in documents, diagrams, and estimates to explain your thinking or map out a flow beside the work.' },
+      { k: '6', name: 'Ask Orbit about the work', icon: 'ph-fill ph-sparkle', tint: '#5C28A4', wash: '#F8F5FB',
+        detail: 'Orbit reads everything in the Space and answers questions about updates, decisions, blockers, and history.' }
+    ]
+  };
+
+  componentDidMount() {
+    const node = document.querySelector('[data-qsa]');
     if (!node) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       node.setAttribute('data-go', ''); return;
     }
-    var played = false, t;
-    var play = function () { if (played) return; played = true; node.setAttribute('data-go', ''); };
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Plays once when it first enters view.
+    this._played = false;
+    const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
     if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { t = setTimeout(play, 340); }
-          else if (!played) { clearTimeout(t); }
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 340); }
+          else if (!this._played) { clearTimeout(this._t); }
         });
       }, { threshold: 0.15 });
-      io.observe(node);
+      this.io.observe(node);
     } else { play(); }
-  })();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+
+    const regions = (p.regions && p.regions.length ? p.regions : D.regions).map((rg, i) => {
+      const at = 260 + i * 130;
+      return {
+        k: rg.k, name: rg.name, detail: rg.detail ?? rg.replaces ?? '',
+        icon: rg.icon || 'ph-fill ph-circle',
+        markStyle: 'flex:none; display:inline-flex; align-items:center; justify-content:center;'
+          + ' width:30px; height:30px; border-radius:9px; background:' + (rg.wash || '#F8F5FB') + ';'
+          + ' color:' + (rg.tint || '#5C28A4') + ';',
+        rowStyle: 'box-sizing:border-box; background:#F8F5FB; border:2px solid #1A1611; border-radius:8px;'
+          + ' box-shadow:4px 4px 0 #1A1611; padding:18px 20px; cursor:default;'
+          + ' --d:' + at + 'ms;'
+      };
+    });
+
+    var S = this.surf();
+    return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
+      kickerNum: p.kickerNum ?? D.kickerNum,
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+
+      spaceName: p.spaceName ?? D.spaceName,
+      timerValue: p.timerValue ?? D.timerValue,
+      ticketId: p.ticketId ?? D.ticketId,
+      itemTitle: p.itemTitle ?? D.itemTitle,
+      itemStatus: p.itemStatus ?? D.itemStatus,
+      itemAge: p.itemAge ?? D.itemAge,
+      itemDescription: p.itemDescription ?? D.itemDescription,
+      linkedLabel: p.linkedLabel ?? D.linkedLabel,
+      focalKey: p.focalKey ?? D.focalKey,
+      focalTitle: p.focalTitle ?? D.focalTitle,
+      links: p.links && p.links.length ? p.links : D.links,
+      activity: p.activity && p.activity.length ? p.activity : D.activity,
+      toolsLabel: p.toolsLabel ?? D.toolsLabel,
+      tools: p.tools && p.tools.length ? p.tools : D.tools,
+      askOrbitLabel: p.askOrbitLabel ?? D.askOrbitLabel,
+      threads: p.threads && p.threads.length ? p.threads : D.threads,
+      composerLabel: p.composerLabel ?? D.composerLabel,
+      hintLabel: p.hintLabel ?? D.hintLabel,
+      regions: regions
+    };
+  }
+}
 </script>
 </body>
 </html>

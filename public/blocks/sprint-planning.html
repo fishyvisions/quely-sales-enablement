@@ -12,10 +12,13 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#FFFFFF; font-family:'Inter',sans-serif; }
-  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; }
+  ::selection { background:#5C28A4; color:#fff; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
 
   /* The 6-col bento holds down to ~860px viewport (stage 780, span-2 = 249px).
      Below that the spans halve so some variety survives, then stack. */
@@ -38,17 +41,17 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#FFFFFF; padding:80px 40px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:80px 40px; display:flex; justify-content:center;">
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
 
     <div style="max-width:840px; margin:0 auto; text-align:center;">
       <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:14px;">
         <span style="flex:none; width:18px; height:18px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
-        <span style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7C3AED;">{{ eyebrow }}</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7C3AED;">{{ eyebrow }}</span>
       </div>
-      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">{{ headline }}</h2>
-      <p style="margin:0; font-size:16px; line-height:1.6; color:#4B5563; text-wrap:pretty;">{{ body }}</p>
+      <h2 style="margin:0 0 14px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.15; letter-spacing:-.04em; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#5C5345; text-wrap:pretty;">{{ body }}</p>
     </div>
 
     <!-- ============ THE BENTO ============ -->
@@ -58,26 +61,26 @@
         <div data-el="card" data-card data-wide="{{ c.wide }}" style="{{ c.wrapStyle }}">
           <div style="display:flex; align-items:center; gap:11px; margin-bottom:12px;">
             <span style="{{ c.markStyle }}"><i class="{{ c.icon }}" style="font-size:17px;"></i></span>
-            <span style="flex:1; min-width:0; font-size:16px; line-height:1.3; font-weight:700; letter-spacing:-.012em; color:#111827; text-wrap:pretty;">{{ c.title }}</span>
+            <span style="flex:1; min-width:0; font-size:16px; line-height:1.3; font-weight:700; letter-spacing:-.012em; color:#1A1611; text-wrap:pretty;">{{ c.title }}</span>
           </div>
 
-          <p style="margin:0; font-size:13.5px; line-height:1.55; color:#4B5563; text-wrap:pretty;">{{ c.text }}</p>
+          <p style="margin:0; font-size:13.5px; line-height:1.55; color:#5C5345; text-wrap:pretty;">{{ c.text }}</p>
 
           <sc-if value="{{ c.note }}" hint-placeholder-val="{{ false }}">
-            <p style="margin:10px 0 0; font-size:12px; line-height:1.5; color:#6B7280; text-wrap:pretty;">{{ c.note }}</p>
+            <p style="margin:10px 0 0; font-size:12px; line-height:1.5; color:#5C5345; text-wrap:pretty;">{{ c.note }}</p>
           </sc-if>
 
           <!-- ORBIT ESTIMATE -->
           <sc-if value="{{ c.showEstimate }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:14px; background:#F9F6FE; border:1px solid #EADDF8; border-radius:11px; padding:12px 13px;">
               <div style="display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
-                <span style="flex:none; width:18px; height:18px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
-                <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:700; color:#4B1F88;">{{ estimateLabel }}</span>
+                <span style="flex:none; width:18px; height:18px; background:url('/assets/quely-orbit-pet.png') center/contain no-repeat;"></span>
+                <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:700; color:#41186F;">{{ estimateLabel }}</span>
                 <span style="flex:none; background:#5C28A4; border-radius:8px; padding:4px 11px; font-size:13px; font-weight:700; color:#fff;">{{ estimateValue }}</span>
               </div>
               <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:11px;">
                 <sc-for list="{{ subtasks }}" as="st" hint-placeholder-count="3">
-                  <span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E4D3F5; border-radius:9999px; padding:4px 10px; font-size:11px; font-weight:600; color:#4B1F88;"><i class="ph ph-check-square" style="font-size:11px;"></i>{{ st }}</span>
+                  <span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #C9C1F2; border-radius:9999px; padding:4px 10px; font-size:11px; font-weight:600; color:#41186F;"><i class="ph ph-check-square" style="font-size:11px;"></i>{{ st }}</span>
                 </sc-for>
               </div>
             </div>
@@ -107,7 +110,7 @@
               <sc-for list="{{ capacity }}" as="cp" hint-placeholder-count="3">
                 <div style="display:flex; align-items:center; gap:9px;">
                   <span style="{{ cp.avatarStyle }}">{{ cp.initials }}</span>
-                  <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:600; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ cp.name }}</span>
+                  <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:600; color:#1A1611; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ cp.name }}</span>
                   <span style="flex:1 1 60px; min-width:36px; height:7px; border-radius:9999px; background:#EEF0F4; overflow:hidden;"><span style="{{ cp.barStyle }}"></span></span>
                   <span style="flex:none; font-size:11.5px; font-weight:600; color:{{ cp.labelColor }}; white-space:nowrap;">{{ cp.label }}</span>
                 </div>
@@ -120,16 +123,16 @@
             <div style="display:inline-flex; align-items:center; gap:9px; margin-top:14px; background:#EFEAFB; border-radius:9px; padding:7px 12px;">
               <i class="ph-fill ph-timer" style="font-size:15px; color:#5C28A4;"></i>
               <span style="font-size:13px; font-weight:700; letter-spacing:.09em; color:#5C28A4; font-variant-numeric:tabular-nums;">{{ timerValue }}</span>
-              <span style="font-size:11.5px; font-weight:600; color:#4B1F88;">{{ timerLabel }}</span>
+              <span style="font-size:11.5px; font-weight:600; color:#41186F;">{{ timerLabel }}</span>
             </div>
           </sc-if>
 
           <!-- MEETING -->
           <sc-if value="{{ c.showMeeting }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex; flex-direction:column; gap:6px; margin-top:14px;">
-              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-calendar-plus" style="flex:none; font-size:13px; color:#B45309;"></i>{{ meetSchedule }}</span>
-              <i class="ph-bold ph-arrow-down" style="font-size:12px; color:#4B5563; padding-left:13px;"></i>
-              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-microphone-stage" style="flex:none; font-size:13px; color:#B45309;"></i>{{ meetTranscript }}</span>
+              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-calendar-plus" style="flex:none; font-size:13px; color:#8A3D06;"></i>{{ meetSchedule }}</span>
+              <i class="ph-bold ph-arrow-down" style="font-size:12px; color:#5C5345; padding-left:13px;"></i>
+              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-microphone-stage" style="flex:none; font-size:13px; color:#8A3D06;"></i>{{ meetTranscript }}</span>
             </div>
           </sc-if>
 
@@ -148,8 +151,22 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1180}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1180},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One searchable space for the sprint&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Plan, commit, and run the sprint with the full history behind every decision.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Review the work, debate estimates, uncover blind spots, assign tasks against actual availability, and keep every decision connected to the sprint. Orbit makes it easy to retrieve why a task received its estimate, what changed, who owns it, and where capacity is tight before the team commits.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;estimateLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit suggests&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;estimateValue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5 pts&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;timerValue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;04:00:00&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;timerLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;left to contribute&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;meetSchedule&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Schedule from the Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;meetTranscript&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Transcript returns here&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cards&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{span:number;icon:string;tint:string;wash:string;title:string;text:string;note?:string;showEstimate?:boolean;showFib?:boolean;showTools?:boolean;showCapacity?:boolean;showTimer?:boolean;showMeeting?:boolean;showDocs?:boolean}&gt;&quot;},&quot;subtasks&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;fib&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;fibPicked&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tools&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;docs&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;icon:string;tint:string}&gt;&quot;},&quot;capacity&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;initials:string;tint:string;pct:number;label:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'One searchable space for the sprint',
     headline: 'Plan, commit, and run the sprint with the full history behind every decision.',
@@ -157,39 +174,39 @@ class Component extends DCLogic {
 
     // span = grid columns out of 6, so the bento has rhythm rather than a uniform grid
     cards: [
-      { span: 3, icon: 'ph-fill ph-sparkle', tint: '#5C28A4', wash: '#F7F3FD', edge: '#E4D3F5',
-        title: 'Let Orbit estimate the work',
-        text: 'Orbit, Quely’s AI assistant, reviews the information around a task and suggests an estimate. It can break the work into subtasks, show how the effort may differ by experience level, and raise questions that help the team spot missing requirements, unclear scope, or unresolved dependencies before committing.',
+      { span: 3, icon: 'ph-fill ph-sparkle', tint: '#5C28A4', wash: '#F7F3FD', edge: '#C9C1F2',
+        title: 'Estimate with AI',
+        text: 'Orbit, our AI Assistant reviews the task context and suggests an estimate, including subtasks, open questions, and anything that could affect effort.',
         showEstimate: true },
 
       { span: 3, icon: 'ph-fill ph-cards', tint: '#2563EB', wash: '#F3F8FF', edge: '#DBEAFE',
         title: 'Estimate together and preserve the reasoning',
-        text: 'Run Fibonacci estimation with the team, compare individual estimates, and discuss why they differ. The final estimate stays connected to the assumptions and conversation behind it, so anyone can later understand why the team chose that number.',
+        text: 'Compare estimates, discuss the differences, and keep the final estimate with the reasoning behind it.',
         showFib: true },
 
       { span: 3, icon: 'ph-fill ph-chats-circle', tint: '#0E7490', wash: '#F2FDFE', edge: '#CFF3F8',
         title: 'Discuss the sprint asynchronously',
-        text: 'Use the Space chat to discuss the sprint or any task inside it. Team members can ask questions, explain their estimates, raise risks, and share updates without moving the conversation into a separate chat tool. Set a timer to give everyone a clear window to contribute before the discussion closes.',
+        text: 'Ask questions, share updates, make decisions, and explain estimates in the Space without moving the conversation elsewhere.',
         showTimer: true },
 
       { span: 3, icon: 'ph-fill ph-plugs-connected', tint: '#4F46E5', wash: '#F4F5FF', edge: '#DDE1FD',
-        title: 'Bring in the work the sprint depends on',
-        text: 'Import relevant work items from Jira, Linear, Azure DevOps, GitHub Issues, Monday.com, Trello, Wrike, and other connected project-management tools. Select work by status and other fields, then bring the right items into the Sprint Space without recreating them.',
+        title: 'Bring all your sprint work into one Space',
+        text: 'Pull relevant work from Jira, Linear, GitHub, Azure DevOps, and other tools directly into the Sprint Space.',
         showTools: true },
 
       { span: 2, icon: 'ph-fill ph-flow-arrow', tint: '#B91C1C', wash: '#FFF5F5', edge: '#FBD5D5',
-        title: 'Explain the work with quick documents and diagrams',
-        text: 'Create lightweight documents and diagrams inside the Space when a task needs more explanation than the ticket provides. Capture requirements, technical flows, architecture ideas, edge cases, or implementation notes and keep them connected to the sprint work they support.',
+        title: 'Explain the work with quick docs and diagrams',
+        text: 'Create lightweight docs and diagrams for requirements, technical flows, edge cases, and implementation notes.',
         showDocs: true },
 
-      { span: 2, icon: 'ph-fill ph-microphone-stage', tint: '#B45309', wash: '#FFFCF0', edge: '#FBE7BC',
+      { span: 2, icon: 'ph-fill ph-microphone-stage', tint: '#8A3D06', wash: '#FFFCF0', edge: '#FBE7BC',
         title: 'Move from async discussion to a meeting',
-        text: 'When a thread needs a live conversation, schedule the meeting from the Sprint Space. Quely records and transcribes it, then returns the transcript to the same Space, so the decisions, questions, and next steps remain connected to the sprint.',
+        text: 'Schedule a meeting from the Space when you need one. The recording and transcript come back to the same place.',
         showMeeting: true },
 
-      { span: 2, icon: 'ph-fill ph-gauge', tint: '#15803D', wash: '#F4FDF7', edge: '#C6EFD5',
+      { span: 2, icon: 'ph-fill ph-gauge', tint: '#12652F', wash: '#F4FDF7', edge: '#C6EFD5',
         title: 'Assign work against real availability',
-        text: 'Have each person set the time they have available for the sprint, then assign the work in the same Space. The lead can allocate tasks, or the team can take turns choosing work, while Quely shows who still has capacity, who is fully allocated, and where the workload needs to be adjusted before commitment.',
+        text: 'Set each person’s available time and assign work with a clear view of who has capacity and who is overloaded.',
         showCapacity: true }
     ],
 
@@ -215,7 +232,7 @@ class Component extends DCLogic {
     capacity: [
       { name: 'Dana', initials: 'DR', tint: '#5C28A4', pct: 100, label: 'Full' },
       { name: 'Ravi', initials: 'RS', tint: '#2563EB', pct: 62,  label: 'Room' },
-      { name: 'Mei',  initials: 'ML', tint: '#15803D', pct: 128, label: 'Over' }
+      { name: 'Mei',  initials: 'ML', tint: '#12652F', pct: 128, label: 'Over' }
     ]
   };
 
@@ -298,12 +315,14 @@ class Component extends DCLogic {
           + '; color:#fff; font-size:11px; font-weight:700; display:inline-flex;'
           + ' align-items:center; justify-content:center;',
         barStyle: 'display:block; height:100%; width:' + Math.min(100, cp.pct) + '%;'
-          + ' border-radius:9999px; background:' + (over ? '#EF4444' : near ? '#B45309' : '#5C28A4') + ';',
-        labelColor: over ? '#B91C1C' : near ? '#B45309' : '#4B5563'
+          + ' border-radius:9999px; background:' + (over ? '#EF4444' : near ? '#8A3D06' : '#5C28A4') + ';',
+        labelColor: over ? '#B91C1C' : near ? '#8A3D06' : '#4B5563'
       };
     });
 
+    var S = this.surf();
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,

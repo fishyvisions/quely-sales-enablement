@@ -44,7 +44,8 @@ const EVENT_MAP = {
   space_tab:  { name: EVENTS.DEMO_STARTED, props: { demo: 'Space' } },
   lens_view:  { name: EVENTS.DEMO_STARTED, props: { demo: 'Lens' } },
   lens_push:  { name: EVENTS.DEMO_COMPLETED, props: { demo: 'Lens' } },
-  cta:        { name: EVENTS.CTA_CLICKED, props: {} }
+  cta:        { name: EVENTS.CTA_CLICKED, props: {} },
+  question_start: { name: EVENTS.QUESTION_STARTED, props: {} } // first keystroke in the ask box
 };
 
 // base identity props on every event

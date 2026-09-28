@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="enablement-store.js"></script>
+<script src="./quely-content-library.js"></script>
+<script src="./quely-page-plans.js"></script>
+<style>
+  body { margin:0; background:#ECE7F2; }
+  * { box-sizing:border-box; }
+  input, select, textarea { font-family:'Inter',sans-serif; }
+  ::selection { background:#C9C1F2; }
+</style>
+</helmet>
+<div style="display:flex; height:100vh; font-family:'Inter',sans-serif; color:#1A1611; overflow:hidden;">
+
+  <!-- SIDEBAR -->
+  <div style="flex:none; width:236px; background:#1A1611; padding:24px 18px; display:flex; flex-direction:column; gap:6px;">
+    <img src="assets/quely-logo-dark.svg" alt="Quely" style="height:24px; margin:6px 8px 22px;">
+    <div style="font-family:'Geist Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.38); padding:0 10px; margin-bottom:8px;">Sales enablement</div>
+    <button onClick="{{ goProspects }}" style="{{ navProspects }}"><i class="ph ph-users-three" style="font-size:20px;"></i>Prospects</button>
+    <button onClick="{{ goAnalytics }}" style="{{ navAnalytics }}"><i class="ph ph-chart-bar" style="font-size:20px;"></i>Analytics</button>
+    <button onClick="{{ goLibrary }}" style="{{ navLibrary }}"><i class="ph ph-squares-four" style="font-size:20px;"></i>Library</button>
+    <button onClick="{{ goBuilder }}" style="{{ navBuilder }}"><i class="ph ph-stack-plus" style="font-size:20px;"></i>Page Builder</button>
+    <button onClick="{{ goQuestions }}" style="{{ navQuestions }}"><i class="ph ph-chat-teardrop-text" style="font-size:20px;"></i>Questions <span style="{{ qBadge }}">{{ questionCount }}</span></button>
+    <div style="margin-top:auto; padding:14px 10px 4px; border-top:1px solid rgba(255,255,255,.08);">
+      <div style="font-size:12px; color:rgba(255,255,255,.4); line-height:1.5;">Demo backend runs in your browser. Real deployment uses a shared database.</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+
+    <!-- topbar -->
+    <div style="flex:none; height:64px; border-bottom:1px solid #E5E7EB; background:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 28px;">
+      <div style="font-family:'Geist',sans-serif; font-size:19px; font-weight:700;">{{ viewTitle }}</div>
+      <div style="position:relative;">
+        <button onClick="{{ toggleNotif }}" style="position:relative; background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:3px 3px 0 #1A1611; width:42px; height:42px; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i class="ph ph-bell" style="font-size:20px; color:#374151;"></i><span style="{{ notifBadge }}">{{ notifCount }}</span></button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; right:0; top:50px; width:360px; background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; box-shadow:0 16px 40px -10px rgba(3,7,18,.28); z-index:40; overflow:hidden;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:15px 18px; border-bottom:1px solid #F3F4F6;"><div style="font-size:14px; font-weight:700;">Notifications</div><button onClick="{{ clearNotif }}" style="background:none; border:none; color:#5C28A4; font-size:13px; font-weight:600; cursor:pointer;">Clear</button></div>
+            <div style="max-height:340px; overflow:auto;">
+              <sc-for list="{{ notifications }}" as="n" hint-placeholder-count="2">
+                <div style="display:flex; gap:12px; padding:14px 18px; border-bottom:1px solid #F6F7F9;">
+                  <i class="{{ n.icon }}" style="{{ n.iconStyle }}"></i>
+                  <div style="min-width:0;"><div style="font-size:14px; line-height:1.4; color:#1A1611;">{{ n.text }}</div><div style="font-size:12px; color:#5C5345; margin-top:2px;">{{ n.timeLabel }}</div></div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noNotifs }}" hint-placeholder-val="{{ false }}"><div style="padding:26px 18px; text-align:center; font-size:13px; color:#5C5345;">No activity yet.</div></sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- scroll content -->
+    <div style="flex:1; min-height:0; overflow:auto; padding:28px;">
+
+      <!-- ============ PROSPECTS ============ -->
+      <sc-if value="{{ isProspects }}" hint-placeholder-val="{{ true }}">
+        <div>
+
+          <!-- create + list -->
+          <div style="min-width:0;">
+            <!-- create form -->
+            <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:22px 24px; margin-bottom:22px;">
+              <div style="font-size:16px; font-weight:700; margin-bottom:16px;">New prospect link</div>
+              <div style="{{ fieldsStyle }}">
+                <div><label style="{{ lbl }}">Name</label><input value="{{ fName }}" onInput="{{ setName }}" placeholder="Sarah Chen" style="{{ inp }}"></div>
+                <div><label style="{{ lbl }}">Company</label><input value="{{ fCompany }}" onInput="{{ setCompany }}" placeholder="Acme" style="{{ inp }}"></div>
+                <div><label style="{{ lbl }}">Email</label><input value="{{ fEmail }}" onInput="{{ setEmail }}" placeholder="sarah@acme.com" style="{{ inp }}"></div>
+                <div><label style="{{ lbl }}">Role</label><input value="{{ fRole }}" onInput="{{ setRole }}" placeholder="VP Engineering" style="{{ inp }}"></div>
+              </div>
+              <sc-if value="{{ notAdvanced }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; justify-content:center; margin-top:18px;"><div style="width:100%; max-width:420px;"><button onClick="{{ primaryAction }}" style="width:100%; background:#5C28A4; color:#fff; font-size:15px; font-weight:700; padding:11px; border:2px solid #1A1611; border-radius:0; box-shadow:4px 4px 0 #1A1611; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;"><i class="{{ primaryIcon }}" style="font-size:18px;"></i>{{ primaryLabel }}</button></div></div>
+              </sc-if>
+              <!-- Personalized: customize the page -->
+              <div style="margin-top:16px; border-top:1px solid #F3F4F6; padding-top:16px;">
+                <button onClick="{{ toggleAdvanced }}" style="display:flex; align-items:center; gap:12px; width:100%; background:transparent; border:none; padding:0; cursor:pointer; text-align:left;">
+                  <span style="{{ advTrackStyle }}"><span style="{{ advKnobStyle }}"></span></span>
+                  <span style="flex:1; min-width:0;">
+                    <span style="display:block; font-size:14px; font-weight:700; color:#1A1611;">Personalized page</span>
+                    <span style="display:block; font-size:12px; color:#5C5345;">Build a page around this prospect's problem. Off = the standard Quely page.</span>
+                  </span>
+                  <span style="{{ advBadgeStyle }}">{{ advBadge }}</span>
+                </button>
+                <sc-if value="{{ fAdvanced }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; justify-content:center; margin-top:18px;"><div style="width:100%; max-width:420px;"><button onClick="{{ primaryAction }}" style="width:100%; background:#5C28A4; color:#fff; font-size:15px; font-weight:700; padding:11px; border:2px solid #1A1611; border-radius:0; box-shadow:4px 4px 0 #1A1611; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;"><i class="{{ primaryIcon }}" style="font-size:18px;"></i>{{ primaryLabel }}</button></div></div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ hasCreated }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:16px; background:#F5EEFB; border:2px solid #1A1611; border-radius:0; padding:14px 16px; display:flex; align-items:center; gap:12px;">
+                  <i class="ph-fill ph-check-circle" style="font-size:22px; color:#5C28A4;"></i>
+                  <div style="flex:1; min-width:0;"><div style="font-size:13px; font-weight:600; color:#5C28A4; margin-bottom:2px;">Link ready for {{ createdName }}</div><div style="font-size:13px; color:#4B5563; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ createdPretty }}</div></div>
+                  <a href="{{ createdFile }}" target="_blank" rel="noopener" style="text-decoration:none;"><span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #D1D5DB; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:600; color:#111827;"><i class="ph ph-arrow-square-out"></i>Open</span></a>
+                  <button onClick="{{ copyCreated }}" style="background:#1A1611; color:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:3px 3px 0 #5C28A4; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer;">{{ copyLabel }}</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- list: full width; a row opens the detail modal -->
+            <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; overflow:hidden;">
+              <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,.7fr) minmax(0,.8fr) minmax(0,1.3fr) 24px; gap:12px; padding:13px 20px; border-bottom:2px solid #1A1611; font-family:'Geist Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#4B5563;">
+                <div>Prospect</div><div>Status</div><div>Visits</div><div>Time</div><div>Most viewed</div><div></div>
+              </div>
+              <sc-for list="{{ prospects }}" as="row" hint-placeholder-count="3">
+                <div onClick="{{ row.select }}" style="{{ row.rowStyle }}">
+                  <div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#111827; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ row.name }}</div><div style="font-size:13px; color:#4B5563; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ row.company }}</div></div>
+                  <div><span style="{{ row.statusStyle }}">{{ row.statusLabel }}</span></div>
+                  <div style="font-size:14px; color:#374151;">{{ row.visits }}</div>
+                  <div style="font-size:14px; color:#374151;">{{ row.timeLabel }}</div>
+                  <div style="font-size:14px; color:#374151; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ row.mostViewed }}</div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <sc-if value="{{ row.hasQuestion }}" hint-placeholder-val="{{ false }}"><i class="ph-fill ph-chat-teardrop-text" title="Asked a question" style="color:#8F5BD7; font-size:18px;"></i></sc-if>
+                    <a href="{{ row.fileLink }}" target="_blank" rel="noopener" title="Open link" style="color:#4B5563; text-decoration:none;"><i class="ph ph-arrow-square-out" style="font-size:18px;"></i></a>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noProspects }}" hint-placeholder-val="{{ false }}"><div style="padding:40px; text-align:center; font-size:14px; color:#4B5563;">No prospects yet. Generate your first link above.</div></sc-if>
+            </div>
+          </div>
+
+          <!-- detail modal, centred over the content area (sidebar is 236px) -->
+          <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+          <div style="position:fixed; top:0; right:0; bottom:0; left:236px; z-index:60; display:flex; align-items:center; justify-content:center; padding:28px;">
+            <div onClick="{{ closeSel }}" style="position:absolute; inset:0; background:rgba(26,22,17,.55);"></div>
+            <div style="position:relative; width:100%; max-width:640px; max-height:calc(100vh - 56px); overflow:auto; background:#fff; border:2px solid #1A1611; box-shadow:8px 8px 0 #1A1611;">
+              <div style="padding:22px 24px;">
+              <button onClick="{{ closeSel }}" title="Close" style="position:absolute; top:12px; right:12px; background:none; border:0; color:#4B5563; cursor:pointer; font-size:20px; line-height:1; padding:2px;"><i class="ph ph-x"></i></button>
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding-right:30px;">
+                  <div style="min-width:0;"><div style="font-size:18px; font-weight:700;">{{ sel.name }}</div><div style="font-size:14px; color:#4B5563;">{{ sel.sub }}</div></div>
+                  <span style="{{ sel.statusStyle }}">{{ sel.statusLabel }}</span>
+                </div>
+                <div style="display:flex; gap:10px; margin:18px 0;">
+                  <div style="flex:1; background:#F8F5FB; border:1px solid #D8D2E4; padding:12px 14px;"><div style="font-size:22px; font-weight:800;">{{ sel.visits }}</div><div style="font-size:12px; color:#4B5563;">Visits</div></div>
+                  <div style="flex:1; background:#F8F5FB; border:1px solid #D8D2E4; padding:12px 14px;"><div style="font-size:22px; font-weight:800;">{{ sel.totalTime }}</div><div style="font-size:12px; color:#4B5563;">Total time</div></div>
+                  <div style="flex:1; background:#F8F5FB; border:1px solid #D8D2E4; padding:12px 14px;"><div style="font-size:22px; font-weight:800;">{{ sel.ctaLabel }}</div><div style="font-size:12px; color:#4B5563;">Booked</div></div>
+                </div>
+                <div style="font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#4B5563; margin-bottom:12px;">Attention by section</div>
+                <div style="display:flex; flex-direction:column; gap:9px;">
+                  <sc-for list="{{ sel.bars }}" as="b" hint-placeholder-count="4">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div style="flex:none; width:92px; font-size:13px; color:#374151;">{{ b.label }}</div>
+                      <div style="flex:1; height:10px; background:#F3F4F6; border-radius:9999px; overflow:hidden;"><div style="height:100%; border-radius:9999px; background:{{ b.color }}; width:{{ b.pct }}%;"></div></div>
+                      <div style="flex:none; width:54px; text-align:right; font-size:13px; color:#4B5563;">{{ b.timeLabel }}</div>
+                    </div>
+                      </sc-for>
+                    </div>
+                    <sc-if value="{{ sel.hasInteractions }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin-top:20px; font-family:'Geist Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#5C5345; margin-bottom:10px;">Interacted with</div>
+                      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                        <sc-for list="{{ sel.interactions }}" as="ix" hint-placeholder-count="2">
+                          <span title="{{ ix.detail }}" style="display:inline-flex; align-items:center; gap:7px; background:#F5EEFB; border:1px solid #C9C1F2; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#5C28A4;"><i class="{{ ix.icon }}" style="font-size:15px;"></i>{{ ix.label }}</span>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ sel.hasQuestions }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin-top:20px; font-family:'Geist Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#5C5345; margin-bottom:10px;">Questions</div>
+                      <div style="display:flex; flex-direction:column; gap:10px;">
+                        <sc-for list="{{ sel.questions }}" as="q" hint-placeholder-count="1">
+                          <div style="background:#F5EEFB; border-radius:10px; padding:12px 14px;"><div style="font-size:14px; line-height:1.4; color:#1A1611;">"{{ q.text }}"</div><div style="font-size:12px; color:#5C28A4; margin-top:5px;">on {{ q.sectionLabel }} · {{ q.timeLabel }}</div></div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <div style="margin-top:20px; background:#1A1611; border-radius:12px; padding:16px;">
+                      <div style="display:flex; align-items:center; gap:8px; font-family:'Geist Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#C9C1F2; margin-bottom:8px;"><i class="ph-fill ph-sparkle"></i>Suggested follow-up</div>
+                      <div style="font-size:14px; line-height:1.5; color:#fff;">{{ sel.followUp }}</div>
+                    </div>
+                    <div style="margin-top:16px; display:flex; gap:10px;">
+                      <a href="{{ sel.fileLink }}" target="_blank" rel="noopener" style="flex:1; text-decoration:none;"><span style="display:flex; align-items:center; justify-content:center; gap:8px; background:#fff; border:1px solid #D1D5DB; border-radius:9px; padding:10px; font-size:14px; font-weight:600; color:#1A1611;"><i class="ph ph-arrow-square-out"></i>Open link</span></a>
+                      <button onClick="{{ sel.del }}" style="flex:none; background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:3px 3px 0 #1A1611; padding:10px 14px; font-size:14px; font-weight:600; color:#B91C1C; cursor:pointer;"><i class="ph ph-trash"></i></button>
+                    </div>
+                  </div>
+  </div>
+</div>
+</sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ ANALYTICS ============ -->
+      <sc-if value="{{ isAnalytics }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px;">
+          <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:18px 20px;"><div style="font-family:'Geist',sans-serif; font-size:28px; font-weight:800;">{{ agg.total }}</div><div style="font-size:13px; color:#5C5345;">Prospects</div></div>
+          <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:18px 20px;"><div style="font-family:'Geist',sans-serif; font-size:28px; font-weight:800;">{{ agg.openRate }}</div><div style="font-size:13px; color:#5C5345;">Open rate</div></div>
+          <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:18px 20px;"><div style="font-family:'Geist',sans-serif; font-size:28px; font-weight:800;">{{ agg.avgTime }}</div><div style="font-size:13px; color:#5C5345;">Avg time / prospect</div></div>
+          <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:18px 20px;"><div style="font-family:'Geist',sans-serif; font-size:28px; font-weight:800;">{{ agg.ctaRate }}</div><div style="font-size:13px; color:#5C5345;">Demo booked</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:16px;">
+          <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:22px 24px;">
+            <div style="font-size:16px; font-weight:700; margin-bottom:16px;">Attention by section <span style="font-size:13px; font-weight:400; color:#5C5345;">· across all prospects</span></div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <sc-for list="{{ agg.sections }}" as="s" hint-placeholder-count="5">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div style="flex:none; width:104px; font-size:14px; color:#374151;">{{ s.label }}</div>
+                  <div style="flex:1; height:14px; background:#F3F4F6; border-radius:9999px; overflow:hidden;"><div style="height:100%; border-radius:9999px; background:{{ s.color }}; width:{{ s.pct }}%;"></div></div>
+                  <div style="flex:none; width:60px; text-align:right; font-size:13px; color:#5C5345;">{{ s.timeLabel }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:22px 24px;">
+              <div style="font-size:16px; font-weight:700; margin-bottom:12px;">Most asked about</div>
+              <sc-for list="{{ agg.questionSections }}" as="q" hint-placeholder-count="2">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid #F6F7F9;"><span style="font-size:14px; color:#374151;">{{ q.label }}</span><span style="font-size:14px; font-weight:700; color:#5C28A4;">{{ q.count }}</span></div>
+              </sc-for>
+              <sc-if value="{{ agg.noQuestions }}" hint-placeholder-val="{{ true }}"><div style="padding:14px 0; font-size:13px; color:#5C5345;">No questions yet.</div></sc-if>
+            </div>
+            <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:22px 24px;">
+              <div style="font-size:16px; font-weight:700; margin-bottom:10px;">Drop-off</div>
+              <div style="font-size:14px; line-height:1.5; color:#5C5345;">{{ agg.dropoffLine }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ QUESTIONS ============ -->
+  
+    <!-- ================= LIBRARY: every block, browsable and editable ================= -->
+    <sc-if value="{{ isLibrary }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:flex-start;">
+
+      <div style="flex:1 1 520px; min-width:0;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap;">
+          <div style="font-size:14px; color:#4B5563;">{{ libCount }} blocks. Every custom page is assembled from these. Click a block to edit its copy.</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <sc-for list="{{ libFilters }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.pick }}" style="{{ f.style }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <sc-for list="{{ libBlocks }}" as="b" hint-placeholder-count="4">
+            <div data-lib-row="{{ b.key }}" onClick="{{ b.open }}" style="{{ b.cardStyle }}">
+              <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #F3F4F6;">
+                <span style="{{ b.roleStyle }}">{{ b.role }}</span>
+                <span style="font-size:14px; font-weight:600; color:#111827;">{{ b.title }}</span>
+                <span style="font-family:'Geist Mono',monospace; font-size:11px; color:#6B7280;">{{ b.file }}</span>
+                <span style="{{ b.editedStyle }}">Edited</span>
+                <span style="margin-left:auto; font-size:12px; color:#4B5563;">Used in: {{ b.usedIn }}</span>
+              </div>
+              <div style="{{ b.previewStyle }}">
+                <sc-if value="{{ b.isCard }}" hint-placeholder-val="{{ false }}">
+                <sc-if value="{{ b.libShowThread }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Hero Thread" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCollision }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Hero Collision" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowBottleneck }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Hero Bottleneck" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowHandoff }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Hero Handoff" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowConverge }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Space Converge" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowBeforeafter }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Before After" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowAnatomy }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Space Anatomy" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowMultitool }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Multi Tool Space" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowRecord }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Decision Record" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowRelmap }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Relationship Map" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowLenses }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Orbit Lenses" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowRoles }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Team Roles" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowPlanning }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block Sprint Planning" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowHowitworks }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block How It Works" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCtaFrag }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block CTA Fragmentation" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCtaDec }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block CTA Decisions" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCtaRisk }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block CTA Risks" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCtaKnow }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block CTA Knowledge" hint-size="100%,600px"></dc-import></div></sc-if>
+                <sc-if value="{{ b.libShowCtaAction }}" hint-placeholder-val="{{ false }}"><div style="{{ b.scaleStyle }}"><dc-import name="Block CTA Action" hint-size="100%,600px"></dc-import></div></sc-if>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="flex:1 1 300px; max-width:360px; position:sticky; top:24px;">
+        <sc-if value="{{ libEditing }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:20px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px;">
+            <div style="font-size:15px; font-weight:700; color:#111827;">{{ libEditTitle }}</div>
+            <button onClick="{{ libClose }}" style="background:none; border:0; color:#6B7280; cursor:pointer; font-size:18px; line-height:1;"><i class="ph ph-x"></i></button>
+          </div>
+          <div style="font-size:12.5px; color:#6B7280; margin-bottom:18px;">Changes apply to every page that uses this block.</div>
+
+          <label style="{{ lbl }}">Eyebrow</label>
+          <input value="{{ libEyebrow }}" onInput="{{ setLibEyebrow }}" style="{{ inp }}">
+          <label style="{{ lbl }}">Headline</label>
+          <textarea value="{{ libHeadline }}" onInput="{{ setLibHeadline }}" rows="3" style="{{ inp }} resize:vertical; line-height:1.4;"></textarea>
+          <label style="{{ lbl }}">Body</label>
+          <textarea value="{{ libBody }}" onInput="{{ setLibBody }}" rows="6" style="{{ inp }} resize:vertical; line-height:1.5;"></textarea>
+
+          <div style="display:flex; gap:8px; margin-top:18px;">
+            <button onClick="{{ libSave }}" style="flex:1; background:#5C28A4; color:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:4px 4px 0 #1A1611; padding:11px 14px; font-size:13.5px; font-weight:600; cursor:pointer;">Save changes</button>
+            <button onClick="{{ libReset }}" style="background:#fff; color:#1A1611; border:2px solid #1A1611; border-radius:0; box-shadow:3px 3px 0 #1A1611; padding:11px 14px; font-size:13.5px; font-weight:600; cursor:pointer;">Reset</button>
+          </div>
+          <div style="{{ libSavedStyle }}"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i>Saved</div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ libIdle }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#F8F5FB; border:2px dashed #1A1611; border-radius:0; padding:28px 20px; text-align:center;">
+          <i class="ph ph-cursor-click" style="font-size:26px; color:#8F5BD7;"></i>
+          <div style="margin-top:10px; font-size:14px; font-weight:600; color:#111827;">Select a block to edit</div>
+          <div style="margin-top:6px; font-size:12.5px; line-height:1.5; color:#6B7280;">Eyebrow, headline and body are editable. Layout and visuals stay fixed so every page keeps the brand look.</div>
+        </div>
+        </sc-if>
+      </div>
+
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isQuestions }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:820px; display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ questions }}" as="q" hint-placeholder-count="3">
+            <div style="background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:18px 22px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:10px;"><span style="width:34px; height:34px; border-radius:50%; background:#F5EEFB; color:#5C28A4; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ q.initials }}</span><div><div style="font-size:15px; font-weight:600;">{{ q.name }}</div><div style="font-size:12px; color:#5C5345;">{{ q.company }}</div></div></div>
+                <div style="font-size:12px; color:#5C5345;">{{ q.timeLabel }}</div>
+              </div>
+              <div style="font-size:16px; line-height:1.45; color:#1A1611;">"{{ q.text }}"</div>
+              <div style="margin-top:10px; display:flex; align-items:center; gap:10px;"><span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F5EEFB; padding:4px 11px; border-radius:9999px;">{{ q.sectionLabel }}</span><a href="{{ q.fileLink }}" target="_blank" rel="noopener" style="font-size:12px; color:#5C5345;">Open their link →</a></div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noQuestionsView }}" hint-placeholder-val="{{ true }}"><div style="background:#F8F5FB; border:2px dashed #1A1611; border-radius:0; padding:48px; text-align:center; color:#5C5345; font-size:14px;">No questions yet. They'll appear here the moment a prospect asks one.</div></sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  state = {
+    view:'prospects', selToken:null, notifOpen:false, createdToken:null, copyLabel:'Copy',
+    genStatus:'idle', genPlan:null, genError:'', openDrop:null,
+    libFilter:'all', libEdit:null, libEyebrow:'', libHeadline:'', libBody:'', libSaved:false, libVis:{},
+    form:{ name:'', company:'', email:'', role:'', pain:'', advanced:false, focusRole:'eng-leader', focusTopic:'context-fragmentation', genNotes:'' }
+  };
+
+  componentDidMount() {
+    var self = this;
+    this._libT = setInterval(function () { self.libSweep(); }, 350);
+    this._libScroll = function () { self.libSweep(); };
+    window.addEventListener('scroll', this._libScroll, { passive:true });
+    this.store = window.QuelyEnablement;
+    this.forceUpdate();
+    this._poll = setInterval(() => this.forceUpdate(), 1500);
+    this._onFocus = () => this.forceUpdate();
+    window.addEventListener('focus', this._onFocus);
+    this._outside = (e) => {
+      if (!this.state.openDrop) return;
+      if (e.target && e.target.closest && e.target.closest('[data-dd]')) return;
+      this.setState({ openDrop: null });
+    };
+    document.addEventListener('mousedown', this._outside, true);
+  }
+  componentWillUnmount() {
+    clearInterval(this._libT); clearTimeout(this._lsT);
+    if (this._libScroll) window.removeEventListener('scroll', this._libScroll);
+    clearInterval(this._poll);
+    window.removeEventListener('focus', this._onFocus);
+    if (this._outside) document.removeEventListener('mousedown', this._outside, true);
+  }
+
+  fmt(ms) {
+    if (!ms || ms < 1000) return ms ? '0s' : '0s';
+    var s = Math.round(ms/1000);
+    if (s < 60) return s + 's';
+    var m = Math.floor(s/60), r = s % 60;
+    return m + 'm ' + (r < 10 ? '0'+r : r) + 's';
+  }
+  when(ts) {
+    if (!ts) return '';
+    var d = new Date(ts), now = new Date();
+    var sameDay = d.toDateString() === now.toDateString();
+    var t = d.toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+    return sameDay ? ('Today ' + t) : (d.toLocaleDateString([], { month:'short', day:'numeric' }) + ' ' + t);
+  }
+  secLabel(id) {
+    var st = this.store || window.QuelyEnablement || {};
+    var s = (st.SECTIONS || []).find(function(x){ return x.id === id; });
+    return s ? s.label : id;
+  }
+  fileLink(token) { return encodeURI('Quely Prospect Viewer.dc.html') + '?p=' + encodeURIComponent(token); }
+  prettyLink(token) { return 'quely.io/share/' + token; }
+  initials(name) {
+    var p = String(name||'').trim().split(/\s+/);
+    return ((p[0]||' ')[0] + (p[1]?p[1][0]:'')).toUpperCase();
+  }
+  navStyle(active) {
+    return 'display:flex; align-items:center; gap:11px; width:100%; text-align:left; font-family:inherit; font-size:15px; font-weight:600; padding:11px 12px; border:none; border-radius:10px; cursor:pointer; '
+      + (active ? 'background:rgba(143,91,215,.22); color:#fff;' : 'background:transparent; color:rgba(255,255,255,.6);');
+  }
+  SECCOLORS = { hero:'#9CA3AF', problem:'#9385E6', proof:'#6366F1', spaces:'#5C28A4', orbit:'#2A6FDB', features:'#16A34A', cta:'#D97706' };
+
+  // Curated picker lists (condensed from the full library taxonomy)
+  CUR_ROLES = [
+    { slug:'eng-leader', label:'Engineering manager / tech lead' },
+    { slug:'pm', label:'Product manager' },
+    { slug:'engineer', label:'Engineer' }
+  ];
+  CUR_TOPICS = [
+    { slug:'context-fragmentation', label:'Work information is spread across too many tools' },
+    { slug:'decision-traceability', label:'Decisions and changes lose their history' },
+    { slug:'risk-dependencies', label:'Delivery risks and dependencies surface too late' },
+    { slug:'knowledge-loss', label:'Project knowledge depends on a few people' },
+    { slug:'ceremony-loss', label:'Discussions and meeting outputs do not turn into action' }
+  ];
+  // Deactivated for V1 (restore by moving back into CUR_TOPICS):
+  // { slug:'capacity-planning', label:'Planning ignores the team\u2019s actual capacity' }
+
+  FAM_REP = { fragmentation:'context-fragmentation', decisions:'decision-traceability', risks:'risk-dependencies', capacity:'capacity-planning' };
+
+  // Live AI: read the salesperson's notes, choose a narrative family, and write a
+  // bespoke PagePlan (hero, problem, signals, work item, Orbit Q&A, CTA). The rest
+  // of the plan inherits the chosen family's scenario so the page stays coherent.
+  generateAI() {
+    var self = this;
+    var fm = this.state.form;
+    var notes = (fm.genNotes || '').trim();
+    if (!notes) { this.setState({ genError:'Add a few notes first.' }); return; }
+    if (!(window.claude && window.claude.complete)) { this.setState({ genError:'AI is only available in the live preview.' }); return; }
+    if (!window.QuelyPagePlans) { this.setState({ genError:'Content library not loaded yet.' }); return; }
+    this.setState({ genStatus:'working', genError:'', genPlan:null });
+
+    var famKeys = window.QuelyPagePlans.activeFamilyKeys ? window.QuelyPagePlans.activeFamilyKeys() : Object.keys(window.QuelyPagePlans.FAMILIES);
+    var families = famKeys.map(function (k) {
+      return '- ' + k + ': ' + window.QuelyPagePlans.FAMILIES[k].label;
+    }).join('\n');
+    var sys = 'You are a Quely sales-enablement page generator. Quely unifies a piece of work and all its context (tickets, docs, conversations, meetings, decisions) into one Space, with an AI assistant (Orbit) that answers across it and Lenses that distill decisions/risks/actions. '
+      + 'Given a salesperson\u2019s notes about a prospect, choose the single best narrative FAMILY and write a bespoke, prospect-specific page. Ground everything in the notes; invent no metrics. Use the prospect\u2019s real tools/work if mentioned. Output ONLY minified JSON, no prose, matching exactly this shape:\n'
+      + '{"family":"<one of the family keys>","workItem":{"name":"<a concrete example task from their world>","id":"<SHORT-ID>"},'
+      + '"hero":{"headline":"<punchy, speaks to their situation>","body":"<2-3 sentences>"},'
+      + '"problem":{"headline":"<their core problem>","body":"<2-3 sentences>","points":["<consequence>","<consequence>","<consequence>","<consequence>"]},'
+      + '"signalsLabel":"<short label>","signals":[{"label":"<short>","icon":"ph-fill ph-<phosphor-name>"} x5],'
+      + '"orbit":{"subject":"<the example task name>","intro":"<1 sentence framing this as a simulated Orbit session>","suggestions":[{"label":"<short>","q":"<question>"} x4],"answers":[{"keys":["<lowercase substrings that match the question>"],"text":"<grounded answer>"} x5],"fallback":{"text":"<default answer>"}},'
+      + '"cta":{"headline":"<continues their story>","body":"<2 sentences>"},'
+      + '"sections":{"proof":<bool>,"space":<bool>,"orbit":<bool>,"lenses":<bool>,"capacity":<bool>,"features":<bool>}}\n'
+      + 'For "sections": include ONLY what genuinely helps THIS prospect; omit the rest. Always set capacity:false. Include orbit when retrieval/answering helps, lenses only when decision/risk synthesis helps, space when unifying context helps, proof when social proof helps. A shorter coherent page beats a long padded one.\n'
+      + 'Families:\n' + families + '\nPick icons from Phosphor fill set (e.g. ph-fill ph-kanban, ph-chat-circle, ph-phone-call, ph-warning, ph-gauge, ph-graph, ph-seal-check).';
+
+    window.claude.complete({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 4000,
+      system: sys,
+      messages: [{ role:'user', content: 'Role: ' + (fm.focusRole || 'engineering leader') + '\nCompany: ' + (fm.company || 'the prospect') + '\nName: ' + (fm.name || '') + '\n\nNotes:\n' + notes }]
+    }).then(function (txt) {
+      var raw = String(txt || '').trim();
+      var a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+      if (a === -1 || b === -1) throw new Error('no json');
+      var ai = JSON.parse(raw.slice(a, b + 1));
+      var inactive = window.QuelyPagePlans.INACTIVE_FAMILIES || {};
+      var famKey = (window.QuelyPagePlans.FAMILIES[ai.family] && !inactive[ai.family]) ? ai.family : 'fragmentation';
+      // base plan from the family, then overlay the AI's bespoke fields
+      var base = window.QuelyPagePlans.buildPagePlan({
+        role: fm.focusRole, topic: self.FAM_REP[famKey], company: fm.company, name: fm.name
+      });
+      if (ai.workItem) base.workItem = Object.assign({}, base.workItem, ai.workItem);
+      if (ai.hero) { base.hero.headline = ai.hero.headline || base.hero.headline; base.hero.body = ai.hero.body || base.hero.body; }
+      if (ai.problem) { base.problem.headline = ai.problem.headline || base.problem.headline; base.problem.body = ai.problem.body || base.problem.body; if (ai.problem.points && ai.problem.points.length) base.problem.points = ai.problem.points; }
+      if (ai.signalsLabel) base.signalsLabel = ai.signalsLabel;
+      if (ai.signals && ai.signals.length) base.signals = ai.signals.map(function (s) { return { label:s.label, icon:s.icon || 'ph-fill ph-dot', color:'#C9C1F2' }; });
+      if (ai.orbit) {
+        base.orbit = Object.assign({}, base.orbit);
+        if (ai.orbit.subject) { base.orbit.subject = ai.orbit.subject; base.lensSubject = ai.orbit.subject; }
+        if (ai.orbit.intro) base.orbit.intro = ai.orbit.intro;
+        if (ai.orbit.suggestions && ai.orbit.suggestions.length) base.orbit.suggestions = ai.orbit.suggestions;
+        if (ai.orbit.answers && ai.orbit.answers.length) base.orbit.answers = ai.orbit.answers;
+        if (ai.orbit.fallback && ai.orbit.fallback.text) base.orbit.fallback = ai.orbit.fallback;
+      }
+      if (ai.cta) { base.cta.headline = ai.cta.headline || base.cta.headline; base.cta.body = ai.cta.body || base.cta.body; }
+      if (ai.sections && typeof ai.sections === 'object') { base.sections = Object.assign({}, base.sections, ai.sections); }
+      // capacity is inactive in V1: never let a generated plan enable the capacity board
+      base.sections.capacity = false;
+      // (dormant) when the capacity family is reactivated, restore:
+      // if (base.family === 'capacity') { base.sections.capacity = true; base.sections.space = false; base.sections.orbit = false; base.sections.lenses = false; }
+      base.aiGenerated = true;
+      self.setState({ genStatus:'ready', genPlan: base, genError:'' });
+    }).catch(function (e) {
+      self.setState({ genStatus:'idle', genError:'Generation failed — try again or adjust the notes.' });
+    });
+  }
+
+
+  /* ---------------- LIBRARY ----------------
+     The catalogue is the live block registry; nothing here is a second copy. Previews
+     mount lazily (all 24 at once starves the main thread) and scale to fit the card. */
+  LIB = [
+    ['thread',     'hero',   'Decisions lose history',        'decisions'],
+    ['collision',  'hero',   'Risks surface too late',        'risks'],
+    ['bottleneck', 'hero',   'Knowledge in a few people',     'knowledge'],
+    ['handoff',    'hero',   'Outputs become action',         'action'],
+    ['converge',   'hero',   'Work spread across tools',      'fragmentation'],
+    ['beforeafter','problem','Before Quely / With Quely',     'all five'],
+    ['anatomy',    'solve',  'Inside a Quely Space',          'fragmentation'],
+    ['multitool',  'solve',  'Many tools, one Space',         'fragmentation · risks'],
+    ['record',     'solve',  'Decision record',               'decisions · knowledge'],
+    ['relmap',     'solve',  'Relationship map',              'risks'],
+    ['lenses',     'solve',  'Orbit Lenses',                  'action'],
+    ['review',     'solve',  'Sprint review',                 'action'],
+    ['roles',      'solve',  'What each role gets',           'fragmentation'],
+    ['planning',   'solve',  'Sprint planning',               'planning (dormant)'],
+    ['howitworks', 'solve',  'How Quely works',               'optional'],
+    ['ctaFrag',    'cta',    'CTA · scattered work',          'fragmentation'],
+    ['ctaDec',     'cta',    'CTA · decisions',               'decisions'],
+    ['ctaRisk',    'cta',    'CTA · delivery risks',          'risks'],
+    ['ctaKnow',    'cta',    'CTA · knowledge',               'knowledge'],
+    ['ctaAction',  'cta',    'CTA · action items',            'action']
+  ];
+  ROLE = { hero:['Hero','#5C28A4','#F3EEFB'], problem:['Problem','#B45309','#FEF3C7'],
+           solve:['How Quely solves it','#15803D','#DCFCE7'], cta:['Pre-footer','#1D4ED8','#DBEAFE'] };
+
+  libFile(key) { return (window.QuelyPagePlans && window.QuelyPagePlans.BLOCK_FILES) ? window.QuelyPagePlans.BLOCK_FILES[key] : null; }
+
+  libOpen(key) {
+    var name = this.libFile(key); if (!name) return;
+    var saved = this.store && this.store.getBlockCopy ? this.store.getBlockCopy(name) : null;
+    this.setState({ libEdit:key, libEyebrow: saved ? saved.eyebrow : '', libHeadline: saved ? saved.headline : '',
+                    libBody: saved ? saved.body : '', libSaved:false });
+  }
+  libSave() {
+    var name = this.libFile(this.state.libEdit); if (!name) return;
+    var copy = { eyebrow:this.state.libEyebrow, headline:this.state.libHeadline, body:this.state.libBody };
+    var any = copy.eyebrow || copy.headline || copy.body;
+    this.store.setBlockCopy(name, any ? copy : null);
+    this.setState({ libSaved:true });
+    var self = this; clearTimeout(this._lsT); this._lsT = setTimeout(function () { self.setState({ libSaved:false }); }, 1600);
+  }
+  libReset() {
+    var name = this.libFile(this.state.libEdit); if (!name) return;
+    this.store.setBlockCopy(name, null);
+    this.setState({ libEyebrow:'', libHeadline:'', libBody:'', libSaved:false });
+  }
+  /* lazy previews: mount the first two eagerly, the rest as they scroll near view */
+  libSweep() {
+    if (this.state.view !== 'library') return;
+    var rows = document.querySelectorAll('[data-lib-row]'); if (!rows.length) return;
+    var vh = window.innerHeight || 800, next = null, vis = this.state.libVis || {};
+    rows.forEach(function (r) {
+      var k = r.getAttribute('data-lib-row'); if (vis[k]) return;
+      var b = r.getBoundingClientRect();
+      if (b.top < vh + 500) { next = next || Object.assign({}, vis); next[k] = true; }
+    });
+    if (next) this.setState({ libVis: next });
+  }
+
+  renderVals() {
+    var self = this, store = this.store || window.QuelyEnablement || null;
+    if (!store || !store.SECTIONS) store = { SECTIONS:[], PAIN_ANGLES:[], listProspects:function(){return [];}, getNotifications:function(){return [];}, getProspect:function(){return null;}, totalMs:function(){return 0;}, mostViewedSection:function(){return null;}, dropOffSection:function(){return null;}, status:function(){return '';} };
+    var list = store.listProspects ? store.listProspects() : [];
+    var sections = store.SECTIONS || [];
+
+    var statusStyle = function (viewed) {
+      return 'display:inline-flex; align-items:center; font-size:12px; font-weight:600; padding:4px 11px; border-radius:9999px; '
+        + (viewed ? 'background:#DCFCE7; color:#12652F;' : 'background:#F3F4F6; color:#5C5345;');
+    };
+
+    // prospect rows
+    var prospects = list.map(function (p) {
+      var viewed = !!p.firstOpened;
+      var mv = store.mostViewedSection(p);
+      var selected = self.state.selToken === p.token;
+      return {
+        token: p.token, name: p.name || '(no name)', company: p.company || '—',
+        statusLabel: viewed ? 'Viewed' : 'Not opened', statusStyle: statusStyle(viewed),
+        visits: p.visits.length, timeLabel: self.fmt(store.totalMs(p)),
+        mostViewed: mv ? mv.label : '—',
+        hasQuestion: p.questions.length > 0,
+        fileLink: self.fileLink(p.token),
+        rowStyle: 'display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,.7fr) minmax(0,.8fr) minmax(0,1.3fr) 24px; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid #F6F7F9; cursor:pointer; '
+          + (selected ? 'background:#F5EEFB;' : 'background:#fff;'),
+        select: function () { self.setState({ selToken: p.token }); }
+      };
+    });
+
+    // selected detail
+    var selP = self.state.selToken ? store.getProspect(self.state.selToken) : null;
+    var sel = null;
+    if (selP) {
+      var total = store.totalMs(selP) || 0;
+      var maxMs = 0;
+      sections.forEach(function (s) { maxMs = Math.max(maxMs, selP.sectionMs[s.id] || 0); });
+      var bars = sections.map(function (s) {
+        var ms = selP.sectionMs[s.id] || 0;
+        return { label: s.label, timeLabel: self.fmt(ms), pct: maxMs ? Math.max(ms>0?4:0, Math.round(ms/maxMs*100)) : 0, color: self.SECCOLORS[s.id] || '#9385E6' };
+      });
+      // interactive-element usage, derived from viewer events
+      var evs = selP.events || [];
+      var orbitQs = evs.filter(function (e) { return e.type === 'orbit_demo'; });
+      var lensViews = evs.filter(function (e) { return e.type === 'lens_view'; });
+      var lensPushes = evs.filter(function (e) { return e.type === 'lens_push'; });
+      var tabEvs = evs.filter(function (e) { return e.type === 'space_tab'; });
+      var uniq = function (arr) { return arr.filter(function (v, i) { return v && arr.indexOf(v) === i; }); };
+      var cap = function (s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; };
+      var tabNames = { disc:'Discussion', docs:'Docs & assets', dec:'Decisions', act:'Activity' };
+      var interactions = [];
+      if (orbitQs.length) interactions.push({
+        label: 'Asked Orbit · ' + orbitQs.length,
+        icon: 'ph-fill ph-sparkle',
+        detail: uniq(orbitQs.map(function (e) { return e.meta && e.meta.q; })).join('\n')
+      });
+      if (tabEvs.length) interactions.push({
+        label: 'Explored the Space',
+        icon: 'ph-fill ph-kanban',
+        detail: 'Tabs: ' + uniq(tabEvs.map(function (e) { return tabNames[e.meta && e.meta.tab] || (e.meta && e.meta.tab); })).join(', ')
+      });
+      if (lensViews.length) interactions.push({
+        label: 'Lenses: ' + uniq(lensViews.map(function (e) { return cap(e.meta && e.meta.lens); })).join(', '),
+        icon: 'ph-fill ph-graph',
+        detail: 'Opened ' + lensViews.length + ' lens view(s)'
+      });
+      if (lensPushes.length) interactions.push({
+        label: 'Pushed to tools · ' + lensPushes.length,
+        icon: 'ph-fill ph-arrow-square-out',
+        detail: lensPushes.map(function (e) { return (e.meta && e.meta.kind) === 'meeting' ? 'Scheduled a meeting' : 'Pushed to Jira'; }).join('\n')
+      });
+      var mv = store.mostViewedSection(selP);
+      var drop = store.dropOffSection(selP);
+      var q0 = selP.questions[0];
+      var follow;
+      if (!selP.firstOpened) follow = "Hasn't opened the link yet. Send a short nudge with the link again.";
+      else if (q0) follow = 'Answer their question on ' + self.secLabel(q0.section) + ' first, then offer a live walkthrough.';
+      else if (selP.ctaClicked) follow = 'Reached the CTA. Confirm the meeting and tailor it to ' + (mv?mv.label:'their focus') + '.';
+      else if (mv) follow = 'Spent the most time on ' + mv.label + '. Lead your follow-up with that, offer to go deeper.';
+      else follow = 'Opened but skimmed. Re-share with a one-line hook on the problem.';
+
+      sel = {
+        name: selP.name || '(no name)',
+        sub: [selP.role, selP.company].filter(Boolean).join(' · ') || selP.email || '—',
+        statusLabel: selP.firstOpened ? 'Viewed' : 'Not opened', statusStyle: statusStyle(!!selP.firstOpened),
+        visits: selP.visits.length, totalTime: self.fmt(total), ctaLabel: selP.ctaClicked ? 'Yes' : 'No',
+        bars: bars,
+        hasInteractions: interactions.length > 0,
+        interactions: interactions,
+        hasQuestions: selP.questions.length > 0,
+        questions: selP.questions.map(function (q) { return { text:q.text, sectionLabel:self.secLabel(q.section), timeLabel:self.when(q.ts) }; }),
+        followUp: follow,
+        fileLink: self.fileLink(selP.token),
+        del: function () { store.deleteProspect(selP.token); self.setState({ selToken:null }); }
+      };
+    }
+
+    // aggregate
+    var viewed = list.filter(function (p) { return !!p.firstOpened; });
+    var secTotals = {}; sections.forEach(function (s) { secTotals[s.id] = 0; });
+    list.forEach(function (p) { sections.forEach(function (s) { secTotals[s.id] += (p.sectionMs[s.id]||0); }); });
+    var maxSec = Math.max(1, ...sections.map(function (s) { return secTotals[s.id]; }));
+    var aggSections = sections.map(function (s) {
+      return { label:s.label, timeLabel:self.fmt(secTotals[s.id]), pct: Math.round(secTotals[s.id]/maxSec*100), color:self.SECCOLORS[s.id]||'#9385E6' };
+    });
+    var qCounts = {};
+    list.forEach(function (p) { p.questions.forEach(function (q) { qCounts[q.section] = (qCounts[q.section]||0)+1; }); });
+    var questionSections = Object.keys(qCounts).map(function (k) { return { label:self.secLabel(k), count:qCounts[k] }; })
+      .sort(function (a,b) { return b.count - a.count; });
+    var totalCta = list.filter(function (p) { return p.ctaClicked; }).length;
+    var avgMs = viewed.length ? viewed.reduce(function (a,p) { return a + store.totalMs(p); }, 0) / viewed.length : 0;
+    // dropoff: section with least attention among those that got any (excluding hero)
+    var dropLine;
+    if (!viewed.length) dropLine = 'No views yet.';
+    else {
+      var reached = sections.filter(function (s) { return secTotals[s.id] > 0; });
+      var lastReached = reached.length ? reached[reached.length-1] : null;
+      dropLine = lastReached ? ('Most journeys reach “' + lastReached.label + '”. Sections after it get little attention — consider moving key points earlier.') : 'Prospects open but barely scroll.';
+    }
+    var agg = {
+      total: list.length,
+      openRate: list.length ? Math.round(viewed.length/list.length*100) + '%' : '0%',
+      avgTime: self.fmt(avgMs),
+      ctaRate: viewed.length ? Math.round(totalCta/viewed.length*100) + '%' : '0%',
+      sections: aggSections,
+      questionSections: questionSections,
+      noQuestions: questionSections.length === 0,
+      dropoffLine: dropLine
+    };
+
+    // questions feed
+    var questions = [];
+    list.forEach(function (p) {
+      p.questions.forEach(function (q) {
+        questions.push({ name:p.name||'(no name)', company:p.company||'—', initials:self.initials(p.name), text:q.text, sectionLabel:self.secLabel(q.section), timeLabel:self.when(q.ts), fileLink:self.fileLink(p.token), ts:q.ts });
+      });
+    });
+    questions.sort(function (a,b) { return b.ts - a.ts; });
+
+    // notifications
+    var notes = store.getNotifications().map(function (n) {
+      var isQ = n.type === 'question';
+      return {
+        icon: isQ ? 'ph-fill ph-chat-teardrop-text' : 'ph-fill ph-eye',
+        iconStyle: 'font-size:20px; flex:none; margin-top:2px; color:' + (isQ ? '#9385E6' : '#16A34A') + ';',
+        text: isQ ? ((n.name||'A prospect') + ' asked a question on ' + self.secLabel(n.section))
+                  : ((n.name||'A prospect') + (n.company?(' · '+n.company):'') + ' opened your link'),
+        timeLabel: self.when(n.ts)
+      };
+    });
+
+    var f = this.state.form;
+    var created = this.state.createdToken ? store.getProspect(this.state.createdToken) : null;
+    var titles = { library:'Block library', prospects:'Prospects', analytics:'Analytics', questions:'Questions' };
+    var inp = 'width:100%; font-size:14px; color:#1A1611; padding:10px 12px; border:1px solid #D8D2E4; border-radius:8px; background:#fff;';
+    var qCount = questions.length;
+
+    return {
+      // nav
+      goProspects: function () { self.setState({ view:'prospects' }); },
+      closeSel: function () { self.setState({ selToken:null }); },
+      stopClose: function (e) { if (e && e.stopPropagation) e.stopPropagation(); },
+      goAnalytics: function () { self.setState({ view:'analytics' }); },
+      goQuestions: function () { self.setState({ view:'questions' }); },
+      // one path per link type: standard links are made here; personalized pages
+      // are built in the Page Builder, which receives the name and company
+      notAdvanced: !f.advanced,
+      fieldsStyle: 'display:grid; grid-template-columns:1fr 1fr; gap:12px;' + (f.advanced ? ' opacity:.4; pointer-events:none; filter:grayscale(1);' : ''),
+      primaryLabel: f.advanced ? 'Continue in Page Builder' : 'Generate link',
+      primaryIcon: f.advanced ? 'ph-bold ph-arrow-right' : 'ph ph-link',
+      primaryAction: function () {
+        if (!self.state.form.advanced) { self._create(); return; }
+        try { localStorage.setItem('quely_builder_prefill', JSON.stringify({ name: f.name, company: f.company, email: f.email })); } catch (e) {}
+        location.href = encodeURI('Quely Page Builder.dc.html');
+      },
+      goBuilder: function () { location.href = encodeURI('Quely Page Builder.dc.html'); },
+      navBuilder: this.navStyle(false),
+      goLibrary: function () { self.setState({ view:'library', libVis:{ thread:true, collision:true } }); },
+      navProspects: this.navStyle(this.state.view==='prospects'),
+      navAnalytics: this.navStyle(this.state.view==='analytics'),
+      navQuestions: this.navStyle(this.state.view==='questions'),
+      navLibrary: this.navStyle(this.state.view==='library'),
+      isLibrary: this.state.view==='library',
+      viewTitle: titles[this.state.view],
+      isProspects: this.state.view==='prospects',
+      isAnalytics: this.state.view==='analytics',
+      isQuestions: this.state.view==='questions',
+      // ---- library
+      libCount: this.LIB.length,
+      libFilters: ['all','hero','problem','solve','cta'].map(function (f) {
+        var on = self.state.libFilter === f;
+        return { label: f === 'all' ? 'All' : self.ROLE[f][0],
+          pick: function () { self.setState({ libFilter:f }); },
+          style: 'border-radius:9999px; padding:6px 12px; font-size:12.5px; font-weight:600; cursor:pointer;'
+            + (on ? ' background:#111827; color:#fff; border:1px solid #111827;'
+                  : ' background:#fff; color:#374151; border:1px solid #E5E7EB;') };
+      }),
+      libBlocks: this.LIB.filter(function (b) { return self.state.libFilter === 'all' || b[1] === self.state.libFilter; })
+        .filter(function (b) { return !!self.libFile(b[0]); })
+        .map(function (b) {
+          var key = b[0], role = self.ROLE[b[1]], name = self.libFile(key);
+          var sel = self.state.libEdit === key;
+          var edited = !!(self.store && self.store.getBlockCopy && self.store.getBlockCopy(name));
+          return { key:key, name:name, file:name + '.dc.html', title:b[2], usedIn:b[3], role:role[0],
+            open: function () { self.libOpen(key); },
+            isCard: true,
+            libShowThread: key === 'thread' && !!(self.state.libVis || {})[key],
+            libShowCollision: key === 'collision' && !!(self.state.libVis || {})[key],
+            libShowBottleneck: key === 'bottleneck' && !!(self.state.libVis || {})[key],
+            libShowHandoff: key === 'handoff' && !!(self.state.libVis || {})[key],
+            libShowConverge: key === 'converge' && !!(self.state.libVis || {})[key],
+            libShowBeforeafter: key === 'beforeafter' && !!(self.state.libVis || {})[key],
+            libShowAnatomy: key === 'anatomy' && !!(self.state.libVis || {})[key],
+            libShowMultitool: key === 'multitool' && !!(self.state.libVis || {})[key],
+            libShowRecord: key === 'record' && !!(self.state.libVis || {})[key],
+            libShowRelmap: key === 'relmap' && !!(self.state.libVis || {})[key],
+            libShowLenses: key === 'lenses' && !!(self.state.libVis || {})[key],
+            libShowRoles: key === 'roles' && !!(self.state.libVis || {})[key],
+            libShowPlanning: key === 'planning' && !!(self.state.libVis || {})[key],
+            libShowHowitworks: key === 'howitworks' && !!(self.state.libVis || {})[key],
+            libShowCtaFrag: key === 'ctaFrag' && !!(self.state.libVis || {})[key],
+            libShowCtaDec: key === 'ctaDec' && !!(self.state.libVis || {})[key],
+            libShowCtaRisk: key === 'ctaRisk' && !!(self.state.libVis || {})[key],
+            libShowCtaKnow: key === 'ctaKnow' && !!(self.state.libVis || {})[key],
+            libShowCtaAction: key === 'ctaAction' && !!(self.state.libVis || {})[key],
+        cardStyle: 'background:#fff; border:2px solid ' + (sel ? '#5C28A4' : '#1A1611') + '; border-radius:0; overflow:hidden; cursor:pointer;'
+          + ' box-shadow:' + (sel ? '5px 5px 0 #5C28A4' : '5px 5px 0 #1A1611') + ';',
+            roleStyle: 'font-family:\'Geist Mono\',monospace; font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;'
+              + ' border-radius:9999px; padding:3px 9px; color:' + role[1] + '; background:' + role[2] + ';',
+            editedStyle: edited ? 'font-size:11px; font-weight:600; color:#5C28A4; background:#F3EEFB; border-radius:9999px; padding:3px 8px;' : 'display:none;',
+            previewStyle: 'position:relative; height:340px; overflow:hidden; background:#F9FAFB;',
+            scaleStyle: 'position:absolute; top:0; left:0; width:200%; transform:scale(.5); transform-origin:top left; pointer-events:none;' };
+        }),
+      libEditing: !!this.state.libEdit,
+      libIdle: !this.state.libEdit,
+      libEditTitle: (function () { var b = self.LIB.filter(function (x) { return x[0] === self.state.libEdit; })[0]; return b ? b[2] : ''; })(),
+      libEyebrow: this.state.libEyebrow, libHeadline: this.state.libHeadline, libBody: this.state.libBody,
+      setLibEyebrow: function (e) { self.setState({ libEyebrow:e.target.value, libSaved:false }); },
+      setLibHeadline: function (e) { self.setState({ libHeadline:e.target.value, libSaved:false }); },
+      setLibBody: function (e) { self.setState({ libBody:e.target.value, libSaved:false }); },
+      libSave: function () { self.libSave(); },
+      libReset: function () { self.libReset(); },
+      libClose: function () { self.setState({ libEdit:null }); },
+      libSavedStyle: this.state.libSaved
+        ? 'display:flex; align-items:center; gap:6px; margin-top:12px; font-size:12.5px; font-weight:600; color:#15803D;'
+        : 'display:none;',
+      questionCount: qCount,
+      qBadge: 'margin-left:auto; font-size:12px; font-weight:700; min-width:20px; height:20px; padding:0 6px; border-radius:9999px; display:inline-flex; align-items:center; justify-content:center; ' + (qCount ? 'background:#9385E6; color:#fff;' : 'background:rgba(255,255,255,.12); color:rgba(255,255,255,.5);'),
+
+      // notifications
+      toggleNotif: function () { self.setState({ notifOpen: !self.state.notifOpen }); },
+      notifOpen: this.state.notifOpen,
+      notifications: notes,
+      noNotifs: notes.length === 0,
+      notifCount: notes.length,
+      notifBadge: notes.length ? 'position:absolute; top:-5px; right:-5px; background:#DC2626; color:#fff; font-size:11px; font-weight:700; min-width:18px; height:18px; padding:0 4px; border-radius:9999px; display:flex; align-items:center; justify-content:center;' : 'display:none;',
+      clearNotif: function () { store.clearNotifications(); self.forceUpdate(); },
+
+      // create form
+      lbl: 'display:block; font-size:12px; font-weight:600; color:#5C5345; margin-bottom:6px;',
+      inp: inp,
+      fName:f.name, fCompany:f.company, fEmail:f.email, fRole:f.role, fPain:f.pain,
+      // advanced (two-mode)
+      fAdvanced: f.advanced, fFocusRole: f.focusRole, fFocusTopic: f.focusTopic,
+      // custom dropdowns (native selects looked basic / clipped at page edges)
+      roleDropOpen: self.state.openDrop === 'role',
+      topicDropOpen: self.state.openDrop === 'topic',
+      toggleRoleDrop: function () { self.setState({ openDrop: self.state.openDrop === 'role' ? null : 'role' }); },
+      toggleTopicDrop: function () { self.setState({ openDrop: self.state.openDrop === 'topic' ? null : 'topic' }); },
+      fRoleLabel: (self.CUR_ROLES.find(function (r) { return r.slug === f.focusRole; }) || {}).label || 'Select a role',
+      fTopicLabel: (self.CUR_TOPICS.find(function (t) { return t.slug === f.focusTopic; }) || {}).label || 'Select a problem',
+      ddTrigger: 'display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; box-sizing:border-box; background:#fff; border:1px solid #D1D5DB; border-radius:9px; padding:10px 13px; font-family:inherit; font-size:14px; font-weight:600; color:#1A1611; text-align:left; cursor:pointer;',
+      ddCaretRole: 'font-size:13px; color:#5C5345; transition:transform .15s; transform:rotate(' + (self.state.openDrop === 'role' ? '180' : '0') + 'deg);',
+      ddCaretTopic: 'font-size:13px; color:#5C5345; flex:none; transition:transform .15s; transform:rotate(' + (self.state.openDrop === 'topic' ? '180' : '0') + 'deg);',
+      ddMenu: 'position:absolute; z-index:40; top:calc(100% + 6px); left:0; right:0; background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:5px 5px 0 #1A1611; padding:6px; display:flex; flex-direction:column; gap:2px;',
+      roleChoices: self.CUR_ROLES.map(function (r) {
+        var on = r.slug === f.focusRole;
+        return { label: r.label, on: on,
+          style: 'display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; font-family:inherit; font-size:14px; font-weight:' + (on ? '700' : '500') + '; text-align:left; padding:9px 11px; border:none; border-radius:7px; cursor:pointer; color:#1A1611; background:' + (on ? '#F8F5FB' : 'transparent') + ';',
+          pick: function () { self.setState({ form: Object.assign({}, self.state.form, { focusRole: r.slug }), openDrop: null }); } };
+      }),
+      topicChoices: self.CUR_TOPICS.map(function (t) {
+        var on = t.slug === f.focusTopic;
+        return { label: t.label, on: on,
+          style: 'display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; font-family:inherit; font-size:14px; font-weight:' + (on ? '700' : '500') + '; text-align:left; padding:9px 11px; border:none; border-radius:7px; cursor:pointer; color:#1A1611; background:' + (on ? '#F8F5FB' : 'transparent') + ';',
+          pick: function () { self.setState({ form: Object.assign({}, self.state.form, { focusTopic: t.slug }), openDrop: null }); } };
+      }),
+      roleOpts: (window.QuelyLibrary ? window.QuelyLibrary.ROLES : []),
+      topicOpts: (window.QuelyLibrary ? window.QuelyLibrary.TOPICS : []),
+      focusPreview: (function () { var t = (self.CUR_TOPICS.find(function (x) { return x.slug === f.focusTopic; }) || {}).label || ''; return t.toLowerCase(); })(),
+      advBadge: f.advanced ? 'On' : 'Off',
+      advBadgeStyle: 'flex:none; font-family:\'Geist Mono\',monospace; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:4px 10px; border-radius:9999px; ' + (f.advanced ? 'background:#F8F5FB; color:#5C28A4;' : 'background:#F3F4F6; color:#5C5345;'),
+      advTrackStyle: 'flex:none; width:42px; height:24px; border-radius:9999px; position:relative; transition:background .16s; background:' + (f.advanced ? '#5C28A4' : '#D1D5DB') + ';',
+      advKnobStyle: 'position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .16s; transform:translateX(' + (f.advanced ? '18px' : '0') + ');',
+      toggleAdvanced: function () { self.setState({ form: Object.assign({}, self.state.form, { advanced: !self.state.form.advanced }) }); },
+      setFocusRole: function (e) { self.setState({ form: Object.assign({}, self.state.form, { focusRole:e.target.value }) }); },
+      setFocusTopic: function (e) { self.setState({ form: Object.assign({}, self.state.form, { focusTopic:e.target.value }) }); },
+      setName: function (e) { self.setState({ form: Object.assign({}, self.state.form, { name:e.target.value }) }); },
+      setCompany: function (e) { self.setState({ form: Object.assign({}, self.state.form, { company:e.target.value }) }); },
+      setEmail: function (e) { self.setState({ form: Object.assign({}, self.state.form, { email:e.target.value }) }); },
+      setRole: function (e) { self.setState({ form: Object.assign({}, self.state.form, { role:e.target.value }) }); },
+      setPain: function (e) { self.setState({ form: Object.assign({}, self.state.form, { pain:e.target.value }) }); },
+      setGenNotes: function (e) { self.setState({ form: Object.assign({}, self.state.form, { genNotes:e.target.value }), genStatus:'idle', genPlan:null, genError:'' }); },
+      generateAI: function () { self.generateAI(); },
+      fGenNotes: f.genNotes,
+      genBtnLabel: (self.state.genStatus === 'working') ? 'Generating\u2026' : (self.state.genStatus === 'ready' ? 'Regenerate' : 'Generate with Quely AI'),
+      genBtnIcon: (self.state.genStatus === 'working') ? 'ph ph-circle-notch' : 'ph-fill ph-sparkle',
+      genBtnStyle: 'display:inline-flex; align-items:center; gap:8px; background:' + (self.state.genStatus === 'working' ? '#3A2A5A' : '#5C28A4') + '; color:#fff; border:none; border-radius:9px; padding:10px 16px; font-family:inherit; font-size:14px; font-weight:600; cursor:' + (self.state.genStatus === 'working' ? 'wait' : 'pointer') + ';',
+      genError: self.state.genError,
+      genReady: self.state.genStatus === 'ready' && !!self.state.genPlan,
+      genFamilyLabel: self.state.genPlan ? self.state.genPlan.familyLabel : '',
+      genHero: self.state.genPlan ? self.state.genPlan.hero.headline : '',
+      genProblem: self.state.genPlan ? self.state.genPlan.problem.headline : '',
+      genChips: self.state.genPlan ? (self.state.genPlan.signals || []).map(function (s) { return s.label; }).slice(0, 4) : [],
+      genSections: (function () {
+        var p = self.state.genPlan; if (!p) return [];
+        var s = p.sections || {};
+        var rows = [['Hero', true], ['Problem', true], ['Capacity demo', !!s.capacity], ['Space demo', !!s.space], ['Orbit demo', !!s.orbit], ['Lenses', !!s.lenses], ['Capabilities', !!s.features], ['Proof', !!s.proof], ['CTA', true]];
+        return rows.map(function (r) {
+          return { name: r[0], on: r[1],
+            style: 'display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:4px 10px; border-radius:9999px; ' + (r[1] ? 'background:rgba(74,222,128,.12); border:1px solid rgba(74,222,128,.35); color:#4ADE80;' : 'background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.4); text-decoration:line-through;'),
+            icon: r[1] ? 'ph-fill ph-check' : 'ph-fill ph-x' };
+        });
+      })(),
+      createProspect: self._create = function () {
+        var fm = self.state.form;
+        if (!(fm.name || fm.company)) return;
+        var data = Object.assign({}, fm);
+        if (self.state.genStatus === 'ready' && self.state.genPlan) {
+          data.pagePlan = self.state.genPlan; data.genNotes = fm.genNotes; data.advanced = true;
+        }
+        var p = store.createProspect(data);
+        try { localStorage.setItem('quely_open', p.token); } catch (e) {}
+        self.setState({ createdToken:p.token, selToken:p.token, copyLabel:'Copy', genStatus:'idle', genPlan:null, genError:'', form:{ name:'', company:'', email:'', role:'', pain:'', advanced:false, focusRole:'eng-leader', focusTopic:'context-fragmentation', genNotes:'' } });
+      },
+      hasCreated: !!created,
+      createdName: created ? (created.name || created.company) : '',
+      createdPretty: created ? this.prettyLink(created.token) : '',
+      createdFile: created ? this.fileLink(created.token) : '#',
+      copyLabel: this.state.copyLabel,
+      copyCreated: function () {
+        if (created) { try { navigator.clipboard.writeText(self.prettyLink(created.token)); } catch (e) {} }
+        self.setState({ copyLabel:'Copied' });
+        setTimeout(function () { self.setState({ copyLabel:'Copy' }); }, 1500);
+      },
+
+      // list + detail
+      prospects: prospects,
+      noProspects: prospects.length === 0,
+      hasSel: !!sel, noSel: !sel, sel: sel,
+
+      // aggregate + questions
+      agg: agg,
+      questions: questions,
+      noQuestionsView: questions.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

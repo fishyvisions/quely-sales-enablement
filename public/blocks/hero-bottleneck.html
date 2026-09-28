@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
 
   /* The person is gone. What they knew is already recorded, so the work continues. */
   @keyframes qbn-leave  { to { opacity:.6; filter:grayscale(1); } }
@@ -33,7 +35,7 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:56px 40px 62px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:56px 40px 62px; display:flex; justify-content:center;">
   <div style="position:absolute; top:46%; left:50%; width:900px; height:420px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.18), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none; animation:qbn-glow 8s ease-in-out infinite;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
@@ -41,9 +43,9 @@
     <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
       <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
         <img src="/assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
-        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#C9C1F2;">{{ eyebrow }}</span>
       </div>
-      <h1 style="margin:0 0 18px; max-width:900px; font-size:50px; line-height:1.06; letter-spacing:-.03em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h1>
+      <h1 style="margin:0 0 18px; max-width:900px; font-family:'Geist',sans-serif; font-size:50px; line-height:1.06; letter-spacing:-.04em; font-weight:800; color:{{ sInk }}; text-wrap:pretty;">{{ headline }}</h1>
       <p style="margin:0; max-width:800px; font-size:18px; line-height:1.6; color:rgba(255,255,255,.66); text-wrap:pretty;">{{ body }}</p>
     </div>
 
@@ -77,10 +79,10 @@
               <div style="display:flex; align-items:flex-start; gap:12px; background:#fff; border-radius:13px; padding:13px 15px; box-shadow:0 18px 40px -20px rgba(0,0,0,.68), 0 0 0 1px rgba(255,255,255,.11);">
                 <i class="{{ r.icon }}" style="flex:none; margin-top:2px; font-size:17px; color:#5C28A4;"></i>
                 <div style="flex:1; min-width:0;">
-                  <div style="font-size:13.5px; line-height:1.45; font-weight:600; color:#111827; text-wrap:pretty;">{{ r.text }}</div>
+                  <div style="font-size:13.5px; line-height:1.45; font-weight:600; color:#1A1611; text-wrap:pretty;">{{ r.text }}</div>
                   <div style="display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:7px;">
                     <span style="flex:none; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#5C28A4;">{{ r.kind }}</span>
-                    <span style="flex:none; font-size:10.5px; color:#4B5563; white-space:nowrap;">{{ r.meta }}</span>
+                    <span style="flex:none; font-size:10.5px; color:#5C5345; white-space:nowrap;">{{ r.meta }}</span>
                   </div>
                 </div>
               </div>
@@ -120,8 +122,22 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:820}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:820},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Preserve project history&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Let anyone understand any task or project without relying on the person who built it.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Quely keeps the decisions, rationale, discussions, meeting transcripts, and supporting documents around any task or project in one Space. Orbit makes that history easy to retrieve, so new engineers can understand why the system works the way it does, what was ruled out, and what comes next.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;leaverName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Priya Nandi&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;leaverRole&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Tech lead, four years on this codebase&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;leaverStatus&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Left in March&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;leaverNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Every architectural call on this project was hers.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spaceLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Still in the Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;carryLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The work continues&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;joinerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ana Ruiz&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;joinerRole&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Joined last week&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;joinerLine&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;I can see why the retry logic lives here, what was ruled out, and what ships next. I never had to ask.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;carryNote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Anyone can retrieve the same history, on their first day or a year from now.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;records&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{kind:string;icon:string;text:string;meta:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'Preserve project history',
     headline: 'Let anyone understand any task or project without relying on the person who built it.',
@@ -198,7 +214,10 @@ class Component extends DCLogic {
       wrapStyle: 'opacity:0; transform:translateY(14px); --d:' + (1250 + i * 200) + 'ms;'
     }));
 
+    var S = this.surf();
+
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
@@ -219,7 +238,7 @@ class Component extends DCLogic {
       joinerLine: p.joinerLine ?? D.joinerLine,
       carryNote: p.carryNote ?? D.carryNote,
       joinerInitials: this.initialsOf(p.joinerName ?? D.joinerName),
-      joinerAvatarStyle: this.avatar('#15803D', 32, 11.5),
+      joinerAvatarStyle: this.avatar('#12652F', 32, 11.5),
       carryCardStyle: 'opacity:0; transform:translateY(18px); --d:2200ms;'
     };
   }

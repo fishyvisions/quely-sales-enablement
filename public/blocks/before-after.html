@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
   @keyframes qba-in { to { opacity:1; transform:translateY(0); } }
   [data-qba][data-go] [data-el="row"] { animation:qba-in 520ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
   @media (prefers-reduced-motion: reduce) {
@@ -23,14 +25,14 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:80px 40px 88px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:80px 40px 88px; display:flex; justify-content:center;">
   <div style="position:absolute; top:-4%; left:50%; width:900px; height:520px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.14), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none;"></div>
 
   <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
 
     <div style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:34px;">
-      <div style="font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#AB84E1; margin-bottom:16px;">{{ eyebrow }}</div>
-      <h2 style="margin:0; max-width:860px; font-size:38px; line-height:1.16; letter-spacing:-.028em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
+      <div style="font-family:'Geist Mono',monospace; font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#C9C1F2; margin-bottom:16px;">{{ eyebrow }}</div>
+      <h2 style="margin:0; max-width:860px; font-family:'Geist',sans-serif; font-size:38px; line-height:1.16; letter-spacing:-.04em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h2>
       <p style="margin:15px 0 0; max-width:640px; font-size:15px; line-height:1.65; color:rgba(255,255,255,.5); text-wrap:pretty;">{{ body }}</p>
     </div>
 
@@ -39,8 +41,8 @@
 
       <div style="display:grid; grid-template-columns:{{ cols }};">
         <div style="background:rgba(255,255,255,.02);"></div>
-        <div style="padding:15px 18px; text-align:center; background:rgba(255,255,255,.04); border-left:1px solid rgba(255,255,255,.09); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.62);">{{ beforeLabel }}</div>
-        <div style="padding:15px 18px; text-align:center; background:#5C28A4; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff;">{{ afterLabel }}</div>
+        <div style="padding:15px 18px; text-align:center; background:rgba(255,255,255,.04); border-left:1px solid rgba(255,255,255,.09); font-family:'Geist Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.62);">{{ beforeLabel }}</div>
+        <div style="padding:15px 18px; text-align:center; background:#5C28A4; font-family:'Geist Mono',monospace; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#fff;">{{ afterLabel }}</div>
       </div>
 
       <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
@@ -48,7 +50,7 @@
 
           <!-- the job -->
           <div style="box-sizing:border-box; padding:20px 18px;">
-            <span style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:11px; background:rgba(143,91,215,.14); border:1px solid rgba(143,91,215,.3);"><i class="{{ r.icon }}" style="font-size:19px; color:#AB84E1;"></i></span>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:11px; background:rgba(143,91,215,.14); border:1px solid rgba(143,91,215,.3);"><i class="{{ r.icon }}" style="font-size:19px; color:#C9C1F2;"></i></span>
             <div style="margin-top:12px; font-size:15px; line-height:1.28; font-weight:700; color:#fff; text-wrap:pretty;">{{ r.job }}</div>
           </div>
 
@@ -120,7 +122,7 @@
                 <sc-if value="{{ pt.isTitle }}" hint-placeholder-val="{{ true }}">
                   <div style="display:flex; align-items:center; gap:7px;">
                     <i class="{{ pt.iconClass }}" style="{{ pt.iconStyle }}"></i>
-                    <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#111827;">{{ pt.text }}</span>
+                    <span style="flex:1; min-width:0; font-size:11.5px; font-weight:700; color:#1A1611;">{{ pt.text }}</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isMeta }}" hint-placeholder-val="{{ false }}">
@@ -128,7 +130,7 @@
                     <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:6px; padding:2px 7px; font-size:9.5px; font-weight:700; color:#1D4ED8;">
                       <span style="width:10px; height:10px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ pt.text }}
                     </span>
-                    <span style="flex:none; white-space:nowrap; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:6px; padding:2px 7px; font-size:9.5px; font-weight:700; color:#15803D;">{{ pt.meta }}</span>
+                    <span style="flex:none; white-space:nowrap; background:#DCFCE7; border:1px solid #BBF7D0; border-radius:6px; padding:2px 7px; font-size:9.5px; font-weight:700; color:#12652F;">{{ pt.meta }}</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isTabs }}" hint-placeholder-val="{{ false }}">
@@ -143,30 +145,30 @@
                     <span style="flex:none; width:19px; height:19px; border-radius:50%; background:#5C28A4; display:inline-flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff;">{{ pt.who }}</span>
                     <div style="flex:1; min-width:0;">
                       <div style="display:flex; align-items:baseline; gap:6px;">
-                        <span style="flex:none; font-size:10.5px; font-weight:700; color:#111827;">{{ pt.name }}</span>
-                        <span style="flex:none; font-size:9.5px; color:#6B7280;">{{ pt.meta }}</span>
+                        <span style="flex:none; font-size:10.5px; font-weight:700; color:#1A1611;">{{ pt.name }}</span>
+                        <span style="flex:none; font-size:9.5px; color:#5C5345;">{{ pt.meta }}</span>
                       </div>
                       <div style="margin-top:2px; font-size:10.5px; line-height:1.5; color:#374151;">{{ pt.text }}</div>
                     </div>
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isBubble }}" hint-placeholder-val="{{ false }}">
-                  <div style="align-self:flex-end; max-width:92%; background:#F3EEFB; border:1px solid #E4D3F5; border-radius:11px; border-bottom-right-radius:4px; padding:8px 10px; font-size:10.5px; line-height:1.5; font-weight:600; color:#4B1F88;">{{ pt.text }}</div>
+                  <div style="align-self:flex-end; max-width:92%; background:#F8F5FB; border:1px solid #C9C1F2; border-radius:11px; border-bottom-right-radius:4px; padding:8px 10px; font-size:10.5px; line-height:1.5; font-weight:600; color:#41186F;">{{ pt.text }}</div>
                 </sc-if>
                 <sc-if value="{{ pt.isAnswer }}" hint-placeholder-val="{{ false }}">
-                  <div style="background:#F9FAFB; border:1px solid #F3F4F6; border-radius:8px; padding:9px 10px; font-size:10.5px; line-height:1.55; color:#1F2937;">{{ pt.text }}</div>
+                  <div style="background:#ECE7F2; border:1px solid #F3F4F6; border-radius:8px; padding:9px 10px; font-size:10.5px; line-height:1.55; color:#1A1611;">{{ pt.text }}</div>
                 </sc-if>
                 <sc-if value="{{ pt.isRow }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex; align-items:center; gap:7px;">
                     <span style="{{ pt.dotStyle }}"></span>
                     <i class="{{ pt.iconClass }}" style="{{ pt.iconStyle }}"></i>
                     <span style="flex:1; min-width:0; font-size:10.5px; font-weight:600; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
-                    <span style="flex:none; font-size:9.5px; color:#6B7280; white-space:nowrap;">{{ pt.meta }}</span>
+                    <span style="flex:none; font-size:9.5px; color:#5C5345; white-space:nowrap;">{{ pt.meta }}</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isCheck }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex; align-items:center; gap:7px;">
-                    <i class="ph ph-square" style="flex:none; font-size:12px; color:#4B5563;"></i>
+                    <i class="ph ph-square" style="flex:none; font-size:12px; color:#5C5345;"></i>
                     <span style="flex:1; min-width:0; font-size:10.5px; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
                     <span style="flex:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-size:9px; font-weight:700; color:#1D4ED8;">
                       <span style="width:9px; height:9px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ pt.meta }}
@@ -174,17 +176,9 @@
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isSearch }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex; align-items:center; gap:7px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:7px; padding:6px 9px;">
-                    <i class="ph ph-magnifying-glass" style="flex:none; font-size:11px; color:#6B7280;"></i>
-                    <span style="flex:1; min-width:0; font-size:10.5px; color:#6B7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
-                  </div>
-                </sc-if>
-                <sc-if value="{{ pt.isSources }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex; align-items:center; gap:6px; padding-top:7px; border-top:1px solid #F3F4F6;">
-                    <span style="flex:none; font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#6B7280;">{{ pt.label }}</span>
-                    <sc-for list="{{ pt.icons }}" as="ic" hint-placeholder-count="3">
-                      <i class="{{ ic.cls }}" style="{{ ic.style }}"></i>
-                    </sc-for>
+                  <div style="display:flex; align-items:center; gap:7px; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:7px; padding:6px 9px;">
+                    <i class="ph ph-magnifying-glass" style="flex:none; font-size:11px; color:#5C5345;"></i>
+                    <span style="flex:1; min-width:0; font-size:10.5px; color:#5C5345; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ pt.text }}</span>
                   </div>
                 </sc-if>
                 <sc-if value="{{ pt.isLink }}" hint-placeholder-val="{{ false }}">
@@ -196,26 +190,31 @@
         </div>
       </sc-for>
     </div>
-
-    <div style="display:flex; justify-content:center; margin-top:26px;">
-      <span style="display:inline-flex; align-items:center; gap:11px; background:rgba(255,255,255,.04); border:1px solid rgba(143,91,215,.34); border-radius:9999px; padding:13px 26px;">
-        <span style="flex:none; width:19px; height:19px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
-        <span style="font-size:15px; font-weight:600; color:#fff; text-wrap:pretty;">{{ footer }}</span>
-      </span>
     </div>
-
-  </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1800}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1120},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Before Quely / With Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Stop searching across tools to understand the work.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Quely connects each work item to the discussions, meetings, documents, decisions, dependencies, and updates around it, so the team can find the information it needs from one Space.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;beforeLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Before Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;afterLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;With Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rows&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{icon:string;job:string;beforeCopy:string;afterCopy:string;beforeParts:object[];afterParts:object[]}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'Before Quely / With Quely',
     headline: 'Stop searching across tools to understand the work.',
     body: 'Quely connects each work item to the discussions, meetings, documents, decisions, dependencies, and updates around it, so the team can find the information it needs from one Space.',
     beforeLabel: 'Before Quely',
     afterLabel: 'With Quely',
-    footer: 'One Space. Full context. No more searching. Just the answers.',
 
     rows: [
       {
@@ -223,8 +222,8 @@ class Component extends DCLogic {
         job: 'Understand a task',
         beforeCopy: 'Open the ticket, search chat, check documents, and review meeting notes to find the requirements, changes, and decisions.',
         beforeParts: [
-          { k: 'note', label: 'Jira · PROJ-1287', text: 'Add saved payment methods' },
-          { k: 'note', label: '#payments', text: 'We’re only storing cards for returning customers.' },
+          { k: 'note', label: 'Jira \u00b7 PROJ-1287', text: 'Add saved payment methods' },
+          { k: 'note', label: '#payments', text: 'We\u2019re only storing cards for returning customers.' },
           { k: 'note', label: 'Meeting notes', text: 'Scope changed to remove wallet and ACH.' },
           { k: 'logos', logos: ['jira', 'slack', 'notion', 'figma'], more: '+3' }
         ],
@@ -234,7 +233,7 @@ class Component extends DCLogic {
           { k: 'meta', text: 'PROJ-1287', meta: 'In progress' },
           { k: 'answer', text: 'Add saved payment methods' },
           { k: 'tabs', tabs: ['Chat', 'Docs', 'Meetings', 'Decisions', 'Files'] },
-          { k: 'msg', who: 'RS', name: 'Ritika', meta: 'Nov 18', text: 'We’re removing wallet and ACH to make the renewal date.' },
+          { k: 'msg', who: 'RS', name: 'Ritika', meta: 'Nov 18', text: 'We\u2019re removing wallet and ACH to make the renewal date.' },
           { k: 'row', text: 'Scope change doc', icon: 'ph-fill ph-file-text', tint: '#2563EB' }
         ]
       },
@@ -254,51 +253,7 @@ class Component extends DCLogic {
           { k: 'title', text: 'Orbit', icon: 'ph-fill ph-sparkle', tint: '#5C28A4' },
           { k: 'bubble', text: 'Why did we remove wallet and ACH?' },
           { k: 'answer', text: 'Decided in the Nov 18 planning call to narrow scope to card checkout only, so the renewal date could hold. Wallet and ACH moved to the next cycle.' },
-          { k: 'answer', text: 'Options considered: keep all methods (higher risk), or card only (faster, lower risk) ✓' },
-          { k: 'sources', label: 'Sources', icons: [
-            { cls: 'ph-fill ph-microphone-stage', tint: '#8F5BD7' },
-            { cls: 'ph-fill ph-chat-circle', tint: '#5C28A4' },
-            { cls: 'ph-fill ph-file-text', tint: '#2563EB' }
-          ] }
-        ]
-      },
-      {
-        icon: 'ph ph-shield-warning',
-        job: 'Identify delivery risks',
-        beforeCopy: 'Compare updates across tickets, conversations, and meetings to find blockers and dependencies.',
-        beforeParts: [
-          { k: 'row', text: 'Jira', meta: '3 open dependencies', logo: 'jira', dot: '#F87171' },
-          { k: 'row', text: '#eng-frontend', meta: '2 blockers', logo: 'slack', dot: '#F87171' },
-          { k: 'row', text: 'Planning call', meta: 'Risk noted', icon: 'ph-fill ph-microphone-stage', tint: 'rgba(192,132,252,.7)', dot: '#FBBF24' },
-          { k: 'row', text: 'Doc', meta: 'Waiting on API spec', icon: 'ph-fill ph-file-text', tint: 'rgba(52,211,153,.7)', dot: '#FBBF24' }
-        ],
-        afterCopy: 'Orbit reads across the Space and surfaces the risks and dependencies that need attention.',
-        afterParts: [
-          { k: 'title', text: 'Risks & dependencies', icon: 'ph-fill ph-warning', tint: '#B91C1C' },
-          { k: 'row', text: '2 blockers', dot: '#B91C1C' },
-          { k: 'row', text: '3 dependencies', dot: '#B45309' },
-          { k: 'row', text: '1 unanswered question', dot: '#5C28A4' },
-          { k: 'link', text: 'View details', icon: 'ph-bold ph-arrow-right' }
-        ]
-      },
-      {
-        icon: 'ph ph-check-square',
-        job: 'Turn discussions into tracked work',
-        beforeCopy: 'Review meeting notes and chat threads, then create the follow-up tasks manually.',
-        beforeParts: [
-          { k: 'title', text: 'Action items from notes' },
-          { k: 'check', text: 'Update API spec' },
-          { k: 'check', text: 'Add card vaulting' },
-          { k: 'check', text: 'Write tests' },
-          { k: 'btn', text: 'Create tasks' }
-        ],
-        afterCopy: 'Review the action items Orbit extracts and push the relevant ones into the project-management tool.',
-        afterParts: [
-          { k: 'title', text: 'Action items', icon: 'ph-fill ph-list-checks', tint: '#5C28A4' },
-          { k: 'check', text: 'Update API spec', meta: 'PROJ-1312' },
-          { k: 'check', text: 'Add card vaulting', meta: 'PROJ-1313' },
-          { k: 'check', text: 'Write tests', meta: 'PROJ-1314' },
-          { k: 'link', text: 'Push to Jira', icon: 'ph-fill ph-paper-plane-right' }
+          { k: 'answer', text: 'Options considered: keep all methods (higher risk), or card only (faster, lower risk) \u2713' },
         ]
       },
       {
@@ -309,12 +264,12 @@ class Component extends DCLogic {
           { k: 'bubble', text: 'Can you quickly walk me through why we changed this?' },
           { k: 'dots' }
         ],
-        afterCopy: 'Search the Space for the project’s decisions, discussions, meetings, changes, and supporting documents.',
+        afterCopy: 'Search the Space for the project\u2019s decisions, discussions, meetings, changes, and supporting documents.',
         afterParts: [
           { k: 'search', text: 'Search in this Space' },
           { k: 'tabs', tabs: ['All', 'Decisions', 'Meetings', 'Docs', 'Changes'] },
-          { k: 'row', text: 'Decision: remove wallet and ACH', meta: 'Nov 18', icon: 'ph-fill ph-seal-check', tint: '#15803D' },
-          { k: 'row', text: 'Planning call transcript', meta: 'Nov 18', icon: 'ph-fill ph-microphone-stage', tint: '#8F5BD7' },
+          { k: 'row', text: 'Decision: remove wallet and ACH', meta: 'Nov 18', icon: 'ph-fill ph-seal-check', tint: '#12652F' },
+          { k: 'row', text: 'Planning call transcript', meta: 'Nov 18', icon: 'ph-fill ph-microphone-stage', tint: '#9385E6' },
           { k: 'row', text: 'Scope change doc', meta: 'Nov 18', icon: 'ph-fill ph-file-text', tint: '#2563EB' },
           { k: 'row', text: 'Checkout flow v2 diagram', meta: 'Nov 18', icon: 'ph-fill ph-flow-arrow', tint: '#B91C1C' }
         ]
@@ -329,7 +284,7 @@ class Component extends DCLogic {
     const o = {
       isTitle:false, isRow:false, isNote:false, isSearch:false, isCheck:false, isBubble:false,
       isDots:false, isLogos:false, isBtn:false, isMeta:false, isTabs:false, isMsg:false,
-      isAnswer:false, isSources:false, isLink:false,
+      isAnswer:false, isLink:false,
       text: pt.text || '', meta: pt.meta || '', label: pt.label || '', who: pt.who || '', name: pt.name || '',
       iconClass: pt.icon || 'ph', iconStyle: 'display:none;',
       markStyle: 'display:none;', dotStyle: 'display:none;',
@@ -394,13 +349,15 @@ class Component extends DCLogic {
         + ' opacity:0; transform:translateY(10px); --d:' + (140 + i * 120) + 'ms;'
     }));
 
+    var S = this.surf();
+
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
       beforeLabel: p.beforeLabel ?? D.beforeLabel,
       afterLabel: p.afterLabel ?? D.afterLabel,
-      footer: p.footer ?? D.footer,
       cols: '150px minmax(0,1fr) minmax(0,1fr)',
       rows: rows
     };

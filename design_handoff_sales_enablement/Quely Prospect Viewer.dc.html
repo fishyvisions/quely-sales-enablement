@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="enablement-store.js"></script>
+<script src="./quely-content-library.js"></script>
+<script src="./quely-page-plans.js"></script>
+<script src="./default-page-check.js"></script>
+<style>
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#ECE7F2; }
+  a { color:#5C28A4; }
+  a:hover { color:#41186F; }
+  ::selection { background:#5C28A4; color:#fff; }
+  @keyframes qfloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+  @keyframes qglow { 0%,100% { opacity:.5; } 50% { opacity:.9; } }
+  @keyframes qring { 0% { transform:scale(1); opacity:.5; } 70%,100% { transform:scale(1.8); opacity:0; } }
+  @keyframes qbob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+  @keyframes qdot { 0%,80%,100% { opacity:.3; } 40% { opacity:1; } }
+  @keyframes qanswer { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  /* Lens rows reveal their three actions on hover, as the product does. */
+  [data-lens-row]:hover { background:#F9FAFB !important; }
+  [data-lens-row]:hover [data-lens-bar] { display:flex !important; }
+  [data-lens-bar] [data-lens-btn]:hover { background:#F3EEFB; color:#5C28A4; }
+  /* Lens interactivity cues. Visibility is CSS + one imperative attribute, never a
+     {{ }} style hole — holes resolve once during the initial stream in this runtime
+     and never re-apply, which is why hole-driven cues never painted for visitors. */
+  [data-lens-cue], [data-lens-actcue] { display:none; }
+  [data-cue-filter] [data-lens-pills] > span:first-child [data-lens-cue] { display:block; }
+  [data-cue-row] [data-lens-list] > div:first-child [data-lens-row]:nth-of-type(2) [data-lens-cue] { display:block; }
+  [data-cue-act] [data-lens-bar] [data-lens-btn]:first-child [data-lens-actcue] { display:block; }
+
+  @keyframes qhint { 0%,100% { opacity:.55; transform:translateX(0); } 50% { opacity:1; transform:translateX(3px); } }
+  @keyframes qnudge { 0%,100% { box-shadow:0 0 0 0 rgba(143,91,215,.0); } 50% { box-shadow:0 0 0 4px rgba(143,91,215,.18); } }
+  @keyframes qping { 0% { transform:scale(.6); opacity:.75; } 70%,100% { transform:scale(2.4); opacity:0; } }
+  @keyframes qreveal { from { opacity:0; transform:translateY(34px); } to { opacity:1; transform:none; } }
+  @keyframes qrevealx { from { opacity:0; transform:translateY(26px); } to { opacity:1; transform:none; } }
+  [data-reveal] { }
+  @supports (animation-timeline: view()) {
+    [data-reveal] { animation:qreveal linear both; animation-timeline:view(); animation-range:entry 2% entry 46%; }
+    [data-stagger] > * { animation:qrevealx linear both; animation-timeline:view(); animation-range:entry 4% cover 12%; }
+  }
+</style>
+</helmet>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#ECE7F2"/><circle cx="50" cy="42" r="17" fill="none" stroke="#9385E6" stroke-width="4"/><circle cx="50" cy="42" r="4" fill="#9385E6"/><rect x="30" y="70" width="40" height="6" rx="3" fill="#5C28A4"/><rect x="38" y="82" width="24" height="5" rx="2.5" fill="#1A1611"/></svg>
+</template>
+<div style="font-family:'Inter',sans-serif; color:#1A1611;">
+
+  <!-- scroll progress -->
+  <div style="position:fixed; top:0; left:0; height:4px; width:100%; background:transparent; z-index:60;"><div data-progress style="height:100%; width:0%; background:#5C28A4; transition:width .12s linear;"></div></div>
+
+
+  <!-- HERO -->
+  <sc-if value="{{ secOwnHero }}" hint-placeholder-val="{{ true }}">
+  <section id="hero" data-section="hero" style="position:relative; background:#1A1611; overflow:hidden; padding-bottom:64px;">
+    <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(236,231,242,0.07) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div style="position:relative; z-index:1; border-bottom:2px solid rgba(236,231,242,.22);">
+      <div style="max-width:1180px; margin:0 auto; padding:0 40px; height:72px; display:flex; align-items:center; gap:30px;">
+        <img src="assets/brand/mark-purple.svg" alt="" style="width:30px; height:30px;">
+        <span style="font-family:'Geist',sans-serif; font-size:23px; font-weight:600; letter-spacing:-.03em; color:#ECE7F2;">Quely</span>
+        <span style="flex:1;"></span>
+        <a href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" onClick="{{ clickCTA }}" style="display:inline-flex; align-items:center; height:42px; padding:0 18px; background:#ECE7F2; color:#1A1611; border:2px solid #ECE7F2; font-size:14px; font-weight:600; text-decoration:none; box-shadow:4px 4px 0 rgba(147,133,230,.55);">Book a demo</a>
+      </div>
+    </div>
+    <div style="position:relative; z-index:1; padding:clamp(56px,6vw,88px) 40px 0; display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <sc-if value="{{ heroProductShot }}" hint-placeholder-val="{{ true }}">
+    <div data-reveal style="display:flex; flex-direction:column; align-items:center;">
+      <div style="font-size:15px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.14em; color:#C9C1F2; margin-bottom:22px;">{{ heroEyebrow }}</div>
+      <h1 style="margin:0; max-width:960px; font-family:'Geist',sans-serif; font-size:clamp(40px,5vw,64px); line-height:1.0; letter-spacing:-.035em; font-weight:600; color:#ECE7F2;">{{ heroHeadline }}</h1>
+      <p style="margin:26px 0 0; max-width:740px; font-size:21px; line-height:1.5; color:rgba(236,231,242,.74);">{{ heroBody }}</p>
+      <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;">
+        <a href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" target="_blank" rel="noopener" onClick="{{ clickCTA }}" style="display:inline-flex; align-items:center; gap:9px; height:50px; padding:0 24px; background:#ECE7F2; color:#1A1611; border:2px solid #ECE7F2; font-size:15px; font-weight:600; text-decoration:none; box-shadow:4px 4px 0 rgba(147,133,230,.55);">Book a demo <i class="ph-bold ph-arrow-right"></i></a>
+        <a href="#spaces" style="display:inline-flex; align-items:center; height:50px; padding:0 24px; background:transparent; color:#ECE7F2; border:2px solid rgba(236,231,242,.5); font-size:15px; font-weight:600; text-decoration:none;">See Quely in action</a>
+      </div>
+    </div>
+    <div data-reveal style="position:relative; margin-top:54px; width:100%; max-width:1000px;">
+      <div style="position:absolute; inset:-6% 8%; background:radial-gradient(closest-side, rgba(143,91,215,.55), rgba(143,91,215,0)); filter:blur(70px); animation:qglow 5s ease-in-out infinite; z-index:0;"></div>
+      <div style="position:relative; z-index:1; animation:qfloat 7s ease-in-out infinite; border-radius:0; overflow:hidden; border:2px solid #ECE7F2; box-shadow:6px 6px 0 rgba(147,133,230,.6);"><img src="assets/quely-product-ui.png" alt="A Quely Space" style="display:block; width:100%; height:auto;"></div>
+    </div>
+    </sc-if>
+    </div>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ useBlocks }}" hint-placeholder-val="{{ false }}">
+  <div data-building style="position:fixed; left:50%; bottom:28px; transform:translateX(-50%); z-index:60; display:inline-flex; align-items:center; gap:10px; background:#111827; color:#F9FAFB; border-radius:9999px; padding:11px 18px 11px 14px; font-size:13.5px; font-weight:500; box-shadow:0 12px 24px rgba(3,7,18,.10), 0 4px 8px rgba(3,7,18,.06); pointer-events:none; opacity:0; transition:opacity 200ms cubic-bezier(.2,0,0,1);">
+  <span style="position:relative; flex:none; display:inline-flex; width:12px; height:12px;">
+    <span style="position:absolute; inset:0; border-radius:50%; background:#8F5BD7; animation:qping 1.8s cubic-bezier(0,0,.2,1) infinite;"></span>
+    <span style="position:absolute; inset:3px; border-radius:50%; background:#8F5BD7;"></span>
+  </span>
+  <span data-building-text>Building your page…</span>
+</div>
+<div style="display:flex; flex-direction:column;" data-blkstack>
+    <sc-if value="{{ blkThread }}" hint-placeholder-val="{{ false }}"><div style="{{ ordThread }}"><dc-import surface="{{ sfThread }}" eyebrow="{{ cpThread.eyebrow }}" headline="{{ cpThread.headline }}" body="{{ cpThread.body }}" name="Block Hero Thread" hint-size="100%,900px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCollision }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCollision }}"><dc-import surface="{{ sfCollision }}" eyebrow="{{ cpCollision.eyebrow }}" headline="{{ cpCollision.headline }}" body="{{ cpCollision.body }}" name="Block Hero Collision" hint-size="100%,700px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkBottleneck }}" hint-placeholder-val="{{ false }}"><div style="{{ ordBottleneck }}"><dc-import surface="{{ sfBottleneck }}" eyebrow="{{ cpBottleneck.eyebrow }}" headline="{{ cpBottleneck.headline }}" body="{{ cpBottleneck.body }}" name="Block Hero Bottleneck" hint-size="100%,820px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkHandoff }}" hint-placeholder-val="{{ false }}"><div style="{{ ordHandoff }}"><dc-import surface="{{ sfHandoff }}" eyebrow="{{ cpHandoff.eyebrow }}" headline="{{ cpHandoff.headline }}" body="{{ cpHandoff.body }}" name="Block Hero Handoff" hint-size="100%,900px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkConverge }}" hint-placeholder-val="{{ false }}"><div style="{{ ordConverge }}"><dc-import surface="{{ sfConverge }}" eyebrow="{{ cpConverge.eyebrow }}" headline="{{ cpConverge.headline }}" body="{{ cpConverge.body }}" name="Block Space Converge" hint-size="100%,1000px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkAnatomy }}" hint-placeholder-val="{{ false }}"><div style="{{ ordAnatomy }}"><dc-import surface="{{ sfAnatomy }}" eyebrow="{{ cpAnatomy.eyebrow }}" headline="{{ cpAnatomy.headline }}" body="{{ cpAnatomy.body }}" name="Block Space Anatomy" hint-size="100%,1100px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkRelmap }}" hint-placeholder-val="{{ false }}"><div style="{{ ordRelmap }}"><dc-import surface="{{ sfRelmap }}" eyebrow="{{ cpRelmap.eyebrow }}" headline="{{ cpRelmap.headline }}" body="{{ cpRelmap.body }}" name="Block Relationship Map" hint-size="100%,900px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkMultitool }}" hint-placeholder-val="{{ false }}"><div style="{{ ordMultitool }}"><dc-import surface="{{ sfMultitool }}" eyebrow="{{ cpMultitool.eyebrow }}" headline="{{ cpMultitool.headline }}" body="{{ cpMultitool.body }}" name="Block Multi Tool Space" hint-size="100%,1200px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkRecord }}" hint-placeholder-val="{{ false }}"><div style="{{ ordRecord }}"><dc-import surface="{{ sfRecord }}" eyebrow="{{ cpRecord.eyebrow }}" headline="{{ cpRecord.headline }}" body="{{ cpRecord.body }}" name="Block Decision Record" hint-size="100%,900px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkLenses }}" hint-placeholder-val="{{ false }}"><div style="{{ ordLenses }}"><dc-import surface="{{ sfLenses }}" eyebrow="{{ cpLenses.eyebrow }}" headline="{{ cpLenses.headline }}" body="{{ cpLenses.body }}" name="Block Orbit Lenses" hint-size="100%,1400px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkPlanning }}" hint-placeholder-val="{{ false }}"><div style="{{ ordPlanning }}"><dc-import surface="{{ sfPlanning }}" eyebrow="{{ cpPlanning.eyebrow }}" headline="{{ cpPlanning.headline }}" body="{{ cpPlanning.body }}" name="Block Sprint Planning" hint-size="100%,1600px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkRoles }}" hint-placeholder-val="{{ false }}"><div style="{{ ordRoles }}"><dc-import surface="{{ sfRoles }}" eyebrow="{{ cpRoles.eyebrow }}" headline="{{ cpRoles.headline }}" body="{{ cpRoles.body }}" name="Block Team Roles" hint-size="100%,900px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkBeforeafter }}" hint-placeholder-val="{{ false }}"><div style="{{ ordBeforeafter }}"><dc-import surface="{{ sfBeforeafter }}" eyebrow="{{ cpBeforeafter.eyebrow }}" headline="{{ cpBeforeafter.headline }}" body="{{ cpBeforeafter.body }}" name="Block Before After" hint-size="100%,1800px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCost }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCost }}"><dc-import surface="{{ sfCost }}" eyebrow="{{ cpCost.eyebrow }}" headline="{{ cpCost.headline }}" body="{{ cpCost.body }}" name="Block Cost Of Hunting" hint-size="100%,620px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkTimeline }}" hint-placeholder-val="{{ false }}"><div style="{{ ordTimeline }}"><dc-import surface="{{ sfTimeline }}" eyebrow="{{ cpTimeline.eyebrow }}" headline="{{ cpTimeline.headline }}" body="{{ cpTimeline.body }}" name="Block Decision Timeline" hint-size="100%,1500px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkOutcome }}" hint-placeholder-val="{{ false }}"><div style="{{ ordOutcome }}"><dc-import surface="{{ sfOutcome }}" eyebrow="{{ cpOutcome.eyebrow }}" headline="{{ cpOutcome.headline }}" body="{{ cpOutcome.body }}" name="Block Outcome" hint-size="100%,520px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkHowitworks }}" hint-placeholder-val="{{ false }}"><div style="{{ ordHowitworks }}"><dc-import surface="{{ sfHowitworks }}" eyebrow="{{ cpHowitworks.eyebrow }}" headline="{{ cpHowitworks.headline }}" body="{{ cpHowitworks.body }}" name="Block How It Works" hint-size="100%,1240px"></dc-import></div></sc-if>
+  </div>
+  </sc-if>
+
+  <!-- PROBLEM -->
+  <sc-if value="{{ secOwnProblem }}" hint-placeholder-val="{{ true }}">
+  <section id="problem" data-section="problem" style="position:relative; background:#ECE7F2; padding:96px 40px; display:flex; justify-content:center;">
+    <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div data-reveal style="width:100%; position:relative; z-index:1; max-width:960px; text-align:center;">
+      <div style="display:flex; align-items:baseline; justify-content:center; gap:14px; margin-bottom:26px;"><span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:#4B4560;">The problem</span><span style="flex:1; height:0; border-top:1px solid rgba(26,22,17,.22); transform:translateY(-3px);"></span></div>
+      <h2 style="margin:0; font-family:'Geist',sans-serif; font-size:42px; line-height:1.1; letter-spacing:-.04em; font-weight:800;">{{ problemTitle }}</h2>
+      <p style="margin:22px 0 0; font-size:19px; line-height:1.6; color:#5C5345; max-width:840px;">{{ problemBody }}</p>
+      <div data-stagger style="margin-top:28px; display:flex; flex-direction:column; gap:11px; max-width:840px;">
+        <sc-for list="{{ problemPoints }}" as="pt" hint-placeholder-count="4">
+          <div style="display:flex; gap:12px; align-items:flex-start; font-size:17px; line-height:1.5; color:#374151;"><i class="ph-fill ph-caret-right" style="color:#5C28A4; font-size:14px; margin-top:5px; flex:none;"></i><span>{{ pt }}</span></div>
+        </sc-for>
+      </div>
+<sc-if value="{{ advanced }}" hint-placeholder-val="{{ false }}">{{ signalsLabel }}</sc-if>
+      <sc-if value="{{ advanced }}" hint-placeholder-val="{{ false }}">
+        <div data-stagger style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px;">
+          <sc-for list="{{ signals }}" as="sg" hint-placeholder-count="6">
+            <span style="display:inline-flex; align-items:center; gap:9px; background:#F8F5FB; border:1.5px solid #1A1611; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05); transition:transform .18s, box-shadow .18s;" style-hover="transform:translateY(-3px); box-shadow:0 10px 22px -10px rgba(3,7,18,.3);"><i class="{{ sg.icon }}" style="{{ sg.iconStyle }}"></i>{{ sg.label }}</span>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ standard }}" hint-placeholder-val="{{ true }}">
+      <div data-reveal style="margin-top:44px; border:2px solid #1A1611; box-shadow:6px 6px 0 #1A1611; overflow:hidden; background:#F8F5FB;">
+        <img src="assets/scattered-context.png" alt="One ticket, with its context scattered across GitHub, Linear, CI, Figma, Slack, Confluence, Sentry, Datadog, Google Meet, API traces and Notion" style="display:block; width:100%; height:auto;">
+      </div>
+      </sc-if>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- DECISION TIMELINE — pulled from Block Decision Timeline.dc.html -->
+  <sc-if value="{{ secTimeline }}" hint-placeholder-val="{{ false }}">
+  <section id="timeline" data-section="problem" style="background:#FFFFFF;">
+    <sc-if value="{{ legacyBlocks }}" hint-placeholder-val="{{ true }}"><dc-import name="Block Decision Timeline" work-item="{{ tlWorkItem }}" title="{{ tlTitle }}" intro="{{ tlIntro }}" events="{{ tlRawEvents }}" people="{{ tlPeople }}" on-event="{{ tlOnEvent }}" hint-size="100%,1400px"></dc-import></sc-if>
+  </section>
+  </sc-if>
+
+  <!-- DECISION RECORD — pulled from Block Decision Record.dc.html -->
+  <sc-if value="{{ secMechanism }}" hint-placeholder-val="{{ false }}">
+  <section id="mechanism" data-section="spaces" style="background:#1A1611;">
+    <sc-if value="{{ legacyBlocks }}" hint-placeholder-val="{{ true }}"><dc-import name="Block Decision Record" title="{{ mechTitle }}" body="{{ mechBody }}" attached-to="{{ mechAttachedTo }}" rows="{{ mechRawRows }}" hint-size="100%,1380px"></dc-import></sc-if>
+  </section>
+  </sc-if>
+
+  <!-- CAPACITY (interactive planning demo) -->
+  <sc-if value="{{ secCapacity }}" hint-placeholder-val="{{ false }}">
+  <section id="capacity" data-section="spaces" style="background:#ECE7F2; padding:96px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div data-reveal style="width:100%; max-width:1080px;">
+      <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:26px;"><span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:#4B4560;">Quely · Capacity planning</span><span style="flex:1; height:0; border-top:1px solid rgba(26,22,17,.22); transform:translateY(-3px);"></span></div>
+      <h2 style="margin:0 0 12px; font-family:'Geist',sans-serif; font-size:40px; line-height:1.08; letter-spacing:-.04em; font-weight:800;">{{ capTitle }}</h2>
+      <p style="margin:0 0 30px; font-size:18px; line-height:1.55; color:#5C5345; max-width:760px;">{{ capIntro }}</p>
+      <div style="background:#fff; border:1px solid #E5E7EB; border-radius:18px; box-shadow:8px 8px 0 #1A1611; overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:14px; padding:18px 22px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <div style="font-size:17px; font-weight:800; color:#1A1611;">{{ capSprint }}</div>
+          <div style="display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#5C5345; background:#F3F4F6; border-radius:9999px; padding:5px 12px;"><i class="ph-fill ph-users-three" style="color:#5C28A4;"></i>{{ capTeamSize }} people · {{ capAvail }} pts each</div>
+          <div style="{{ capTotalStyle }}"><i class="ph-fill ph-chart-bar"></i>{{ capCommitted }} pts planned</div>
+          <div style="{{ capBannerStyle }}"><i class="{{ capBannerIcon }}"></i>{{ capBanner }}</div>
+        </div>
+        <div style="padding:14px 22px 6px; display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ capMembers }}" as="m" hint-placeholder-count="4">
+            <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0; border-bottom:1px solid #F6F7F9;">
+              <div style="flex:none; width:150px;">
+                <div style="display:flex; align-items:center; gap:9px;"><span style="flex:none; width:32px; height:32px; border-radius:50%; background:{{ m.color }}; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ m.initials }}</span><div style="line-height:1.2;"><div style="font-size:14px; font-weight:700; color:#1A1611;">{{ m.name }}</div><div style="font-size:12px; color:#5C5345;">{{ m.role }}</div></div></div>
+                <div style="margin-top:9px; height:8px; border-radius:9999px; background:#EEF0F4; overflow:hidden;"><div style="{{ m.barStyle }}"></div></div>
+                <div style="margin-top:5px; font-size:12px; font-weight:600; color:{{ m.loadColor }};">{{ m.loadLabel }}</div>
+              </div>
+              <div style="flex:1; min-width:0; display:flex; flex-wrap:wrap; gap:7px; align-items:center;">
+                <sc-for list="{{ m.items }}" as="it" hint-placeholder-count="2">
+                  <span style="{{ it.chipStyle }}"><i class="{{ it.icon }}" style="font-size:13px;"></i>{{ it.label }} <b style="opacity:.7;">{{ it.pts }}</b><button onClick="{{ it.move }}" title="Reassign to whoever has the most room" style="background:none; border:none; padding:0 1px; cursor:pointer; color:inherit; opacity:.55; display:inline-flex;"><i class="ph-bold ph-arrows-left-right" style="font-size:12px;"></i></button><button onClick="{{ it.remove }}" title="Remove" style="background:none; border:none; padding:0 1px; cursor:pointer; color:inherit; opacity:.55; display:inline-flex;"><i class="ph-bold ph-x" style="font-size:12px;"></i></button></span>
+                </sc-for>
+                <sc-if value="{{ m.empty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#5C5345; font-style:italic;">No work assigned — room to take on more.</span></sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 22px 20px; background:#FAFBFC; border-top:1px solid #F3F4F6;">
+          <div style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#5C5345; margin-bottom:10px;">Unassigned work · click to add to whoever has the most room</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ capBacklog }}" as="b" hint-placeholder-count="3">
+              <button onClick="{{ b.add }}" style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px dashed #C9C1F2; border-radius:9999px; padding:8px 14px; font-family:inherit; font-size:14px; font-weight:600; color:#5C28A4; cursor:pointer;"><i class="ph-bold ph-plus" style="font-size:13px;"></i>{{ b.label }} <b style="opacity:.6;">{{ b.pts }}</b></button>
+            </sc-for>
+            <sc-if value="{{ capBacklogEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#5C5345; font-style:italic; padding:8px 0;">All backlog work assigned.</span></sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- GENERATED BLOCKS (advanced only). Static top-level mounts: dc-import does not
+       resolve inside sc-for. Order comes from blockOrderStyle, which assigns each
+       mounted block its CSS order from the PagePlan. Standard mode mounts none. -->
+
+  <!-- PROOF -->
+  <!-- PROTECTED: the sc-if standard branch below is the approved default page. Do not modify during customized-page work (see CLAUDE.md). -->
+  <sc-if value="{{ secProof }}" hint-placeholder-val="{{ true }}">
+  <section id="proof" data-section="proof" style="position:relative; overflow:hidden; background:#1A1611; padding:96px 40px; display:flex; justify-content:center; text-align:center;">
+    <div style="position:absolute; top:-10%; right:-6%; width:640px; height:640px; border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.20), rgba(143,91,215,0)); filter:blur(30px); pointer-events:none; z-index:0;"></div>
+    <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1180px;">
+      <div style="font-family:'Geist Mono',monospace; font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#C9C1F2; margin-bottom:18px;">{{ proofEyebrow }}</div>
+      <h2 style="margin:0 0 44px; margin-left:auto; margin-right:auto; font-family:'Geist',sans-serif; font-size:36px; line-height:1.14; letter-spacing:-.04em; font-weight:800; color:#fff; max-width:960px;">{{ proofHeadline }}</h2>
+      <sc-if value="{{ advanced }}" hint-placeholder-val="{{ false }}">
+        <div data-stagger style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch;">
+          <sc-for list="{{ proofPosts }}" as="po" hint-placeholder-count="3">
+            <div style="background:#fff; border:2px solid #C9C1F2; border-radius:0; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; transition:transform .2s, box-shadow .2s;" style-hover="transform:translateY(-5px); box-shadow:0 28px 60px -20px rgba(0,0,0,.7);">
+              <div style="padding:20px 24px 0;">
+                <div style="display:flex; align-items:center; gap:11px;">
+                  <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
+                  <div style="flex:1 1 auto; min-width:0; line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B; white-space:normal; overflow-wrap:anywhere;">{{ po.sub }}</div><div style="font-size:13px; color:#4B5563; white-space:normal; overflow-wrap:anywhere;">{{ po.badge }}</div></div>
+                  <i class="ph ph-dots-three" style="flex:none; margin-left:auto; color:#4B5563; font-size:22px;"></i>
+                </div>
+                <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">{{ po.title }}</div>
+              </div>
+              <div style="flex:1; min-height:0; padding:0 24px 4px;">
+                <p style="margin:0; font-size:15px; line-height:1.5; color:#1A1A1B;">{{ po.body }}</p>
+              </div>
+              <div style="flex:none; padding:14px 22px 16px; display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
+                <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">{{ po.up }}</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
+                <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">{{ po.comments }}</span></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ standard }}" hint-placeholder-val="{{ true }}">
+      <div data-stagger style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch;">
+        <!-- POST 1 -->
+        <div style="background:#fff; border:2px solid #C9C1F2; border-radius:0; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px; transition:transform .2s, box-shadow .2s;" style-hover="transform:translateY(-5px); box-shadow:0 28px 60px -20px rgba(0,0,0,.7);">
+          <div style="padding:20px 24px 0;">
+            <div style="display:flex; align-items:center; gap:11px;">
+              <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
+              <div style="flex:1 1 auto; min-width:0; line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B; white-space:normal; overflow-wrap:anywhere;">r/agile <span style="color:#4B5563; font-weight:400;">· 10d ago</span></div><div style="font-size:14px; color:#4B5563; white-space:normal; overflow-wrap:anywhere;">Familiar_Network_108</div></div>
+              <i class="ph ph-dots-three" style="flex:none; margin-left:auto; color:#4B5563; font-size:22px;"></i>
+            </div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">How do you stop work from disappearing into tickets, chats, and random spreadsheets</div>
+          </div>
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+            <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
+              <p style="margin:0 0 10px;">Curious how others are dealing with this, because I feel like my job turned into human status aggregator right now if someone asks did task X ever get done i have to:</p>
+              <p style="margin:0 0 2px;">Check the ticket system to see if the ticket is closed</p>
+              <p style="margin:0 0 2px;">Search slack for any update on X threads</p>
+              <p style="margin:0 0 2px;">Look at a shared excel file that someone insists on using as the source of truth</p>
+              <p style="margin:0 0 10px;">Dig through email where someone said we went live two weeks ago</p>
+              <p style="margin:0 0 10px;">And half the time the answers all contradict each other.</p>
+              <p style="margin:0 0 10px;">It feels like we brought in tools to make things clearer, then let every team build their own little island and now nothing lines up I can handle chaos if i at least know where to look what wears me down is spending more time hunting the status than doing the work.</p>
+              <p style="margin:0 0 10px;">I have already tried telling everyone if there is no ticket we are not doing it which lasted until some VP pinged someone directly, creating a simple template for requests so we stop getting can you just quickly with no details and setting up an ops channel where all done updates should go, but people still reply in old threads or DMs</p>
+              <p style="margin:0;">Really curious what has worked in the real world and not just in slide decks.</p>
+            </div>
+          </div>
+          <div style="flex:none; padding:14px 22px 16px; display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
+            <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">1.2k</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">340</span></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
+          </div>
+        </div>
+        <!-- POST 2 -->
+        <div style="background:#fff; border:2px solid #C9C1F2; border-radius:0; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px; transition:transform .2s, box-shadow .2s;" style-hover="transform:translateY(-5px); box-shadow:0 28px 60px -20px rgba(0,0,0,.7);">
+          <div style="padding:20px 24px 0;">
+            <div style="display:flex; align-items:center; gap:11px;">
+              <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
+              <div style="flex:1 1 auto; min-width:0; line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B; white-space:normal; overflow-wrap:anywhere;">r/EngineeringManagers <span style="color:#4B5563; font-weight:400;">· 18d ago</span></div><div style="font-size:14px; color:#4B5563; white-space:normal; overflow-wrap:anywhere;">Conscious-Fact9532</div></div>
+              <i class="ph ph-dots-three" style="flex:none; margin-left:auto; color:#4B5563; font-size:22px;"></i>
+            </div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">anyone else turn into their team's human release notes?</div>
+          </div>
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+            <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
+              <p style="margin:0 0 12px;">Not sure when it happened but I've turned into the person everyone pings to find out what everyone else is doing. What shipped last week, who owns this thing, what's the status on that, did X actually land. Constant. Most of my day now, genuinely. And I've basically stopped doing anything that looks like actual work.</p>
+              <p style="margin:0;">None of it shows up anywhere either - to anyone above me it just looks like I sit in Slack all day. You only notice the coordination when it stops and something falls through. So is this just me, or does every team grow one of these people? And if you've been the de facto &ldquo;context broker&rdquo; - how did you get out of it, or at least get it to count for something at review time?</p>
+            </div>
+          </div>
+          <div style="flex:none; padding:14px 22px 16px; display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
+            <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">940</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">268</span></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
+          </div>
+        </div>
+        <!-- POST 3 -->
+        <div style="background:#fff; border:2px solid #C9C1F2; border-radius:0; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px; transition:transform .2s, box-shadow .2s;" style-hover="transform:translateY(-5px); box-shadow:0 28px 60px -20px rgba(0,0,0,.7);">
+          <div style="padding:20px 24px 0;">
+            <div style="display:flex; align-items:center; gap:11px;">
+              <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
+              <div style="flex:1 1 auto; min-width:0; line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B; white-space:normal; overflow-wrap:anywhere;">r/agile <span style="color:#4B5563; font-weight:400;">· 24d ago</span></div><div style="font-size:14px; color:#4B5563; white-space:normal; overflow-wrap:anywhere;">DaveAstator2020</div></div>
+              <i class="ph ph-dots-three" style="flex:none; margin-left:auto; color:#4B5563; font-size:22px;"></i>
+            </div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">Jira as a task pool - am i going crazy?</div>
+          </div>
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+            <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
+              <p style="margin:0 0 4px;">Hey dear reddit. I tihnk im going insane and would like a second opinion on the topic:</p>
+              <p style="margin:0 0 4px;">Today i had displeasure to discussworking jira with person high rank title.</p>
+              <p style="margin:0 0 4px;">Our jira doesnt have estimate, descriptions, due dates.</p>
+              <p style="margin:0 0 10px;">we do not even have sprints whatsoever.</p>
+              <p style="margin:0 0 10px;">This person said me tiwce that &ldquo;even in this jira it makes sence to move tasks from one column to another because it shows task transition history, and this will be reliable source of information about my work&rdquo;</p>
+              <p style="margin:0 0 10px;">I was thinking that maybe im an issue but after that i dont really know what to think. (again i asked twice to verify this jiravision)</p>
+              <p style="margin:0 0 10px;">For what company scale would you think this is acceptable approach?</p>
+              <p style="margin:0;">I for one don't think it is workable at all at any scale but maybe im wrong or miss something?</p>
+            </div>
+          </div>
+          <div style="flex:none; padding:14px 22px 16px; display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
+            <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">613</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">197</span></div>
+            <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
+          </div>
+
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- SPACES -->
+  <!-- PROTECTED: the sc-if standard branches below are the approved default page. Do not modify during customized-page work (see CLAUDE.md). -->
+  <sc-if value="{{ secSpace }}" hint-placeholder-val="{{ true }}">
+  <section id="spaces" data-section="spaces" style="position:relative; background:#DED6F1; padding:96px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div data-reveal style="width:100%; max-width:1200px; display:flex; flex-wrap:wrap; gap:56px; align-items:center;">
+      <div style="flex:1 1 340px; min-width:0;">
+        <div style="display:flex; align-items:baseline; justify-content:center; gap:14px; margin-bottom:26px;"><span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:#4B4560;">Quely's Space</span><span style="flex:1; height:0; border-top:1px solid rgba(26,22,17,.22); transform:translateY(-3px);"></span></div>
+        <sc-if value="{{ standard }}" hint-placeholder-val="{{ true }}">
+        <h2 style="margin:0 0 16px; font-family:'Geist',sans-serif; font-size:40px; line-height:1.08; letter-spacing:-.04em; font-weight:800;">A task and everything connected to it, in one place.</h2>
+        <p style="margin:0 0 26px; font-size:18px; line-height:1.55; color:#5C5345;">Bring the task in from your tools, then add the materials, discussion, and decisions that move it forward. <b style="color:#1A1611;">Click through the tabs</b> to see what lives in a Space.</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-plugs-connected" style="font-size:20px; color:#5C28A4;"></i>Task imported from Jira, Linear, GitHub &amp; more</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-paperclip" style="font-size:20px; color:#5C28A4;"></i>Docs, Figma, notes &amp; other assets attached</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-chats-circle" style="font-size:20px; color:#5C28A4;"></i>All conversation in one place</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-seal-check" style="font-size:20px; color:#5C28A4;"></i>Decisions, action items and more synthesized from conversations</div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ advanced }}" hint-placeholder-val="{{ false }}">
+        <h2 style="margin:0 0 16px; font-family:'Geist',sans-serif; font-size:40px; line-height:1.08; letter-spacing:-.04em; font-weight:800;">{{ spaceTitle }}</h2>
+        <p style="margin:0 0 26px; font-size:18px; line-height:1.55; color:#5C5345;">{{ spaceBody }} <b style="color:#1A1611;">Click through the tabs</b> to explore.</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ spaceBullets }}" as="bl" hint-placeholder-count="3">
+            <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="{{ bl.icon }}" style="font-size:20px; color:#5C28A4;"></i>{{ bl.text }}</div>
+          </sc-for>
+        </div>
+        </sc-if>
+      </div>
+
+      <!-- explorable Space panel -->
+      <div style="position:relative; flex:1 1 440px; min-width:0;">
+        <div style="position:relative; z-index:1; background:#fff; border:2px solid #1A1611; border-radius:0; box-shadow:6px 6px 0 #1A1611; overflow:hidden;">
+          <!-- task header -->
+          <div style="position:relative; padding:22px 24px; border-bottom:1px solid #F3F4F6;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="display:inline-flex; align-items:center; gap:7px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#2563EB;"><img src="assets/logos/jira.svg" alt="" style="width:15px; height:15px;">{{ workId }}</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#8A3D06;"><i class="ph-fill ph-circle-half"></i>In progress</span>
+              <sc-if value="{{ standard }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex; align-items:center; gap:6px; background:#FEE2E2; border:1px solid #FECACA; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#B91C1C;"><i class="ph-fill ph-warning"></i>Renewal risk</span></sc-if>
+            </div>
+            <div style="font-size:24px; font-weight:800; letter-spacing:-.01em; color:#1A1611;">{{ workName }}</div>
+          </div>
+          <!-- tabs -->
+          <div style="display:flex; gap:4px; padding:10px 16px 0; border-bottom:1px solid #F3F4F6;">
+            <button onClick="{{ showDisc }}" style="{{ sDisc }}"><i class="ph-fill ph-chats-circle" style="font-size:17px;"></i>Discussion <span style="opacity:.55;">3</span></button>
+            <button onClick="{{ showDocs }}" style="{{ sDocs }}"><sc-if value="{{ showSpaceHint }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span></sc-if><i class="ph-fill ph-paperclip" style="font-size:17px;"></i>Docs &amp; assets <span style="opacity:.55;">4</span></button>
+            <button onClick="{{ showDec }}" style="{{ sDec }}"><sc-if value="{{ showSpaceHint }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span></sc-if><i class="ph-fill ph-seal-check" style="font-size:17px;"></i>Decisions <span style="opacity:.55;">3</span></button>
+            <button onClick="{{ showAct }}" style="{{ sAct }}"><sc-if value="{{ showSpaceHint }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span></sc-if><i class="ph-fill ph-clock-counter-clockwise" style="font-size:17px;"></i>Activity</button>
+          </div>
+          <!-- tab body -->
+          <div style="padding:18px 22px; height:380px; overflow-y:auto; overflow-x:hidden; box-sizing:border-box;">
+            <sc-if value="{{ advanced }}" hint-placeholder-val="{{ false }}">
+              <sc-if value="{{ tabDisc }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                  <sc-for list="{{ discList }}" as="m" hint-placeholder-count="3">
+                    <div style="display:flex; gap:12px;"><span style="flex:none; width:34px; height:34px; border-radius:50%; background:#5C28A4; color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;"><i class="ph-fill ph-user"></i></span><div><div style="font-size:14px; margin-bottom:3px;"><b>{{ m.who }}</b> <span style="color:#5C5345;">· {{ m.when }}</span></div><div style="font-size:15px; line-height:1.45; color:#1A1611;">{{ m.text }}</div></div></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ tabDocs }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <sc-for list="{{ docsList }}" as="d" hint-placeholder-count="3">
+                    <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><i class="{{ d.icon }}" style="font-size:22px; color:#5C28A4;"></i><div><div style="font-size:15px; font-weight:600;">{{ d.name }}</div><div style="font-size:13px; color:#5C5345;">{{ d.meta }}</div></div></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ tabDec }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  <sc-for list="{{ decList }}" as="d" hint-placeholder-count="2">
+                    <div style="display:flex; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><i class="ph-fill ph-seal-check" style="font-size:22px; color:#16A34A; flex:none;"></i><div><div style="font-size:15px; font-weight:600;">{{ d.text }}</div><div style="font-size:13px; line-height:1.4; color:#5C5345;">{{ d.meta }}</div></div></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ tabAct }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:0;">
+                  <sc-for list="{{ actList }}" as="a" hint-placeholder-count="3">
+                    <div style="display:flex; gap:13px; padding-bottom:16px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#5C28A4;"></span><span style="flex:1; width:2px; background:#E5E7EB;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1A1611;">{{ a.text }}</div><div style="font-size:12px; color:#5C5345;">{{ a.meta }}</div></div></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </sc-if>
+            <sc-if value="{{ standard }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ tabDisc }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:12px; border-bottom:1px solid #EEF0F3;">
+                  <span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #C9C1F2; border-radius:9px; padding:7px 13px 7px 9px; font-size:14px; font-weight:700; color:#1A1611;"><span style="width:20px; height:20px; background:url('assets/quely-orbit-pet.png') center/contain no-repeat;"></span>Ask Orbit</span>
+                  <span style="display:flex; gap:8px;"><span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #E2E4EA; border-radius:8px; padding:6px 11px; font-size:13px; font-weight:600; color:#1A1611;">New first <i class="ph ph-caret-down" style="font-size:11px; color:#4B5563;"></i></span><span style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #E2E4EA; border-radius:8px; padding:6px 11px; font-size:13px; font-weight:600; color:#1A1611;">All threads <i class="ph ph-caret-down" style="font-size:11px; color:#4B5563;"></i></span></span>
+                </div>
+                <div style="padding:11px 0; border-bottom:1px solid #EEF0F3;">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;"><span style="flex:none; width:30px; height:30px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">MP</span><span style="font-size:15px; font-weight:700; color:#1A1611;">Maya Price</span><span style="margin-left:auto; font-size:13px; color:#4B5563;">2 days ago</span></div>
+                  <div style="font-size:13.5px; line-height:1.45; color:#1F2937;">Narrowing scope to card checkout only so we hit the renewal deadline. Wallet and ACH move to the next cycle. Flagging so nobody keeps building the wallet path.</div>
+                  <div style="display:flex; align-items:center; gap:8px; margin-top:8px;"><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:13px;"></i>3</span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:13px;"></i>Resolve <i class="ph ph-caret-down" style="font-size:11px;"></i></span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:13px;"></i>2</span></div>
+                </div>
+                <div style="padding:11px 0; border-bottom:1px solid #EEF0F3;">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;"><span style="flex:none; width:30px; height:30px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">DK</span><span style="font-size:15px; font-weight:700; color:#1A1611;">Dev Kumar</span><span style="margin-left:auto; font-size:13px; color:#4B5563;">1 day ago</span></div>
+                  <div style="font-size:13.5px; line-height:1.45; color:#1F2937;">Blocked on the payments tokenization PR from Platform. Pinged them to prioritize, but we have no owner on their side yet.</div>
+                  <div style="display:flex; align-items:center; gap:8px; margin-top:8px;"><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:13px;"></i>1</span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:13px;"></i>Resolve <i class="ph ph-caret-down" style="font-size:11px;"></i></span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:13px;"></i>2</span></div>
+                </div>
+                <div style="padding:11px 0; border-bottom:1px solid #EEF0F3;">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;"><span style="flex:none; width:30px; height:30px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">SC</span><span style="font-size:15px; font-weight:700; color:#1A1611;">Sara Cole</span><span style="margin-left:auto; font-size:13px; color:#4B5563;">22 hours ago</span></div>
+                  <div style="font-size:13.5px; line-height:1.45; color:#1F2937;">Acme is expecting this before their renewal on the 30th. Raising it as a renewal risk until the dependency has an owner.</div>
+                  <div style="display:flex; align-items:center; gap:8px; margin-top:8px;"><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph-fill ph-triangle" style="font-size:13px;"></i>0</span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-check-circle" style="font-size:13px;"></i>Resolve <i class="ph ph-caret-down" style="font-size:11px;"></i></span><span style="display:inline-flex; align-items:center; gap:6px; background:#F5F6F8; border:1px solid #E2E4EA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#4B5563;"><i class="ph ph-chat" style="font-size:13px;"></i>1</span></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:14px; padding-top:14px;">
+                  <span style="flex:1; min-width:0; font-size:15px; color:#4B5563;">What's on your mind?</span>
+                  <span style="display:flex; align-items:center; gap:14px; color:#4B5563;"><span style="width:18px; height:18px; background:url('assets/quely-orbit-pet.png') center/contain no-repeat;"></span><i class="ph ph-paperclip" style="font-size:17px;"></i><i class="ph ph-calendar-plus" style="font-size:17px;"></i><i class="ph ph-smiley" style="font-size:17px;"></i><i class="ph ph-microphone" style="font-size:17px;"></i><i class="ph ph-text-align-left" style="font-size:17px;"></i><i class="ph ph-text-aa" style="font-size:17px;"></i><i class="ph-fill ph-paper-plane-right" style="font-size:17px; color:#1A1611;"></i></span>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ tabDocs }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="display:flex; align-items:center; gap:14px; border:1px solid #E5E7EB; border-radius:12px; padding:10px 14px;"><span style="flex:none; width:36px; height:36px; border-radius:9px; background:#F5F6F8; display:inline-flex; align-items:center; justify-content:center;"><img src="assets/logos/confluence.svg" alt="" style="width:24px; height:24px;"></span><div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#1A1611;">Checkout requirements</div><div style="font-size:13px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">1 month ago &bull; https://acme.atlassian.net/wiki/pages/checkout-requirements-v3...</div></div></div>
+                <div style="display:flex; align-items:center; gap:14px; border:1px solid #E5E7EB; border-radius:12px; padding:10px 14px;"><span style="flex:none; width:36px; height:36px; border-radius:9px; background:#F5F6F8; display:inline-flex; align-items:center; justify-content:center;"><img src="assets/logos/figma.svg" alt="" style="width:24px; height:24px;"></span><div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#1A1611;">www.figma.com</div><div style="font-size:13px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">1 month ago &bull; https://www.figma.com/design/65OFC5zMNLiKwlFastiadL/Card-checkout...</div></div></div>
+                <div style="display:flex; align-items:center; gap:14px; border:1px solid #E5E7EB; border-radius:12px; padding:10px 14px;"><span style="flex:none; width:36px; height:36px; border-radius:9px; background:#F5F6F8; display:inline-flex; align-items:center; justify-content:center;"><i class="ph-fill ph-phone-call" style="font-size:22px; color:#8039DF;"></i></span><div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#1A1611;">Customer call notes</div><div style="font-size:13px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">3 weeks ago &bull; Gong &middot; 32 min &middot; Acme renewal check-in</div></div></div>
+                <div style="display:flex; align-items:center; gap:14px; border:1px solid #E5E7EB; border-radius:12px; padding:10px 14px;"><span style="flex:none; width:36px; height:36px; border-radius:9px; background:#F5F6F8; display:inline-flex; align-items:center; justify-content:center;"><img src="assets/logos/salesforce.svg" alt="" style="width:24px; height:24px;"></span><div style="min-width:0;"><div style="font-size:15px; font-weight:600; color:#1A1611;">Renewal risk brief</div><div style="font-size:13px; color:#4B5563; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">22 hours ago &bull; https://acme.lightning.force.com/opportunity/renewal-2026...</div></div></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ tabDec }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column;">
+                <div style="display:flex; align-items:baseline; gap:10px;"><span style="font-size:22px; font-weight:800; letter-spacing:-.02em; color:#1A1611;">Lenses</span><span style="background:#F5F6F8; border-radius:9999px; padding:2px 9px; font-size:13px; font-weight:700; color:#4B5563;">14</span></div>
+                <div style="display:flex; align-items:center; gap:6px; margin-top:4px; font-size:13px; color:#4B5563;"><span style="color:#B45309;">&#10022;</span>Synthesized from 2 sources</div>
+                <div style="display:flex; gap:10px; margin-top:14px;"><span style="flex:1; display:flex; align-items:center; gap:9px; background:#F5F6F8; border-radius:10px; padding:10px 14px; font-size:14px; color:#4B5563;"><i class="ph ph-magnifying-glass" style="font-size:15px;"></i>Search lenses...</span><span style="display:inline-flex; align-items:center; gap:8px; background:#F5F6F8; border-radius:10px; padding:10px 14px; font-size:14px; font-weight:600; color:#1A1611;"><i class="ph-fill ph-graph" style="font-size:15px; color:#8B5CF6;"></i>Lens Map</span></div>
+                <div style="display:flex; gap:8px; margin-top:12px; overflow:hidden;"><span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F3EEFB; border:1.5px solid #8B5CF6; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#1A1611;">All <span style="color:#4B5563;">14</span></span><span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F5F6F8; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#1A1611;"><span style="width:7px; height:7px; border-radius:50%; background:#16A34A;"></span>Decisions <span style="color:#4B5563;">3</span></span><span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F5F6F8; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#1A1611;"><span style="width:7px; height:7px; border-radius:50%; background:#2563EB;"></span>Action Items <span style="color:#4B5563;">6</span></span><span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F5F6F8; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#1A1611;"><span style="width:7px; height:7px; border-radius:50%; background:#B91C1C;"></span>Risks <span style="color:#4B5563;">2</span></span></div>
+                <div style="display:flex; align-items:center; gap:9px; margin-top:12px;"><span style="width:9px; height:9px; border-radius:50%; background:#16A34A;"></span><span style="font-size:17px; font-weight:800; color:#1A1611;">Decisions</span><span style="font-size:14px; color:#4B5563;">3</span><i class="ph ph-caret-down" style="margin-left:auto; font-size:14px; color:#4B5563;"></i></div>
+                <div style="padding:9px 0 6px; border-bottom:1px solid #EEF0F3;"><div style="display:flex; gap:12px;"><div style="flex:1; font-size:13.5px; line-height:1.45; color:#1F2937;">Scope narrowed to card checkout only, so the Acme renewal date holds. Wallet and ACH move to the next cycle.</div><span style="flex:none; font-size:13px; color:#4B5563;"><i class="ph ph-broadcast" style="font-size:14px;"></i> 2</span></div><div style="display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; color:#4B5563;"><i class="ph ph-flag" style="font-size:14px;"></i> &middot; 2 days ago <span style="display:inline-flex; align-items:center; gap:4px; background:#DCFCE7; border-radius:9999px; padding:2px 9px; font-size:12px; font-weight:600; color:#15803D;"><i class="ph-fill ph-check-circle"></i>Decided</span></div></div>
+                <div style="padding:9px 0 6px; border-bottom:1px solid #EEF0F3;"><div style="display:flex; gap:12px;"><div style="flex:1; font-size:13.5px; line-height:1.45; color:#1F2937;">Defer wallet and ACH to the next cycle and revisit alternative payment paths after launch.</div><span style="flex:none; font-size:13px; color:#4B5563;"><i class="ph ph-broadcast" style="font-size:14px;"></i> 1</span></div><div style="display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; color:#4B5563;"><i class="ph ph-flag" style="font-size:14px;"></i> &middot; 2 days ago</div></div>
+                <div style="display:flex; align-items:center; gap:9px; margin-top:12px;"><span style="width:9px; height:9px; border-radius:50%; background:#2563EB;"></span><span style="font-size:17px; font-weight:800; color:#1A1611;">Action Items</span><span style="font-size:14px; color:#4B5563;">6</span><i class="ph ph-caret-down" style="margin-left:auto; font-size:14px; color:#4B5563;"></i></div>
+                <div style="padding:12px 0 4px;"><div style="display:flex; gap:12px;"><div style="flex:1; font-size:13.5px; line-height:1.45; color:#1F2937;">Dev to get an owner assigned on the payments tokenization dependency with the Platform team this week.</div><span style="flex:none; font-size:13px; color:#4B5563;"><i class="ph ph-broadcast" style="font-size:14px;"></i> 3</span></div><div style="display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; color:#4B5563;"><i class="ph ph-flag" style="font-size:14px;"></i> &middot; 1 day ago</div></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ tabAct }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column;">
+                <div style="display:flex; align-items:center; gap:28px; border-bottom:1px solid #EEF0F3;"><span style="display:inline-flex; align-items:center; gap:8px; padding:0 0 12px; font-size:15px; font-weight:600; color:#1A1611; box-shadow:inset 0 -2px #5C28A4;">New <span style="background:#5C28A4; color:#fff; border-radius:9999px; min-width:20px; height:20px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">3</span></span><span style="display:inline-flex; align-items:center; gap:8px; padding:0 0 12px; font-size:15px; color:#4B5563;">Mentions <span style="background:#5C28A4; color:#fff; border-radius:9999px; min-width:20px; height:20px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">2</span></span><span style="display:inline-flex; align-items:center; gap:8px; padding:0 0 12px; font-size:15px; color:#4B5563;">Threads <span style="background:#5C28A4; color:#fff; border-radius:9999px; min-width:20px; height:20px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">1</span></span></div>
+                <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; padding:12px 0; font-size:14px; color:#4B5563;">Only show unread <span style="width:38px; height:22px; border-radius:9999px; background:#D1D5DB; display:inline-block; position:relative;"><span style="position:absolute; left:2px; top:2px; width:18px; height:18px; border-radius:50%; background:#fff;"></span></span><i class="ph ph-dots-three-vertical" style="font-size:16px;"></i></div>
+                <div style="font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#4B5563; padding:6px 0 10px;">1 day ago</div>
+                <div style="display:flex; gap:12px; background:#EFEAF8; border-left:3px solid #5C28A4; border-radius:0 12px 12px 0; padding:11px 14px;"><span style="flex:none; width:30px; height:30px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">DK</span><div style="min-width:0; flex:1;"><div style="font-size:14px; line-height:1.5; color:#1A1611;"><b>Dev Kumar</b> <span style="color:#4B5563;">replied in discussion</span> <b>Fix checkout flow</b></div><div style="font-size:13px; color:#4B5563; margin-top:2px;">1 day ago</div><div style="margin-top:8px; background:#fff; border-radius:8px; padding:8px 10px; font-size:13px; line-height:1.5; color:#1F2937;">Blocked on the payments tokenization PR. Pinged Platform to prioritize...</div></div></div>
+                <div style="font-family:'Geist Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#4B5563; padding:16px 0 10px;">22 hours ago</div>
+                <div style="display:flex; gap:12px; background:#EFEAF8; border-left:3px solid #5C28A4; border-radius:0 12px 12px 0; padding:11px 14px;"><span style="flex:none; width:30px; height:30px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">SC</span><div style="min-width:0; flex:1;"><div style="font-size:14px; line-height:1.5; color:#1A1611;"><b>Sara Cole</b> <span style="color:#4B5563;">mentioned you in</span> <b>Fix checkout flow</b></div><div style="font-size:13px; color:#4B5563; margin-top:2px;">22 hours ago</div><div style="margin-top:8px; background:#fff; border-radius:8px; padding:8px 10px; font-size:13px; line-height:1.5; color:#1F2937;">@maya Acme is expecting this before the renewal on the 30th &mdash; flagging as a renewal risk.</div></div></div>
+              </div>
+            </sc-if>
+            </sc-if>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ORBIT + LENSES -->
+  <!-- PROTECTED: default Orbit/Lens fallback content is approved. Do not modify during customized-page work (see CLAUDE.md). -->
+  <sc-if value="{{ secOrbitSection }}" hint-placeholder-val="{{ true }}">
+  <section id="orbit" data-section="orbit" style="position:relative; overflow:hidden; background:#ECE7F2; background-image:radial-gradient(rgba(26,22,17,.07) 1px, transparent 1px); background-size:26px 26px; padding:96px 40px; display:flex; justify-content:center;">
+    <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1040px;">
+      <sc-if value="{{ secOrbit }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px;"><img src="assets/quely-orbit-pet.png" alt="" style="width:34px; height:34px;"><div style="font-family:'Geist Mono',monospace; font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C28A4;">Quely AI · Orbit</div></div>
+      <h2 style="margin:0 0 10px; font-family:'Geist',sans-serif; font-size:42px; line-height:1.1; letter-spacing:-.04em; font-weight:800; color:#1A1611; text-align:center;">Ask anything. Get the answer.</h2>
+      <p style="margin:0 auto 30px; font-size:18px; line-height:1.5; color:#4B5563; max-width:720px; text-align:center;">{{ orbitIntro }}</p>
+
+      <!-- the product's Orbit panel: white, mascot top-left, ink frame + hard offset -->
+      <div style="position:relative; z-index:1; background:#fff; border:2px solid #1A1611; box-shadow:6px 6px 0 #1A1611; overflow:hidden; display:flex; flex-direction:column; height:640px;">
+
+        <!-- panel header: Threads + history / new-chat, as in the product -->
+        <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #EEF0F3;">
+          <span style="display:inline-flex; align-items:center; gap:7px; background:#F5F6F8; border-radius:9px; padding:7px 12px; font-size:13px; font-weight:600; color:#4B5563;"><i class="ph ph-caret-double-left" style="font-size:13px;"></i>Threads</span>
+          <span style="margin-left:auto; display:inline-flex; align-items:center; gap:8px; background:#F5F6F8; border-radius:9999px; padding:6px 13px; font-size:13px; font-weight:600; color:#1A1611;"><i class="ph-fill ph-kanban" style="color:#2563EB;"></i>{{ workName }}</span>
+          <i class="ph ph-clock-counter-clockwise" style="font-size:18px; color:#4B5563;"></i>
+          <i class="ph ph-note-pencil" style="font-size:18px; color:#4B5563;"></i>
+        </div>
+
+        <!-- conversation -->
+        <div data-orbit-scroll style="flex:1; min-height:0; overflow:auto; padding:22px 22px 8px; display:flex; flex-direction:column; gap:16px;">
+
+          <sc-if value="{{ orbitEmpty }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; gap:18px;">
+              <img src="assets/quely-orbit-pet.png" alt="" style="width:52px; height:auto;">
+              <div style="font-family:'Geist',sans-serif; font-size:24px; line-height:1.2; letter-spacing:-.02em; font-weight:700; color:#1A1611;">What can I help you with?</div>
+              <div style="display:flex; align-items:center; gap:8px; align-self:stretch; margin-bottom:2px;"><i class="ph-fill ph-sparkle" style="font-size:15px; color:#8B5CF6;"></i><span style="font-size:12.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">Suggested prompts</span></div>
+              <div style="display:flex; flex-direction:column; gap:10px; align-self:stretch;">
+                <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="4">
+                  <button onClick="{{ s.ask }}" style="{{ s.style }}" style-hover="border-color:#C4B5DD; box-shadow:0 2px 8px rgba(92,40,164,.10);"><sc-if value="{{ s.ping }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; top:-5px; right:-5px; width:15px; height:15px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#8B5CF6; opacity:.75; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#8B5CF6;"></span></span></sc-if><span style="flex:1; min-width:0; text-align:left;">{{ s.label }}</span><i class="ph ph-arrow-up-right" style="flex:none; font-size:16px; color:#9CA3AF;"></i></button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-for list="{{ messages }}" as="m" hint-placeholder-count="0">
+            <div style="{{ m.rowStyle }}">
+              <sc-if value="{{ m.isOrbit }}" hint-placeholder-val="{{ false }}"><img src="assets/quely-orbit-pet.png" alt="" style="flex:none; width:30px; height:auto; margin-top:2px;"></sc-if>
+              <div style="{{ m.bubbleStyle }}">
+                <div style="{{ m.textStyle }}">{{ m.text }}</div>
+                <sc-if value="{{ m.hasMore }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ m.moreStyle }}"><sc-for list="{{ m.more }}" as="line" hint-placeholder-count="0"><div style="{{ line.style }}">{{ line.text }}</div></sc-for></div>
+                  <button onClick="{{ m.toggle }}" style="margin-top:10px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:600; color:#2563EB; display:inline-flex; align-items:center; gap:5px;">{{ m.moreLabel }}<i class="{{ m.moreIcon }}" style="font-size:13px;"></i></button>
+                </sc-if>
+            <sc-if value="{{ m.hasSources }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:12px; padding-top:11px; border-top:1px solid #E5E7EB;">
+                <span style="flex:none; font-family:'Geist Mono',monospace; font-size:10.5px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:#4B5563;">Sources</span>
+                <sc-for list="{{ m.sources }}" as="sc" hint-placeholder-count="0">
+                  <span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#374151;"><i class="{{ sc.icon }}" style="{{ sc.iconStyle }}"></i>{{ sc.label }}</span>
+                </sc-for>
+              </div>
+            </sc-if>
+              </div>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <img src="assets/quely-orbit-pet.png" alt="" style="flex:none; width:30px; height:auto; margin-top:2px;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <span style="display:inline-flex; align-items:center; gap:8px; align-self:flex-start; background:#F5F6F8; border-radius:9999px; padding:7px 13px; font-size:13px; font-weight:600; color:#4B5563;"><span style="width:7px; height:7px; border-radius:50%; background:#8B5CF6; animation:qdot 1.2s infinite;"></span>Analyzing work item context</span>
+                <span style="display:inline-flex; align-items:center; gap:8px; align-self:flex-start; background:#F5F6F8; border-radius:9999px; padding:7px 13px; font-size:13px; font-weight:600; color:#4B5563;"><span style="width:7px; height:7px; border-radius:50%; background:#8B5CF6; animation:qdot 1.2s infinite .3s;"></span>Retrieving information</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- Actions row, as in the product -->
+        <div style="margin:0 16px 10px; border:1px solid #E5E7EB; border-radius:14px; overflow:hidden;">
+          <button onClick="{{ toggleActions }}" style="width:100%; display:flex; align-items:center; gap:10px; background:#fff; border:none; padding:13px 16px; cursor:pointer; font-family:inherit; text-align:left;">
+            <span style="color:#8B5CF6; font-size:16px;">&#10022;</span>
+            <span style="font-size:15px; font-weight:700; color:#1A1611;">Actions</span>
+            <span style="display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 6px; border-radius:9999px; background:#FEE2E2; color:#B91C1C; font-size:12px; font-weight:700;">3</span>
+            <span style="border:1px solid #BFDBFE; border-radius:9999px; padding:2px 9px; font-size:11px; font-weight:700; color:#2563EB;">BETA</span>
+            <i class="{{ actionsCaret }}" style="margin-left:auto; font-size:15px; color:#4B5563;"></i>
+          </button>
+          <sc-if value="{{ actionsOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top:1px solid #EEF0F3; padding:6px 8px 10px; display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:9px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#EFF6FF; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-note-pencil" style="font-size:16px; color:#2563EB;"></i></span><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:#1A1611;">Update description</div><div style="font-size:12.5px; color:#4B5563;">Rewrite the work item description from this thread</div></div></div>
+              <div style="display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:9px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#F3EEFB; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-chat-circle-dots" style="font-size:16px; color:#5C28A4;"></i></span><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:#1A1611;">Ask</div><div style="font-size:12.5px; color:#4B5563;">Post a question to the team in this Space</div></div><span style="display:inline-flex; align-items:center; gap:8px; font-size:12px; color:#4B5563;">Auto-send<span style="width:34px; height:20px; border-radius:9999px; background:#5C28A4; display:inline-block; position:relative;"><span style="position:absolute; right:2px; top:2px; width:16px; height:16px; border-radius:50%; background:#fff;"></span></span></span></div>
+              <div style="display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:9px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#DCFCE7; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-lightning" style="font-size:16px; color:#15803D;"></i></span><div style="flex:1; min-width:0;"><div style="font-size:14px; font-weight:700; color:#1A1611;">Estimations</div><div style="font-size:12.5px; color:#4B5563;">Suggest an estimate and break the work into subtasks</div></div></div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- composer, as in the product -->
+        <div style="margin:0 16px 16px; border:1.5px solid #C4B5DD; border-radius:14px; padding:12px 14px 12px; box-shadow:0 0 0 3px rgba(139,92,246,.08);">
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid #E5E7EB; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#4B5563;"><i class="ph ph-at" style="font-size:14px;"></i>Add tool</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <input value="{{ orbitInput }}" onInput="{{ setOrbitInput }}" onKeyDown="{{ orbitKey }}" placeholder="Ask a question about this Space" style="flex:1; background:transparent; border:none; padding:6px 0; font-family:inherit; font-size:15px; color:#1A1611; outline:none;">
+            <button onClick="{{ sendOrbit }}" style="flex:none; background:none; border:none; padding:4px; cursor:pointer; display:inline-flex; align-items:center;"><i class="ph-fill ph-paper-plane-right" style="font-size:22px; color:#5C28A4;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      </sc-if>
+      <sc-if value="{{ secLenses }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:34px;">
+        <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:18px;">
+          <div style="font-family:'Geist Mono',monospace; font-size:13px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:#5C28A4;">Lenses</div>
+          <div style="font-size:15px; color:#4B5563;">Every decision, action, risk and opportunity, pulled out of the discussion.</div>
+        </div>
+
+        <!-- the Lenses panel, full width, as it appears in the product -->
+        <div style="position:relative; background:#fff; border:2px solid #1A1611; box-shadow:8px 8px 0 rgba(147,133,230,.5);">
+
+          <div style="display:flex; align-items:center; gap:9px; padding:13px 20px; border-bottom:1px solid #F3F4F6;">
+            <i class="ph-bold ph-caret-double-left" style="font-size:14px; color:#4B5563;"></i>
+            <span style="font-size:14px; font-weight:600; color:#1A1611;">Threads</span>
+          </div>
+
+          <div style="padding:18px 20px 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:26px; font-weight:800; letter-spacing:-.02em; color:#1A1611;">Lenses</span>
+              <span style="background:#F3F4F6; border-radius:8px; padding:3px 10px; font-size:14px; font-weight:600; color:#4B5563;">37</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:7px; margin-top:7px;">
+              <span style="font-size:14px; color:#5C28A4;">&#10022;</span>
+              <span style="font-size:14px; color:#4B5563;">Synthesized from 2 sources</span>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
+              <div style="flex:1; min-width:0; display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:11px 18px;">
+                <i class="ph ph-magnifying-glass" style="flex:none; font-size:16px; color:#4B5563;"></i>
+                <span style="flex:1; min-width:0; font-size:15px; color:#4B5563;">Search lenses...</span>
+              </div>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:9px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:11px 18px; font-size:15px; font-weight:600; color:#1A1611;">
+                <i class="ph-fill ph-graph" style="font-size:16px; color:#5C28A4;"></i>Lens Map
+              </span>
+            </div>
+
+            <div data-lens-pills style="display:flex; align-items:center; gap:9px; margin-top:14px; flex-wrap:wrap;">
+              <sc-for list="{{ lensPills }}" as="p" hint-placeholder-count="5">
+                <span style="{{ p.style }}" onClick="{{ p.pick }}"><span data-lens-cue style="position:absolute; inset:-6px; border-radius:9999px; border:2px solid #8B5CF6; animation:qring 1.9s cubic-bezier(0,0,.2,1) infinite; pointer-events:none;"></span><span style="{{ p.dot }}"></span>{{ p.label }} <b style="font-weight:600; color:#4B5563;">{{ p.count }}</b></span>
+              </sc-for>
+              <span style="flex:none; margin-left:auto; display:inline-flex; align-items:center; gap:4px; color:#4B5563;"><i class="ph ph-arrows-down-up" style="font-size:15px;"></i><i class="ph ph-caret-down" style="font-size:12px;"></i></span>
+            </div>
+
+            <!-- grouped lens items; each row carries its own hover actions -->
+            <div data-lens-list style="margin-top:20px;">
+              <sc-for list="{{ lensGroups }}" as="g" hint-placeholder-count="4">
+                <div style="margin-bottom:22px;">
+                  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <span style="{{ g.dot }}"></span>
+                    <span style="font-size:17px; font-weight:700; color:#1A1611;">{{ g.label }}</span>
+                    <span style="font-size:15px; color:#4B5563;">{{ g.count }}</span>
+                    <i class="ph ph-caret-down" style="margin-left:auto; font-size:15px; color:#4B5563;"></i>
+                  </div>
+
+                  <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                    <div data-lens-row style="{{ it.rowStyle }}">
+                      <span data-lens-cue style="position:absolute; right:13px; top:50%; margin-top:-13px; width:26px; height:26px; pointer-events:none; z-index:2;">
+                        <span style="position:absolute; inset:0; border-radius:9999px; border:2px solid #8B5CF6; animation:qring 1.9s cubic-bezier(0,0,.2,1) infinite;"></span>
+                        <span style="position:absolute; inset:8px; border-radius:50%; background:#8B5CF6;"></span>
+                      </span>
+                      <div style="display:flex; gap:12px; align-items:flex-start;">
+                        <div style="flex:1; min-width:0;">
+                        <div style="{{ it.textStyle }}">{{ it.text }}</div>
+                          <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                            <i class="ph ph-flag" style="flex:none; font-size:13px; color:#4B5563;"></i>
+                            <span style="flex:none; font-size:13px; color:#4B5563;">&middot; {{ it.when }}</span>
+                            <span style="{{ it.decidedStyle }}"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i>Decided</span>
+                          <span style="{{ it.dismissedStyle }}"><i class="ph ph-arrow-counter-clockwise" style="font-size:12px;"></i>Dismissed &middot; click trash to undo</span>
+                          </div>
+                        </div>
+                        <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:13px; color:#4B5563;">
+                          <i class="ph ph-broadcast" style="font-size:14px;"></i>{{ it.signals }}
+                        </span>
+                      </div>
+
+                      <!-- the three actions the product reveals on hover -->
+                      <div data-lens-bar style="{{ it.toolbarStyle }}">
+                        <span data-lens-btn title="Push to tool" style="{{ it.pushBtn }}" onClick="{{ it.push }}"><span data-lens-actcue style="position:absolute; inset:-4px; border-radius:9999px; border:2px solid #8B5CF6; animation:qring 1.9s cubic-bezier(0,0,.2,1) infinite; pointer-events:none;"></span><i class="ph ph-arrow-square-out" style="font-size:17px;"></i></span>
+                        <span style="{{ it.divider }}"></span>
+                        <span data-lens-btn title="Schedule a meeting" style="{{ it.meetBtn }}" onClick="{{ it.meet }}"><i class="{{ it.meetIcon }}" style="font-size:17px;"></i></span>
+                        <span style="{{ it.divider }}"></span>
+                        <span data-lens-btn title="Dismiss" onClick="{{ it.dismiss }}" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:9999px; color:#B91C1C; cursor:pointer;"><i class="ph ph-trash" style="font-size:17px;"></i></span>
+                      </div>
+
+
+                      <!-- confirmations, in place: a row may be both pushed and scheduled -->
+                      <div style="{{ it.doneRowStyle }}">
+                        <sc-for list="{{ it.done }}" as="dn" hint-placeholder-count="0">
+                          <span style="{{ dn.style }}"><i class="{{ dn.icon }}" style="font-size:14px;"></i>{{ dn.label }}</span>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ pmOpen }}" hint-placeholder-val="{{ false }}">
+          <!-- PUSH MODAL — the product's Configure issue details dialog -->
+          <div style="{{ pmScrim }}" onClick="{{ lensMenuClose }}"></div>
+          <div style="{{ pmStyle }}">
+            <div style="display:flex; align-items:stretch; height:100%;">
+
+              <!-- tool rail -->
+              <div style="flex:none; width:196px; box-sizing:border-box; background:#FBFAFE; border-right:1px solid #E5E7EB; padding:12px 10px; overflow:auto;">
+                <sc-for list="{{ lensTools }}" as="tl" hint-placeholder-count="8">
+                  <div style="{{ tl.style }}" onClick="{{ tl.pick }}">
+                    <span style="{{ tl.mark }}"></span>
+                    <span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ tl.name }}</span>
+                    <i class="{{ tl.tickIcon }}" style="{{ tl.tickStyle }}"></i>
+                    <span style="{{ tl.badgeStyle }}">{{ tl.badge }}</span>
+                  </div>
+                </sc-for>
+              </div>
+
+              <!-- configure form -->
+              <div style="flex:1; min-width:0; box-sizing:border-box; padding:20px 22px 0; display:flex; flex-direction:column;">
+                <div style="flex:1; min-height:0; overflow:auto; padding-bottom:16px;">
+                  <div style="font-size:19px; font-weight:800; letter-spacing:-.02em; color:#1A1611; margin-bottom:16px;">Configure issue details</div>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px 16px;">
+                    <div>
+                      <div style="{{ pmLabel }}">Site <span style="color:#B91C1C;">*</span></div>
+                      <div style="{{ pmField }}"><span style="{{ pmJira }}"></span><span style="flex:1; min-width:0; color:#1A1611;">{{ pmSite }}</span><i class="ph ph-caret-down" style="flex:none; font-size:14px; color:#4B5563;"></i></div>
+                    </div>
+                    <div>
+                      <div style="{{ pmLabel }}">Project <span style="color:#B91C1C;">*</span></div>
+                      <div style="{{ pmField }}"><span style="{{ pmJira }}"></span><span style="flex:1; min-width:0; color:#1A1611;">{{ pmProject }}</span><i class="ph ph-caret-down" style="flex:none; font-size:14px; color:#4B5563;"></i></div>
+                    </div>
+                    <div>
+                      <div style="{{ pmLabel }}">Issue type <span style="color:#B91C1C;">*</span></div>
+                      <div style="{{ pmField }}"><i class="ph-fill ph-check-square" style="flex:none; font-size:16px; color:#2563EB;"></i><span style="flex:1; min-width:0; color:#1A1611;">Task</span><i class="ph ph-caret-down" style="flex:none; font-size:14px; color:#4B5563;"></i></div>
+                    </div>
+                    <div>
+                      <div style="{{ pmLabel }}">Priority</div>
+                      <div style="{{ pmField }}"><i class="ph ph-arrow-up" style="flex:none; font-size:15px; color:#4B5563;"></i><span style="flex:1; min-width:0; color:#1A1611;">None</span><i class="ph ph-caret-down" style="flex:none; font-size:14px; color:#4B5563;"></i></div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top:14px; max-width:50%;">
+                    <div style="{{ pmLabel }}">Assignee</div>
+                    <div style="{{ pmField }}"><span style="flex:1; min-width:0; color:#6B7280;">Unassigned</span><i class="ph ph-caret-down" style="flex:none; font-size:14px; color:#4B5563;"></i></div>
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:10px; margin:16px 0 8px;">
+                    <span style="{{ pmLabel }} margin:0;">Description <span style="color:#B91C1C;">*</span></span>
+                    <span style="flex:none; background:#F3EEFB; border-radius:7px; padding:3px 9px; font-size:11.5px; font-weight:700; color:#5C28A4;">AI generated</span>
+                  </div>
+                  <div style="border:1px solid #E5E7EB; border-radius:10px; padding:16px 18px;">
+                    <div style="font-size:14.5px; font-weight:800; color:#1A1611;">Summary</div>
+                    <div style="margin-top:6px; font-size:14px; line-height:1.55; color:#374151; text-wrap:pretty;">{{ pmSummary }}</div>
+                    <div style="margin-top:14px; font-size:14.5px; font-weight:800; color:#1A1611;">Why it matters</div>
+                    <div style="margin-top:6px; font-size:14px; line-height:1.55; color:#374151; text-wrap:pretty;">{{ pmWhy }}</div>
+                  </div>
+                </div>
+
+                <div style="flex:none; display:flex; align-items:center; justify-content:flex-end; gap:10px; border-top:1px solid #E5E7EB; padding:14px 0;">
+                  <span style="cursor:pointer; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 20px; font-size:14px; font-weight:600; color:#374151;" onClick="{{ lensMenuClose }}">Cancel</span>
+                  <span style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; background:#5C28A4; border-radius:9px; padding:10px 20px; font-size:14px; font-weight:700; color:#fff;" onClick="{{ pmCreate }}"><i class="ph-bold ph-plus" style="font-size:14px;"></i>{{ pmCreateLabel }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ smOpenFlag }}" hint-placeholder-val="{{ false }}">
+          <!-- SCHEDULE MODAL — the product's meeting scheduler -->
+          <div style="{{ smScrim }}" onClick="{{ smClose }}"></div>
+          <div style="{{ smStyle }}">
+            <div style="display:flex; align-items:stretch; height:100%;">
+
+              <!-- left: title, provider, participants -->
+              <div style="flex:none; width:300px; box-sizing:border-box; border-right:1px solid #E5E7EB; padding:20px; overflow:auto;">
+                <div style="{{ pmLabel }}">Title</div>
+                <div style="{{ pmField }} color:#1A1611;"><span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ smTitle }}</span></div>
+
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                  <div style="{{ pmField }} flex:1; min-width:0;"><span style="{{ smMeetMark }}"></span><span style="flex:1; min-width:0; color:#1A1611;">Google Meet</span><i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i></div>
+                  <div style="{{ pmField }} flex:none; width:118px;"><span style="flex:1; min-width:0; color:#1A1611;">30 minutes</span><i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i></div>
+                </div>
+
+                <div style="{{ pmLabel }} margin-top:16px;">Participants</div>
+                <div style="{{ pmField }}">
+                  <span style="flex:1; min-width:0; display:flex; align-items:center; gap:7px; background:#F3F4F6; border-radius:9999px; padding:3px 9px 3px 3px;">
+                    <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#1D4ED8; font-size:9px; font-weight:800; color:#fff;">ON</span>
+                    <span style="flex:1; min-width:0; font-size:13px; font-weight:600; color:#1A1611;">Onyi Nwankwo</span>
+                    <i class="ph ph-x" style="flex:none; font-size:12px; color:#4B5563;"></i>
+                  </span>
+                  <i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i>
+                </div>
+              </div>
+
+              <!-- right: date + time -->
+              <div style="flex:1; min-width:0; box-sizing:border-box; padding:20px 20px 0; display:flex; flex-direction:column;">
+                <div style="flex:1; min-height:0; overflow:auto; padding-bottom:14px;">
+                  <div style="{{ pmLabel }}">Date</div>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="{{ pmField }} flex:none; width:136px;"><span style="flex:1; color:#1A1611;">Sep 2026</span><i class="ph ph-calendar-blank" style="flex:none; font-size:15px; color:#4B5563;"></i></div>
+                    <i class="ph ph-arrows-clockwise" style="flex:none; font-size:16px; color:#4B5563;"></i>
+                    <div style="{{ pmField }} flex:1; min-width:0;"><span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#1A1611;">Does not repeat</span><i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i></div>
+                    <i class="ph ph-arrow-left" style="flex:none; font-size:15px; color:#4B5563;"></i>
+                    <i class="ph ph-arrow-right" style="flex:none; font-size:15px; color:#4B5563;"></i>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px;">
+                    <sc-for list="{{ smDays }}" as="d" hint-placeholder-count="3">
+                      <div style="{{ d.style }}" onClick="{{ d.pick }}">
+                        <div style="font-size:13px; font-weight:600; color:#4B5563;">{{ d.dow }}</div>
+                        <div style="{{ d.numStyle }}">{{ d.num }}</div>
+                        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:4px;">
+                          <span style="flex:none; width:6px; height:6px; border-radius:50%; background:#16A34A;"></span>
+                          <span style="font-size:12px; color:#4B5563;">All Participants</span>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+
+                  <div style="{{ pmLabel }} margin-top:16px;">Select Time (Sep {{ smDay }})</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:9px;">
+                    <sc-for list="{{ smSlots }}" as="t" hint-placeholder-count="8">
+                      <span style="{{ t.style }}" onClick="{{ t.pick }}">{{ t.label }}</span>
+                    </sc-for>
+                  </div>
+
+                  <div style="margin-top:14px; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:11px; padding:13px 15px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <i class="ph ph-clock" style="flex:none; font-size:16px; color:#15803D;"></i>
+                      <span style="font-size:14.5px; font-weight:800; color:#1A1611;">Meeting time</span>
+                    </div>
+                    <div style="display:flex; align-items:flex-end; gap:12px; margin-top:11px;">
+                      <div style="flex:1; min-width:0;">
+                        <div style="font-size:12.5px; font-weight:600; color:#4B5563; margin-bottom:5px;">Start</div>
+                        <div style="{{ pmField }}"><span style="flex:1; min-width:0; color:#1A1611;">{{ smStart }}</span><i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i></div>
+                      </div>
+                      <i class="ph ph-arrow-right" style="flex:none; margin-bottom:12px; font-size:15px; color:#4B5563;"></i>
+                      <div style="flex:1; min-width:0;">
+                        <div style="font-size:12.5px; font-weight:600; color:#4B5563; margin-bottom:5px;">End</div>
+                        <div style="{{ pmField }}"><span style="flex:1; min-width:0; color:#1A1611;">{{ smEnd }}</span><i class="ph ph-caret-down" style="flex:none; font-size:13px; color:#4B5563;"></i></div>
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:7px; margin-top:10px;">
+                      <i class="ph-fill ph-check-circle" style="flex:none; font-size:15px; color:#15803D;"></i>
+                      <span style="font-size:13px; font-weight:600; color:#15803D;">{{ smFree }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="flex:none; display:flex; align-items:center; gap:10px; border-top:1px solid #E5E7EB; padding:13px 0;">
+                  <span style="flex:1; display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:13.5px; font-weight:600; color:#1A1611;">Orbit Recording</span>
+                    <span style="flex:none; position:relative; width:38px; height:22px; border-radius:9999px; background:#16A34A;"><span style="position:absolute; right:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#fff;"></span></span>
+                  </span>
+                  <span style="cursor:pointer; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 20px; font-size:14px; font-weight:600; color:#374151;" onClick="{{ smClose }}">Cancel</span>
+                  <span style="cursor:pointer; white-space:nowrap; background:#5C28A4; border-radius:9px; padding:10px 22px; font-size:14px; font-weight:700; color:#fff;" onClick="{{ smConfirm }}">Schedule</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- OUTCOME — pulled from Block Outcome.dc.html -->
+  <sc-if value="{{ secOutcome }}" hint-placeholder-val="{{ false }}">
+  <section id="outcome" data-section="features" style="background:#ECE7F2;">
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <sc-if value="{{ legacyBlocks }}" hint-placeholder-val="{{ true }}"><dc-import name="Block Outcome" title="{{ outTitle }}" body="{{ outBody }}" points="{{ outPoints }}" hint-size="100%,520px"></dc-import></sc-if>
+  </section>
+  </sc-if>
+
+  <!-- FEATURES -->
+  <sc-if value="{{ secFeatures }}" hint-placeholder-val="{{ true }}">
+  <section id="features" data-section="features" style="position:relative; background:#41186F; padding:96px 40px; display:flex; justify-content:center;">
+    <div data-reveal style="width:100%; position:relative; z-index:1; max-width:1040px;">
+      <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:26px;"><span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:#C9C1F2;">Everything in one place</span><span style="flex:1; height:0; border-top:1px solid rgba(255,255,255,.26); transform:translateY(-3px);"></span></div>
+      <h2 style="margin:0 0 36px; font-family:'Geist',sans-serif; font-size:42px; line-height:1.1; letter-spacing:-.04em; font-weight:800; color:#fff;">{{ featuresTitle }}</h2>
+      <div data-stagger style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="6">
+          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start; transition:transform .18s, box-shadow .18s;" style-hover="transform:translateY(-4px); box-shadow:0 16px 30px -14px rgba(3,7,18,.22);"><i class="{{ f.icon }}" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">{{ f.title }}</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">{{ f.sub }}</div></div></div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- CTA — suppressed when the PagePlan mounts a dedicated CTA block, so a page
+       never shows two competing calls to action -->
+  <sc-if value="{{ secOwnCta }}" hint-placeholder-val="{{ true }}">
+  <section id="cta" data-section="cta" style="background:#1A1611; padding:100px 40px 44px; display:flex; justify-content:center;">
+    <div data-reveal style="width:100%; max-width:940px; text-align:center;">
+      <h2 style="margin:0; font-family:'Geist',sans-serif; font-size:48px; line-height:1.08; letter-spacing:-.04em; font-weight:800; color:#fff;">{{ ctaHeadline }}</h2>
+      <p style="margin:22px 0 0; font-size:20px; line-height:1.5; color:rgba(255,255,255,.72);">{{ ctaBody }}</p>
+      <div style="margin-top:38px; display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;">
+        <a href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" target="_blank" rel="noopener" onClick="{{ clickCTA }}" style="text-decoration:none;"><span style="display:inline-flex; align-items:center; gap:10px; background:#9385E6; color:#1A1611; font-size:18px; font-weight:700; padding:16px 34px; border:2px solid #1A1611; box-shadow:5px 5px 0 rgba(236,231,242,.9); transition:transform .18s, box-shadow .18s;" style-hover="transform:translate(-2px,-2px); box-shadow:7px 7px 0 rgba(236,231,242,.9);">Book a demo <i class="ph-bold ph-arrow-right"></i></span></a>
+        <button onClick="{{ openQ }}" style="display:inline-flex; align-items:center; gap:10px; background:transparent; color:#fff; font-size:18px; font-weight:600; padding:16px 30px; border-radius:10px; border:1px solid rgba(255,255,255,.62); cursor:pointer; font-family:inherit;">Ask a question</button>
+      </div>
+    </div>
+  </section>
+
+  </sc-if>
+
+
+  <!-- CTA BLOCKS — terminal by construction: a call to action is always last -->
+  <div id="cta-blocks" style="scroll-margin-top:0;"></div><sc-if value="{{ useBlocks }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ blkCtaFrag }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCtaFrag }}"><dc-import surface="{{ sfCtaFrag }}" eyebrow="{{ cpCtaFrag.eyebrow }}" headline="{{ cpCtaFrag.headline }}" body="{{ cpCtaFrag.body }}" name="Block CTA Fragmentation" hint-size="100%,620px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCtaDec }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCtaDec }}"><dc-import surface="{{ sfCtaDec }}" eyebrow="{{ cpCtaDec.eyebrow }}" headline="{{ cpCtaDec.headline }}" body="{{ cpCtaDec.body }}" name="Block CTA Decisions" hint-size="100%,540px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCtaRisk }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCtaRisk }}"><dc-import surface="{{ sfCtaRisk }}" eyebrow="{{ cpCtaRisk.eyebrow }}" headline="{{ cpCtaRisk.headline }}" body="{{ cpCtaRisk.body }}" name="Block CTA Risks" hint-size="100%,420px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCtaKnow }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCtaKnow }}"><dc-import surface="{{ sfCtaKnow }}" eyebrow="{{ cpCtaKnow.eyebrow }}" headline="{{ cpCtaKnow.headline }}" body="{{ cpCtaKnow.body }}" name="Block CTA Knowledge" hint-size="100%,520px"></dc-import></div></sc-if>
+    <sc-if value="{{ blkCtaAction }}" hint-placeholder-val="{{ false }}"><div style="{{ ordCtaAction }}"><dc-import surface="{{ sfCtaAction }}" eyebrow="{{ cpCtaAction.eyebrow }}" headline="{{ cpCtaAction.headline }}" body="{{ cpCtaAction.body }}" name="Block CTA Action" hint-size="100%,300px"></dc-import></div></sc-if>
+  </sc-if>
+
+  <!-- FOOTER -->
+  <footer style="background:#1A1611; padding:56px 40px 40px; display:flex; justify-content:center;">
+    <div style="width:100%; max-width:940px;">
+
+      <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:40px; padding-bottom:36px;">
+
+        <div style="flex:1 1 300px; min-width:0;">
+          <img src="assets/quely-logo-dark.svg" alt="Quely" style="height:32px; width:auto; display:block;">
+          <p style="margin:18px 0 0; max-width:320px; font-size:15.5px; line-height:1.55; color:rgba(236,231,242,.62); text-wrap:pretty;">{{ footTagline }}</p>
+        </div>
+
+        <div style="flex:0 1 auto; display:flex; flex-wrap:wrap; gap:44px;">
+          <div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:.17em; text-transform:uppercase; color:#9385E6; margin-bottom:16px;">Website</div>
+            <a href="https://quely.io" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-size:16.5px; font-weight:500; color:#ECE7F2; text-decoration:none; border-bottom:1px solid rgba(147,133,230,.45); padding-bottom:2px; transition:border-color .18s, color .18s;" style-hover="color:#C9C1F2; border-color:#9385E6;">quely.io <i class="ph-bold ph-arrow-up-right" style="font-size:13px; color:#9385E6;"></i></a>
+          </div>
+          <div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:.17em; text-transform:uppercase; color:#9385E6; margin-bottom:16px;">Get in touch</div>
+            <a href="mailto:ronma@quely.io" style="display:inline-flex; align-items:center; gap:8px; font-size:16.5px; font-weight:500; color:#ECE7F2; text-decoration:none; border-bottom:1px solid rgba(147,133,230,.45); padding-bottom:2px; transition:border-color .18s, color .18s;" style-hover="color:#C9C1F2; border-color:#9385E6;">ronma@quely.io <i class="ph-bold ph-envelope-simple" style="font-size:13px; color:#9385E6;"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px; background:rgba(236,231,242,.16);"></div>
+
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; padding-top:26px;">
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.06em; color:rgba(236,231,242,.5);">&copy; QUELY 2026</span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.06em; color:rgba(236,231,242,.5);">{{ footNote }}</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- PERSISTENT ASK BUTTON -->
+  <div style="position:fixed; right:26px; bottom:26px; z-index:56;">
+    <span style="position:absolute; inset:0; border-radius:9999px; background:#5C28A4; animation:qring 2.6s ease-out infinite; z-index:0;"></span>
+    <button onClick="{{ openQ }}" style="position:relative; z-index:1; display:inline-flex; align-items:center; gap:10px; background:#1A1611; color:#ECE7F2; font-size:16px; font-weight:600; padding:14px 22px; border:none; border:2px solid #1A1611; border-radius:0; box-shadow:4px 4px 0 #1A1611;  cursor:pointer; font-family:inherit; transition:transform .18s;" style-hover="transform:translateY(-2px);"><i class="ph-fill ph-chat-teardrop-text" style="font-size:20px;"></i>Ask a question</button>
+  </div>
+
+  <!-- QUESTION PANEL -->
+  <sc-if value="{{ qPanelOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:70; background:rgba(3,7,18,.55); display:flex; align-items:flex-end; justify-content:flex-end; padding:26px;">
+      <div style="width:100%; max-width:440px; background:#fff; border-radius:18px; box-shadow:0 24px 60px -12px rgba(3,7,18,.5); padding:28px; font-family:'Inter',sans-serif;">
+        <sc-if value="{{ qSubmitted }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; padding:20px 0;">
+            <div style="width:60px; height:60px; border-radius:50%; background:#DCFCE7; display:flex; align-items:center; justify-content:center; margin:0 auto 18px;"><i class="ph-fill ph-check" style="font-size:32px; color:#16A34A;"></i></div>
+            <div style="font-size:22px; font-weight:700; margin-bottom:8px;">Question sent</div>
+            <p style="margin:0 0 24px; font-size:15px; line-height:1.5; color:#5C5345;">The Quely team will get back to you shortly.</p>
+            <button onClick="{{ closeQ }}" style="background:#111827; color:#fff; font-size:15px; font-weight:600; padding:12px 26px; border:none; border-radius:10px; cursor:pointer; font-family:inherit;">Done</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ qFormOpen }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <div style="font-size:20px; font-weight:700;">Ask a question</div>
+              <button onClick="{{ closeQ }}" style="background:none; border:none; cursor:pointer; color:#5C5345; font-size:24px; line-height:1; padding:0;"><i class="ph ph-x"></i></button>
+            </div>
+            <p style="margin:0 0 18px; font-size:14px; line-height:1.45; color:#5C5345;">{{ askingAs }}</p>
+            <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">About this section</label>
+            <select value="{{ qSection }}" onChange="{{ setQSection }}" style="width:100%; font-family:inherit; font-size:15px; color:#1A1611; padding:11px 13px; border:1px solid #D1D5DB; border-radius:10px; margin-bottom:16px; background:#fff;">
+              <option value="hero">Intro</option>
+              <option value="problem">The problem</option>
+              <option value="proof">Real teams</option>
+              <option value="spaces">Spaces</option>
+              <option value="orbit">Orbit</option>
+              <option value="features">Features</option>
+              <option value="cta">Book a demo</option>
+            </select>
+            <textarea value="{{ qText }}" onInput="{{ setQText }}" placeholder="What would you like to know?" style="width:100%; box-sizing:border-box; min-height:110px; resize:vertical; font-family:inherit; font-size:15px; line-height:1.45; color:#1A1611; padding:13px; border:1px solid #D1D5DB; border-radius:10px; margin-bottom:18px;"></textarea>
+            <button onClick="{{ submitQ }}" style="width:100%; background:#5C28A4; color:#fff; font-size:16px; font-weight:600; padding:14px; border:none; border-radius:10px; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; justify-content:center; gap:9px;"><i class="ph-bold ph-paper-plane-right"></i>Send question</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:800}}">
+class Component extends DCLogic {
+  state = { lensFilter:'All', lensTouched:false, lensGone:{}, lensRow:null, lensMenu:null, lensAct:{}, lensPick:'Jira', smOpen:null, smDate:17, smTime:'10:00 AM', tlOpen:{}, qPanelOpen:false, qSubmitted:false, qText:'', qSection:'hero', messages:[], orbitInput:'', thinking:false, streaming:false, spaceTab:'disc', spaceTouched:false, orbitTouched:false, lens:'decisions', lensTouched:false, pushed:{}, pushMenu:null };
+  _msgSeq = 0;
+
+  // PROTECTED: default-page fallback content (checkout scenario). Do not modify during customized-page work (see CLAUDE.md).
+  LENSES = [
+    { id:'decisions', label:'Decisions', icon:'ph-fill ph-seal-check', color:'#22C55E', items:[
+      'Scope narrowed to card checkout only',
+      'Defer wallet & ACH to the next cycle',
+      'Prioritize ahead of the Acme renewal' ] },
+    { id:'action', label:'Action', icon:'ph-fill ph-list-checks', color:'#60A5FA', items:[
+      'Unblock the payments tokenization PR',
+      'Confirm card-only scope with the customer',
+      'QA the full checkout flow before launch' ] },
+    { id:'risks', label:'Risks', icon:'ph-fill ph-warning', color:'#F87171', items:[
+      'Payments dependency has no owner yet',
+      'Renewal deadline on the 30th is at risk',
+      'Wallet users need a clear interim message' ] },
+    { id:'opportunities', label:'Opportunities', icon:'ph-fill ph-lightbulb', color:'#FBBF24', items:[
+      'Reuse tokenization for subscriptions',
+      'Position the fix in the renewal conversation' ] },
+    { id:'questions', label:'Open Questions', icon:'ph-fill ph-question', color:'#C4B5FD', items:[
+      'Who owns the payments dependency?',
+      'Do ACH users need a fallback path?' ] },
+    { id:'next', label:'Next Steps', icon:'ph-fill ph-arrow-right', color:'#818CF8', items:[
+      'Assign an owner to the dependency',
+      'Schedule a pre-launch review',
+      'Send the customer a status update via CS' ] }
+  ];
+  trackTab(id) {
+    if (this.tracking) this.store.recordEvent(this.token, 'space_tab', { tab:id });
+  }
+  selectLens(id) {
+    if (this.tracking) this.store.recordEvent(this.token, 'lens_view', { lens:id });
+    this.setState({ lens:id, lensTouched:true, lensAnimAt: Date.now() });
+  }
+  PM_TOOLS = [
+    { id:'jira',        label:'Jira',         logo:'assets/logos/jira.svg' },
+    { id:'linear',      label:'Linear',       logo:'assets/logos/linear.svg' },
+    { id:'monday',      label:'monday.com',   logo:'assets/logos/monday.svg' },
+    { id:'wrike',       label:'Wrike',        logo:'assets/logos/wrike.png' },
+    { id:'todoist',     label:'Todoist',      logo:'assets/logos/todoist.svg' },
+    { id:'trello',      label:'Trello',       logo:'assets/logos/trello.svg' },
+    { id:'azuredevops', label:'Azure DevOps', logo:'assets/logos/azuredevops.svg' },
+    { id:'github',      label:'GitHub Issues',logo:'assets/logos/github.svg' }
+  ];
+  toolById(id) { for (var i=0;i<this.PM_TOOLS.length;i++){ if(this.PM_TOOLS[i].id===id) return this.PM_TOOLS[i]; } return null; }
+  togglePushMenu(key) { this.setState({ pushMenu: this.state.pushMenu === key ? null : key }); }
+  pushItem(key, kind) {
+    if (this.tracking) this.store.recordEvent(this.token, 'lens_push', { key:key, kind:kind });
+    var next = Object.assign({}, this.state.pushed); next[key] = kind;
+    this.setState({ pushed: next, pushMenu: null });
+  }
+
+  /* Dots are only shown for sections that actually render: a customized page
+     suppresses inline sections and mounts blocks instead, so a static dot list
+     leaves dead links — worst case the "Book a demo" dot doing nothing. */
+  syncDots() {
+    var dots = document.querySelectorAll('[data-dot]');
+    if (!dots.length) return;
+    var hero = document.getElementById('hero');
+    var rail0 = dots[0].parentElement;
+    if (hero && rail0) {
+      var past = window.scrollY > hero.offsetHeight - 80;
+      rail0.style.opacity = past ? '1' : '0';
+      rail0.style.pointerEvents = past ? 'auto' : 'none';
+      if (!past) return;
+    }
+    var self = this;
+    // bind once: href="#id" does not move the page in this runtime
+    if (!this._dotsBound) {
+      this._dotsBound = true;
+      dots.forEach(function (d) {
+        d.addEventListener('click', function (e) {
+          e.preventDefault();
+          var id = d.getAttribute('data-dot');
+          var el = document.getElementById(id)
+                || (id === 'cta' ? document.getElementById('cta-blocks') : null);
+          if (!el) return;
+          var top = el.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: 'smooth' });
+        });
+      });
+    }
+    var shown = 0;
+    dots.forEach(function (d) {
+      var id = d.getAttribute('data-dot');
+      var alive = !!document.getElementById(id);
+      // the conversion dot follows the mounted CTA block when the inline one is suppressed
+      // the conversion dot follows the mounted CTA block when the inline one is gone
+      if (id === 'cta' && !alive) {
+        var blk = document.getElementById('cta-blocks');
+        var nxt = blk && blk.nextElementSibling;
+        if (nxt && nxt.querySelector && nxt.querySelector('.sc-host')) {
+          alive = true;
+          d.setAttribute('href', '#cta-blocks');
+        }
+      }
+      d.style.display = alive ? 'block' : 'none';
+      if (alive) shown++;
+    });
+    // a lone dot is noise, not navigation
+    var rail = dots[0] && dots[0].parentElement;
+    if (rail) rail.style.display = shown > 1 ? 'flex' : 'none';
+  }
+
+
+  /* Cues are switched on after mount and off on first use, via an attribute rather
+     than a style hole — holes never re-apply in this runtime. */
+  lensHost() {
+    var list = document.querySelector('[data-lens-list]');
+    return list && list.closest('section');
+  }
+  armLensCue() {
+    var self = this;
+    var tryArm = function () {
+      var host = self.lensHost();
+      if (!host) { setTimeout(tryArm, 200); return; }
+      // revealing a row's toolbar is a separate event from using it: hover promotes
+      // the cue onto the actions, and only a real action retires it
+      if (!host._cueHooked) {
+        host._cueHooked = true;
+        var reveal = function (e) {
+          if (e.target && e.target.closest && e.target.closest('[data-lens-row]')) self.clearLensCue('row');
+        };
+        host.addEventListener('mouseover', reveal);
+        host.addEventListener('focusin', reveal);
+      }
+      // each affordance keeps its own cue until that affordance is used, so using
+      // one control never hides the fact that the others are live too
+      ['filter', 'row'].forEach(function (k) {
+        if (!host.hasAttribute('data-used-' + k)) host.setAttribute('data-cue-' + k, '');
+      });
+    };
+    tryArm();
+  }
+  clearLensCue(kind) {
+    var host = this.lensHost();
+    if (!host) return;
+    host.removeAttribute('data-cue-' + kind);
+    host.setAttribute('data-used-' + kind, '');
+    // opening a row reveals its toolbar, so point at that next
+    if (kind === 'row' && !host.hasAttribute('data-used-act')) host.setAttribute('data-cue-act', '');
+  }
+
+  /* The assembly notice: shown while a composed page's blocks are still mounting,
+     names the current step, and dissolves once every planned block is on the page. */
+  buildingNotice() {
+    var self = this;
+    var tick = function () {
+      var el = document.querySelector('[data-building]');
+      var stack = document.querySelector('[data-blkstack]');
+      if (!el || !stack) { self._bt = setTimeout(tick, 200); return; }
+      // dc-import tags are consumed as they mount, so count from the plan instead
+      var planned = (self.pagePlan && self.pagePlan.blockOrder) ? self.pagePlan.blockOrder.length : 0;
+      // CTA blocks mount in their own terminal wrapper, so count page-wide
+      var mounted = document.querySelectorAll('.sc-host').length;
+      if (!planned) { el.style.opacity = '0'; return; }
+      var txt = el.querySelector('[data-building-text]');
+      if (planned && mounted < planned) {
+        el.style.opacity = '1';
+        var step = mounted === 0 ? 'Building your page…'
+                 : mounted === 1 ? 'Setting the problem…'
+                 : mounted === 2 ? 'Adding how Quely helps…'
+                 : 'Finishing up…';
+        if (txt) txt.textContent = step;
+        self._bt = setTimeout(tick, 250);
+      } else {
+        if (txt) txt.textContent = 'Your page is ready';
+        el.style.opacity = '1';
+        self._bt = setTimeout(function () { el.style.opacity = '0'; }, 1100);
+      }
+    };
+    tick();
+  }
+
+  componentDidMount() {
+    this.armLensCue();
+    this.buildingNotice();
+    var store = window.QuelyEnablement;
+    this.store = store;
+    var params = new URLSearchParams(location.search);
+    this.token = params.get('p');
+    if (this.token === 'latest' && store && store.latestToken) this.token = store.latestToken();
+    // Query strings can get dropped when the file is opened via the app tab, so also
+    // accept a token handed off through storage (set by the dashboard's Preview/Open).
+    // One-shot: the dashboard's Preview/Open hands a token over through storage, but
+    // it is consumed on read. Otherwise the flag sticks and the viewer can never be
+    // opened plainly again — every later visit would re-show that personalized page.
+    if (!this.token) {
+      try {
+        this.token = sessionStorage.getItem('quely_open') || localStorage.getItem('quely_open') || null;
+        sessionStorage.removeItem('quely_open');
+        localStorage.removeItem('quely_open');
+      } catch (e) {}
+    }
+    if (this.token === 'latest' && store && store.latestToken) this.token = store.latestToken();
+    this.current = 'hero';
+    var prospect = (store && this.token) ? store.getProspect(this.token) : null;
+    // URL-encoded focus makes a custom link self-contained (works even when the
+    // prospect record isn't in this browser's storage). Query params win over the record.
+    var qTopic = params.get('topic') || params.get('focusTopic') || '';
+    var qRole = params.get('role') || params.get('focusRole') || '';
+    var qCompany = params.get('company') || '';
+    var qName = params.get('name') || '';
+    if ((qTopic || qCompany || qName) && !prospect) {
+      prospect = { name: qName, company: qCompany };
+    } else if ((qTopic || qCompany || qName) && prospect) {
+      prospect = Object.assign({}, prospect);
+      if (qCompany) prospect.company = qCompany;
+      if (qName) prospect.name = qName;
+    }
+    this.prospect = prospect;
+    this.tracking = !!(store && this.token && store.getProspect(this.token));
+    // resolve the prospect's focus (role + primary problem topic) and assemble a plan.
+    // Tailoring is OPT-IN: Advanced mode + a focus, OR a focus passed in the URL.
+    var lib = window.QuelyLibrary;
+    var advanced = !!(qTopic || (prospect && prospect.advanced && prospect.focusTopic));
+    // DEFAULT-PAGE REGRESSION TRIPWIRE: on every standard-mode load, verify the
+    // original approved page still renders exactly (see default-page-check.js).
+    var isStandardMode = !advanced && !(prospect && prospect.pagePlan && prospect.pagePlan.hero);
+    this._standardMode = isStandardMode;
+    this.advanced = advanced;
+    if (advanced) {
+      var role = qRole || (prospect && (prospect.focusRole || prospect.role)) || 'eng-leader';
+      var topic = qTopic || (prospect && prospect.focusTopic) || 'context-fragmentation';
+      // store raw inputs; the plan is assembled lazily in renderVals so it works
+      // even when the library script evaluates AFTER this mount (e.g. in a bundle).
+      this._focusInputs = { role: role, topic: topic };
+      this.focus = { role: role, topic: topic };
+    } else {
+      this._focusInputs = null;
+      this.focus = null;
+    }
+    this.plan = null;
+    if (this.tracking) store.recordVisit(this.token);
+    this.forceUpdate();
+    // If the library/store isn't ready at mount (e.g. bundled build load order),
+    // re-render shortly so the tailored plan assembles once it's available.
+    if (this.advanced && !window.QuelyLibrary) {
+      var self = this, tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        if (window.QuelyLibrary || tries > 40) { clearInterval(iv); self.forceUpdate(); }
+      }, 50);
+    }
+
+    // scroll-reveal is CSS-driven (animation-timeline: view()). Only fall back to a
+    // static show if the browser lacks view-timeline support, so we never override
+    // (and kill) the CSS animation with an inline opacity on supported browsers.
+    var supportsView = (typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline: view()'));
+    if (!supportsView) {
+      var show = function (el) { el.style.opacity = '1'; el.style.transform = 'none'; };
+      document.querySelectorAll('[data-reveal]').forEach(show);
+      document.querySelectorAll('[data-stagger]').forEach(function (g) { [].forEach.call(g.children, show); });
+    }
+
+    // dwell + progress + active dot loop
+    this.tick = () => {
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - window.innerHeight) || 1;
+      var frac = Math.min(1, Math.max(0, window.scrollY / max));
+      var bar = document.querySelector('[data-progress]');
+      if (bar) bar.style.width = (frac * 100).toFixed(1) + '%';
+
+      var mid = window.innerHeight / 2;
+      var els = document.querySelectorAll('[data-section]');
+      var cur = null;
+      els.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= mid) cur = el.getAttribute('data-section');
+      });
+      if (!cur) {
+        var best = 1e9;
+        els.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          var d = Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+          if (d < best) { best = d; cur = el.getAttribute('data-section'); }
+        });
+      }
+      if (cur) {
+        this.current = cur;
+
+        document.querySelectorAll('[data-dot]').forEach(function (d) {
+          var on = d.getAttribute('data-dot') === cur;
+          d.style.background = on ? '#5C28A4' : '#D1D5DB';
+          d.style.transform = on ? 'scale(1.5)' : 'scale(1)';
+        });
+      }
+    };
+    this.dwell = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (this.tracking && this.current) this.store.addSectionTime(this.token, this.current, 1000);
+    };
+    this._t1 = setInterval(this.tick, 120);
+    this._t2 = setInterval(this.dwell, 1000);
+    // progressive block mount + dot sync, on one cheap timer
+    this._t3 = setInterval(() => this.syncDots(), 500);
+    this.tick();
+  }
+  componentWillUnmount() {
+    clearInterval(this._t1); clearInterval(this._t2); clearInterval(this._t3);
+    if (this._stream) clearInterval(this._stream);
+    if (this._think) clearTimeout(this._think);
+  }
+
+  // --- Orbit demo answer engine (canned-smart; swap for real AI later) ---
+  SRC = {
+    jira:    { label:'Jira · CHECKOUT-1428', icon:'ph-fill ph-kanban', color:'#60A5FA' },
+    slack:   { label:'Slack thread', icon:'ph-fill ph-chat-circle', color:'#A78BFA' },
+    gong:    { label:'Gong · customer call', icon:'ph-fill ph-phone-call', color:'#C084FC' },
+    meeting: { label:'Meeting · Nov 18 planning', icon:'ph-fill ph-note-blank', color:'#FBBF24' },
+    crm:     { label:'Salesforce · renewal note', icon:'ph-fill ph-cloud', color:'#38BDF8' },
+    doc:     { label:'Doc · Checkout requirements', icon:'ph-fill ph-file-text', color:'#34D399' }
+  };
+  // PROTECTED: default-page fallback content (checkout scenario). Do not modify during customized-page work (see CLAUDE.md).
+  ANSWERS = [
+    { keys:['block','stuck','wait','depend'],
+      text:"It's blocked on a payments dependency. The card-tokenization change owned by the Platform team has to land first, and that work is still in review, so checkout can't be finished until it merges.",
+      more:["# What is blocking it","- Card tokenization change (Platform team) is still in review","- Checkout cannot ship until that PR merges","# Where this came from","- Flagged by Dev in the Slack scope thread","- Confirmed in the Nov 18 planning session","# Suggested next move","Get an owner assigned on the tokenization dependency this week so the renewal date holds."],
+      sources:['jira','slack','meeting'] },
+    { keys:['chang','update','happen','latest','status','going on','new'],
+      text:"Since last week: scope was narrowed to card checkout only, a payments dependency was flagged as the blocker, and CS raised that a customer is expecting this for their renewal. The ticket itself still just says \u201cFix checkout flow.\u201d",
+      more:["# Changes since last week","- Scope narrowed to card checkout only","- Payments dependency flagged as the blocker","- CS raised the customer renewal as a hard deadline","# What has not changed","The Jira ticket still reads “Fix checkout flow” with no description of the narrowed scope."],
+      sources:['slack','meeting','crm'] },
+    { keys:['customer','renew','churn','account','client'],
+      text:"A customer is expecting this fix before their upcoming renewal. CS logged it as a renewal risk, and it came up directly on the last customer call, which is why it got prioritized.",
+      sources:['crm','gong'] },
+    { keys:['why','decid','reason','choose','chose','approach','scope'],
+      text:"Scope was narrowed to card checkout only. In the Nov 18 planning session the team decided to cut the wallet/ACH paths for now to hit the renewal timeline, and to revisit them afterward.",
+      more:["# The decision","Cut wallet and ACH from this release; ship card checkout only.","# Why","- The renewal date could not move","- Wallet and ACH each carried an unresolved dependency","- Card checkout covers the customer’s actual use case","# Trade-off accepted","Alternative payment paths are deferred to the next cycle, tracked as a follow-up decision."],
+      sources:['meeting','slack'] },
+    { keys:['next','todo','action','do now','should'],
+      text:"Next steps: unblock the payments dependency with the Platform team, confirm the card-only scope with the customer via CS, then finish and QA the checkout flow. Owner on the dependency is still unassigned.",
+      more:["# Next steps","- Unblock the payments tokenization dependency with Platform","- Confirm card-only scope with the customer via CS","- Finish and QA the card checkout path","# Open","The dependency still has no owner."],
+      sources:['jira','meeting','crm'] },
+    { keys:['who','own','assign','responsible'],
+      text:"The ticket is assigned to the checkout squad, but the blocking payments dependency has no owner yet. The renewal context is owned by CS, and the scope decision came from the Nov 18 planning group.",
+      sources:['jira','meeting','crm'] }
+  ];
+  answerFor(q) {
+    var s = (q || '').toLowerCase();
+    // Advanced mode: answer from the PagePlan's family scenario (no source chips).
+    if (this.plan && this.plan.orbit) {
+      var A = this.plan.orbit.answers || [];
+      for (var j = 0; j < A.length; j++) {
+        for (var kk = 0; kk < A[j].keys.length; kk++) { if (s.indexOf(A[j].keys[kk]) !== -1) return { text: A[j].text }; }
+      }
+      return { text: (this.plan.orbit.fallback && this.plan.orbit.fallback.text) || '' };
+    }
+    for (var i = 0; i < this.ANSWERS.length; i++) {
+      var a = this.ANSWERS[i];
+      for (var k = 0; k < a.keys.length; k++) { if (s.indexOf(a.keys[k]) !== -1) return a; }
+    }
+    return { text:"Here's what the Space shows on that: the work is \u201cFix checkout flow,\u201d currently blocked on a payments dependency, scoped to card checkout only, and flagged as a renewal risk by CS. Ask about what's blocking it, what changed, why the scope was set, or what's next.",
+             sources:['jira','slack','meeting','crm'] };
+  }
+  activeLenses() { return (this.plan && this.plan.lenses && this.plan.lenses.length) ? this.plan.lenses : this.LENSES; }
+
+  // --- interactive capacity board (instance working copy; forceUpdate on change) ---
+  initCap(demo) {
+    return {
+      members: demo.members.map(function (m) { return { name:m.name, role:m.role, items: m.items.map(function (i) { return { label:i.label, pts:i.pts, kind:i.kind }; }) }; }),
+      backlog: demo.backlog.map(function (b) { return { label:b.label, pts:b.pts, kind:b.kind || 'sprint' }; })
+    };
+  }
+  capLoad(m) { return m.items.reduce(function (a, x) { return a + x.pts; }, 0); }
+  capLeast(members, exclude) {
+    var self = this, best = -1, bestLoad = 1e9;
+    members.forEach(function (m, i) { if (i === exclude) return; var l = self.capLoad(m); if (l < bestLoad) { bestLoad = l; best = i; } });
+    return best;
+  }
+  capAdd(bi) {
+    var c = this._cap; if (!c) return;
+    var item = c.backlog[bi]; if (!item) return;
+    c.backlog = c.backlog.slice(0, bi).concat(c.backlog.slice(bi + 1));
+    var t = this.capLeast(c.members, -1); if (t < 0) t = 0;
+    c.members[t].items = c.members[t].items.concat([item]);
+    if (this.tracking) this.store.recordEvent(this.token, 'capacity_demo', { action:'add' });
+    this.forceUpdate();
+  }
+  capRemove(mi, ii) {
+    var c = this._cap; if (!c) return;
+    var item = c.members[mi].items[ii]; if (!item) return;
+    c.members[mi].items = c.members[mi].items.slice(0, ii).concat(c.members[mi].items.slice(ii + 1));
+    c.backlog = c.backlog.concat([item]);
+    if (this.tracking) this.store.recordEvent(this.token, 'capacity_demo', { action:'remove' });
+    this.forceUpdate();
+  }
+  capMove(mi, ii) {
+    var c = this._cap; if (!c) return;
+    var item = c.members[mi].items[ii]; if (!item) return;
+    var t = this.capLeast(c.members, mi); if (t < 0) t = mi;
+    c.members[mi].items = c.members[mi].items.slice(0, ii).concat(c.members[mi].items.slice(ii + 1));
+    c.members[t].items = c.members[t].items.concat([item]);
+    if (this.tracking) this.store.recordEvent(this.token, 'capacity_demo', { action:'reassign' });
+    this.forceUpdate();
+  }
+  CAP_KIND = {
+    sprint:  { icon:'ph-fill ph-kanban',           chip:'background:#F8F5FB; border:1px solid #C9C1F2; color:#5C28A4;' },
+    carry:   { icon:'ph-fill ph-arrows-clockwise', chip:'background:#FEF3C7; border:1px solid #FDE68A; color:#8A3D06;' },
+    oncall:  { icon:'ph-fill ph-phone-call',       chip:'background:#FEE2E2; border:1px solid #FECACA; color:#B91C1C;' },
+    meeting: { icon:'ph-fill ph-calendar',         chip:'background:#F3F4F6; border:1px solid #E5E7EB; color:#5C5345;' }
+  };
+  // No incremental streaming interval (that class of timer kept racing/being torn down).
+  // Each question independently: append user bubble now, reveal its FULL answer after a
+  // think delay. No shared mutable streaming state -> impossible to freeze/drop/duplicate.
+  runOrbit(q) {
+    var self = this;
+    q = (q || '').trim(); if (!q) return;
+    if (this.tracking) this.store.recordEvent(this.token, 'orbit_demo', { q:q });
+    var userId = ++this._msgSeq;
+    this._pending = (this._pending || 0) + 1;
+    this.setState(function (prev) {
+      return { messages: prev.messages.concat([{ id:userId, role:'user', text:q }]), orbitInput:'', thinking:true, orbitTouched:true };
+    });
+    var ans = this.answerFor(q);
+    setTimeout(function () {
+      var ansId = ++self._msgSeq;
+      self._pending = Math.max(0, (self._pending || 1) - 1);
+      self.setState(function (prev) {
+        return { messages: prev.messages.concat([{ id:ansId, role:'orbit', text:ans.text, sources:ans.sources, more:ans.more || [], done:true, fresh:true }]), thinking: self._pending > 0 };
+      });
+      requestAnimationFrame(function () {
+        var box = document.querySelector('[data-orbit-scroll]');
+        if (box) box.scrollTop = box.scrollHeight;
+      });
+    }, 850);
+  }
+
+  CAP_ICONS = { 'c-space':'ph ph-stack', 'c-orbit':'ph ph-sparkle', 'c-signals-lenses':'ph ph-scan', 'c-queue':'ph ph-tray', 'c-meetings':'ph ph-microphone-stage', 'c-capacity':'ph ph-gauge', 'c-async-standup':'ph ph-chats-circle' };
+  CAP_SHORT = { 'c-space':'One Space for the work', 'c-orbit':'Orbit reads everything', 'c-signals-lenses':'Signals & Lenses', 'c-queue':'Continuous intake', 'c-meetings':'Meetings on the work', 'c-capacity':'Capacity, visible', 'c-async-standup':'Async stand-ups' };
+
+  // CLAUDE.md rule 5 tripwire. Armed from renderVals, not componentDidMount: this
+  // runtime re-renders without re-running componentDidMount, so an instance-owned
+  // hook dies silently (same pattern as Block How It Works). Standard mode only.
+  static armDefaultCheck() {
+    if (window.__qpvCheckArmed) return;
+    window.__qpvCheckArmed = true;
+    // Poll until the checker script has executed: renderVals runs during early
+    // streaming, so a single fixed timer can fire before the script exists and be
+    // silently discarded, with the latched flag preventing any re-arm.
+    var tries = 0;
+    (function wait() {
+      if (window.runDefaultPageCheck) return window.runDefaultPageCheck();
+      if (++tries > 40) return;   // ~20s ceiling
+      setTimeout(wait, 500);
+    })();
+  }
+
+  /* ---- Lenses: the trackers Quely can push an item into ---- */
+  LENS_TOOLS = [
+    { name:'Jira',          logo:'assets/logos/jira.svg' },
+    { name:'Linear',        logo:'assets/logos/linear.svg' },
+    { name:'Todoist',       logo:'assets/logos/todoist.svg' },
+    { name:'Azure DevOps',  logo:'assets/logos/azuredevops.svg' },
+    { name:'Wrike',         logo:'assets/logos/wrike.png' },
+    { name:'monday.com',    logo:'assets/logos/monday.svg' },
+    { name:'Trello',        logo:'assets/logos/trello.svg' },
+    { name:'GitHub Issues', logo:'assets/logos/github.svg', soon:true }
+  ];
+  LENS_TOOL_LOGO = {
+    'Jira':'assets/logos/jira.svg', 'Linear':'assets/logos/linear.svg', 'Todoist':'assets/logos/todoist.svg',
+    'Azure DevOps':'assets/logos/azuredevops.svg', 'GitHub Issues':'assets/logos/github.svg',
+    'Wrike':'assets/logos/wrike.png', 'monday.com':'assets/logos/monday.svg', 'Trello':'assets/logos/trello.svg'
+  };
+
+  /* ---- Lenses: real categories and items from the product demo ---- */
+  LENS_CATS = {
+    'Decisions':     { tint:'#15803D', wash:'#DCFCE7', line:'#BBF7D0', icon:'ph-fill ph-seal-check',  count:'1'  },
+    'Action Items':  { tint:'#1D4ED8', wash:'#EFF6FF', line:'#DBEAFE', icon:'ph-fill ph-list-checks', count:'17' },
+    'Risks':         { tint:'#B91C1C', wash:'#FEF2F2', line:'#FECACA', icon:'ph-fill ph-warning',     count:'10' },
+    'Opportunities': { tint:'#B45309', wash:'#FFFBEB', line:'#FDE68A', icon:'ph-fill ph-lightbulb',   count:'9'  }
+  };
+  LENS_ITEMS = [
+    { cat:'Decisions', when:'10 days ago', signals:'1',
+      text:'Ronma\u2019s main focus is now continuous weekly new customer acquisition via LinkedIn outreach, supported by a simple reporting dashboard.',
+      rows:['Weekly acquisition is the single metric we are steering by for now\u2026',
+            'Reporting dashboard should stay simple: replies, meetings, pilots\u2026'] },
+    { cat:'Action Items', when:'10 days ago', signals:'4',
+      text:'Onyi to review the performance of the first \u2018How We Use Quely\u2019 campaign and identify who engaged, then fix the remaining SendGrid email issues based on team and Ronma\u2019s feedback',
+      rows:['Edit the next How We Use Quely video and repurpose it for YouTube, the bl\u2026',
+            'hi everyone... started off the week by fixing some issues in the notification \u2026',
+            'SendGrid emails: Fixed errors flagged by the team and started working thr\u2026',
+            'SendGrid emails: Fixed errors flagged by the team and started working thr\u2026'] },
+    { cat:'Action Items', when:'10 days ago', signals:'2',
+      decided:true, text:'Ronma to continue refining outreach based on prospect responses, objections, and described workflows to move qualified interest toward Quely pilots.',
+      rows:['Objections so far are mostly about switching cost, not value\u2026',
+            'Two prospects asked for a pilot scoped to one sprint\u2026'] },
+    { cat:'Risks', when:'10 days ago', signals:'2',
+      text:'If the HubSpot form and SendGrid issues are not resolved, campaign replies may keep going unanswered.',
+      rows:['HubSpot form submissions are not reaching the shared inbox\u2026',
+            'Two replies from last week were found only after a manual check\u2026'] },
+    { cat:'Opportunities', when:'10 days ago', signals:'3',
+      text:'Repurposing the \u2018How We Use Quely\u2019 series for YouTube could compound reach without new production effort.',
+      rows:['The first video performed best with product managers\u2026',
+            'Clips could be cut from existing footage rather than reshot\u2026',
+            'YouTube search traffic is currently untapped for us\u2026'] }
+  ];
+  lensVisible() {
+    var f = this.state.lensFilter || 'All';
+    return this.LENS_ITEMS.filter(function (i) { return f === 'All' || i.cat === f; });
+  }
+  lensPillVals() {
+    var self = this, f = this.state.lensFilter || 'All';
+    var all = [{ label:'All', count:'37' }].concat(Object.keys(this.LENS_CATS).map(function (k) {
+      return { label:k, count:self.LENS_CATS[k].count, dot:self.LENS_CATS[k].tint };
+    }));
+    return all.map(function (p) {
+      var on = f === p.label;
+      return { label:p.label, count:p.count,
+        pick: function () { self.clearLensCue('filter'); self.setState({ lensFilter:p.label, lensRow:null, lensMenu:null, lensTouched:true }); },
+          ring: (!self.state.lensTouched && on)
+            ? 'position:absolute; inset:-6px; border-radius:9999px; border:2px solid #8B5CF6;'
+              + ' animation:qring 1.9s cubic-bezier(0,0,.2,1) infinite; pointer-events:none;'
+            : 'display:none;',
+          style: 'position:relative; cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;'
+          + ' border-radius:9999px; padding:5px 12px; font-size:12.5px; font-weight:600;'
+          + (on ? ' background:#F3EEFB; border:1.5px solid #8F5BD7; color:#4B1F88;'
+                : ' background:#fff; border:1px solid #E5E7EB; color:#4B5563;'),
+        dot: p.dot ? ('flex:none; width:7px; height:7px; border-radius:50%; background:' + p.dot + ';') : 'display:none;' };
+    });
+  }
+  lensGroupVals() {
+    var self = this, vis = this.lensVisible();
+    var act = this.state.lensAct || {};
+    var order = Object.keys(this.LENS_CATS);
+    return order.filter(function (cat) {
+      return vis.some(function (i) { return i.cat === cat; });
+    }).map(function (cat) {
+      var c = self.LENS_CATS[cat];
+      var items = vis.filter(function (i) { return i.cat === cat; }).map(function (i) {
+        var idx = self.LENS_ITEMS.indexOf(i);
+        var st = act[idx] || {};
+        var on = self.state.lensRow === idx;          // row revealed
+        var menu = self.state.lensMenu === idx;       // its push picker open
+          var gone = !!(self.state.lensGone || {})[idx];  // dismissed, kept in place
+          var cue = !self.state.lensTouched && idx === self.LENS_ITEMS.indexOf(self.lensVisible()[0]);
+        return {
+          text: i.text, when: i.when, signals: i.signals, firstRow: (idx === self.LENS_ITEMS.indexOf(self.lensVisible()[0])),
+          // clicking the row reveals its actions, the way hover does in the product
+          // dismissed rows stay in place, marked — removing them could empty a
+          // category and leave the panel blank with the pill counts still claiming rows
+          rowStyle: 'position:relative; border-radius:10px; padding:11px 13px; margin:0 -13px 6px;'
+            + (gone ? ' background:#F3F4F6; box-shadow:inset 3px 0 0 #9CA3AF;' : '')
+            + (menu ? ' background:#F9FAFB;' : ''),
+          textStyle: 'font-size:15px; line-height:1.55;'
+            + (gone ? ' color:#6B7280; text-decoration:line-through; text-decoration-color:#9CA3AF;'
+                    : ' color:#1A1611;'),
+          cueStyle: cue
+            ? 'position:absolute; right:13px; top:50%; margin-top:-13px; width:26px; height:26px; pointer-events:none; z-index:2;'
+            : 'display:none;',
+          dismissedStyle: gone
+            ? 'display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:13px;'
+              + ' font-weight:600; color:#6B7280;'
+            : 'display:none;',
+          decidedStyle: i.decided
+            ? 'display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:13px;'
+              + ' font-weight:600; color:#15803D;'
+            : 'display:none;',
+          // the three-icon toolbar
+          toolbarStyle: 'position:absolute; right:13px; top:50%; transform:translateY(-50%); z-index:3;'
+            + ' align-items:center; background:#fff; border:1px solid #E5E7EB; border-radius:9999px;'
+            + ' box-shadow:0 4px 12px rgba(3,7,18,.14); padding:2px;'
+            + ((st.pushed || st.met) ? ' display:none;' : (menu ? ' display:flex;' : ' display:none;')),
+          divider: 'flex:none; width:1px; height:18px; background:#E5E7EB;',
+          pushBtn: 'position:relative; display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px;'
+            + ' cursor:pointer; border-radius:9999px; color:' + (menu ? '#5C28A4' : '#4B5563') + ';'
+            + (menu ? ' background:#F3EEFB;' : ''),
+          push: function (e) { if (e && e.stopPropagation) e.stopPropagation();
+            self.clearLensCue('act'); self.setState({ lensMenu: (menu ? null : idx), lensTouched: true }); },
+          meetBtn: 'display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px;'
+            + ' cursor:pointer; border-radius:9999px; color:#4B5563;',
+          meetIcon: 'ph ph-calendar-plus',
+          dismiss: function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            var g = Object.assign({}, self.state.lensGone); g[idx] = !g[idx];
+            self.clearLensCue('act'); self.setState({ lensGone: g, lensRow: null, lensMenu: null, lensTouched: true });
+          },
+          meet: function (e) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            self.clearLensCue('act'); self.setState({ smOpen: idx, lensMenu: null, lensTouched: true });
+          },
+          // Every completed action gets its own chip: a row can be both pushed to a
+          // tracker AND have a meeting scheduled, so this must never be a single slot.
+          done: [
+            st.pushed ? { icon:'ph-fill ph-check-circle',  label:'Created in ' + st.pushed + ' \u00b7 MKT-412' } : null,
+            st.met    ? { icon:'ph-fill ph-calendar-check', label:'Meeting scheduled \u00b7 ' + st.met } : null
+          ].filter(Boolean).map(function (d) {
+            return { icon:d.icon, label:d.label,
+              style: 'display:inline-flex; align-items:center; gap:6px; white-space:nowrap;'
+                + ' background:#F0FDF4; border:1px solid #BBF7D0; border-radius:9999px; padding:3px 10px;'
+                + ' font-size:12.5px; font-weight:600; color:#15803D;' };
+          }),
+          doneRowStyle: (st.pushed || st.met)
+            ? 'display:flex; flex-wrap:wrap; gap:7px; margin-top:7px;'
+            : 'display:none;'
+        };
+      });
+      return { label:cat, count:c.count, items:items,
+        dot:'flex:none; width:9px; height:9px; border-radius:50%; background:' + c.tint + ';' };
+    });
+  }
+  lensToolVals() {
+    var self = this;
+    return this.LENS_TOOLS.map(function (t) {
+      return { name: t.name, badge: t.soon ? 'Soon' : '',
+        pick: function (e) {
+          if (e && e.stopPropagation) e.stopPropagation();
+          if (t.soon) return;
+          self.setState({ lensPick: t.name });
+        },
+        mark: 'flex:none; width:17px; height:17px; background:url(\'' + t.logo + '\') center/contain no-repeat;'
+          + (t.soon ? ' filter:grayscale(1); opacity:.5;' : ''),
+        badgeStyle: t.soon
+          ? 'flex:none; white-space:nowrap; background:#F3F4F6; border-radius:9999px; padding:2px 7px;'
+            + ' font-family:\'Geist Mono\',monospace; font-size:9px; font-weight:500; letter-spacing:.08em;'
+            + ' text-transform:uppercase; color:#4B5563;'
+          : 'display:none;',
+        tickIcon: (t.soon || t.name === 'Azure DevOps') ? 'ph' : 'ph-fill ph-check-circle',
+        tickStyle: (t.soon || t.name === 'Azure DevOps') ? 'display:none;'
+          : 'flex:none; font-size:16px; color:#16A34A;',
+        style: 'display:flex; align-items:center; gap:10px; border-radius:9px; padding:9px 10px; margin-bottom:2px;'
+          + ' font-size:13.5px; font-weight:600;'
+          + (t.soon ? ' color:#4B5563; cursor:default;'
+                    : ((self.state.lensPick || 'Jira') === t.name
+                        ? ' background:#F3EEFB; color:#5C28A4; cursor:pointer;'
+                        : ' color:#1A1611; cursor:pointer;')) };
+    });
+  }
+  renderVals() {
+    if (this._standardMode) Component.armDefaultCheck();
+    var p = this.prospect;
+    var company = p && p.company ? p.company : '';
+    var self0 = this;
+    // ---- PAGE PLAN: in Advanced mode the whole page is composed from one plan.
+    // Built lazily so it works even when the plan script loads after mount.
+    // The cached plan belongs to a specific prospect. Without a token there is no
+    // prospect, so the cache must be dropped — otherwise a previously-viewed
+    // personalized page keeps rendering after the link is gone (the runtime
+    // hot-reloads this class without remounting, so the field survives).
+    if (!this.token) this.pagePlan = null;
+    var PLAN = this.pagePlan || null;
+    // 1) An AI-generated bespoke plan stored on the prospect wins outright.
+    if (!PLAN && p && p.pagePlan && p.pagePlan.hero) { PLAN = this.pagePlan = p.pagePlan; }
+    // 2) Otherwise, Advanced mode composes a plan from the narrative family.
+    if (this.advanced && !PLAN && window.QuelyPagePlans && this._focusInputs) {
+      var ft = this._focusInputs.topic;
+      var lib0 = window.QuelyLibrary;
+      if (lib0 && !lib0.TOPICS.some(function (t) { return t.slug === ft; })) ft = 'context-fragmentation';
+      PLAN = this.pagePlan = window.QuelyPagePlans.buildPagePlan({
+        role: this._focusInputs.role, topic: ft, company: company, name: (p && p.name) || ''
+      });
+    }
+    this.plan = PLAN; // demo methods (answerFor, lenses) read this
+
+    // ---- HERO
+    var heroEyebrow = company ? ('Built for ' + company + "'s product & engineering teams")
+                              : 'Built for product & engineering teams';
+    var heroHeadline = 'Stop searching across five tools to understand one piece of work.';
+    var heroBody = "Quely brings the ticket, conversations, docs, meetings, decisions, and updates around a work item into one Space, so anyone can see what changed, what's blocked, and what needs attention.";
+    if (PLAN) { heroEyebrow = PLAN.hero.eyebrow; heroHeadline = PLAN.hero.headline; heroBody = PLAN.hero.body; }
+
+    // ---- PROBLEM
+    var problemTitle = PLAN ? PLAN.problem.headline : 'The full context around a piece of work is spread across too many places.';
+    var problemBody = PLAN ? PLAN.problem.body : "A ticket has a title and maybe a short description. But the customer call that created the urgency, the discussion about the tradeoff, the meeting where scope changed, and the decision history all live somewhere else. So the work doesn't start when the ticket is assigned. It starts when someone asks around and pieces together what the ticket actually means.";
+    var problemPoints = PLAN ? PLAN.problem.points : [];
+    // problem-section signal chips (default page keeps its own hardcoded logo chips)
+    var signalsLabel = PLAN ? PLAN.signalsLabel : '';
+    var signals = PLAN ? PLAN.signals.map(function (s) {
+      return { label: s.label, icon: s.icon, iconStyle: 'font-size:20px; color:' + (s.color || '#8F5BD7') + ';' };
+    }) : [];
+
+    // ---- CAPABILITIES
+    var featuresTitle = 'Built to keep the work moving.';
+    var features = [
+      { icon:'ph ph-plugs-connected', title:'Integrations', sub:'Jira, Azure DevOps, Linear, GitHub, and more.' },
+      { icon:'ph ph-chats-circle', title:'Async discussion', sub:'Conversations anchored to the work.' },
+      { icon:'ph ph-files', title:'Docs & assets', sub:'Requirements, designs, and files attached.' },
+      { icon:'ph ph-timer', title:'Discussion timers', sub:'A clear window to contribute.' },
+      { icon:'ph ph-microphone-stage', title:'Meeting transcripts', sub:'Decisions captured from the call.' },
+      { icon:'ph ph-seal-check', title:'Decision log', sub:'What was decided, and why.' }
+    ];
+    if (PLAN) { featuresTitle = PLAN.capabilitiesTitle; features = PLAN.capabilities; }
+    var askingAs = (p && p.name)
+      ? ('Asking as ' + p.name + (p.company ? (' · ' + p.company) : ''))
+      : 'Your question goes straight to the Quely team.';
+    var self = this;
+
+    // --- Orbit demo view model ---
+    var chipBase = 'position:relative; display:flex; align-items:center; gap:12px; width:100%;'
+      + ' background:#fff; border:1px solid #E5E7EB; border-radius:11px; color:#1F2937;'
+      + ' padding:15px 17px; font-size:15px; font-weight:500; line-height:1.35; text-align:left;'
+      + ' font-family:inherit; cursor:pointer; box-shadow:0 1px 2px rgba(3,7,18,.04);';
+    var suggBase = [
+      { label:'What\u2019s blocking this?', q:'What is blocking this right now?' },
+      { label:'What changed recently?', q:'What changed recently?' },
+      { label:'Why this scope?', q:'Why did we decide on this scope?' },
+      { label:'What\u2019s next?', q:'What are the next steps?' }
+    ];
+    if (PLAN && PLAN.orbit && PLAN.orbit.suggestions) suggBase = PLAN.orbit.suggestions;
+    var suggestions = suggBase.map(function (s, i) { return { label:s.label, style: chipBase, ping: (i === 0 && !self.state.orbitTouched), ask:function(){ self.runOrbit(s.q); } }; });
+
+    // Orbit answers: emit exactly the shape the template consumes — mascot flag,
+    // text style, the expandable detail lines, and the source chips.
+    var expanded = this.state.expanded || {};
+    var messages = (this.state.messages || []).map(function (m) {
+      var isUser = m.role === 'user';
+      var open = !!expanded[m.id];
+      var moreLines = (m.more || []).map(function (t) {
+        var head = t.charAt(0) === '#';
+        return {
+          text: head ? t.replace(/^#\s*/, '') : t.replace(/^-\s*/, '\u2022 '),
+          style: head
+            ? 'margin-top:12px; font-size:13.5px; font-weight:700; color:#1A1611;'
+            : 'margin-top:4px; font-size:13.5px; line-height:1.55; color:#374151;'
+        };
+      });
+      var chips = (m.sources || []).map(function (id) {
+        var sc = self.SRC[id] || { label:id, icon:'ph-fill ph-file', color:'#4B5563' };
+        return { label: sc.label, icon: sc.icon,
+                 iconStyle: 'flex:none; font-size:13px; color:' + sc.color + ';' };
+      });
+      return {
+        text: m.text,
+        isOrbit: !isUser,
+        rowStyle: 'display:flex; gap:12px; align-items:flex-start;'
+          + (isUser ? ' justify-content:flex-end;' : ' justify-content:flex-start;'),
+        bubbleStyle: isUser
+          ? 'max-width:80%; background:#5C28A4; color:#fff; padding:13px 16px; border-radius:14px; border-bottom-right-radius:4px;'
+          : 'max-width:88%; background:#F9FAFB; border:1px solid #E5E7EB; color:#1A1611; padding:14px 17px; border-radius:14px; border-bottom-left-radius:4px;'
+            + (m.fresh ? ' animation:qanswer .45s cubic-bezier(.2,0,0,1);' : ''),
+        textStyle: 'font-size:15px; line-height:' + (isUser ? '1.45' : '1.5') + ';',
+        hasMore: !isUser && moreLines.length > 0,
+        more: open ? moreLines : [],
+        moreStyle: open ? 'margin-top:12px; padding-top:12px; border-top:1px solid #E5E7EB;' : 'display:none;',
+        moreLabel: open ? 'Hide details' : 'Show details',
+        moreIcon: open ? 'ph ph-caret-up' : 'ph ph-caret-down',
+        toggle: function () {
+          var nx = Object.assign({}, self.state.expanded || {});
+          nx[m.id] = !nx[m.id];
+          self.setState({ expanded: nx });
+        },
+        hasSources: false,
+        sources: chips
+      };
+    });
+
+
+    // --- explorable Space tabs ---
+    var tab = this.state.spaceTab;
+    var tabStyle = function (on) {
+      return 'position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid ' +
+        (on ? '#5C28A4; color:#5C28A4;' : 'transparent; color:#6B7280;');
+    };
+
+    // --- Space / Proof / CTA / subjects (PagePlan-driven; defaults keep the standard page intact) ---
+    var spaceTitle = PLAN ? PLAN.space.title : 'A task and everything connected to it, in one place.';
+    var spaceBody = PLAN ? PLAN.space.body : 'Bring the task in from your tools, then add the materials, discussion, and decisions that move it forward.';
+    var defBullets = [
+      { icon:'ph-fill ph-plugs-connected', text:'Task imported from Jira' },
+      { icon:'ph-fill ph-chats-circle', text:'Scope discussion, in context' },
+      { icon:'ph-fill ph-seal-check', text:'Decisions captured with the work' }
+    ];
+    var spaceBullets = PLAN ? PLAN.space.bullets : defBullets;
+    var workName = PLAN ? PLAN.workItem.name : 'Fix checkout flow';
+    var tabs = PLAN ? PLAN.space.tabs : null;
+    var discList = tabs ? tabs.disc : [];
+    var docsList = tabs ? tabs.docs : [];
+    var decList  = tabs ? tabs.dec  : [];
+    var actList  = tabs ? tabs.activity : [];
+    var lensSubject = PLAN ? PLAN.lensSubject : 'Fix checkout flow';
+    var orbitIntro = PLAN ? PLAN.orbit.intro : 'This is a simulation of an Orbit session for the task \u201cFix checkout flow.\u201d Ask a question below and watch how Orbit answers from everything in the Space.';
+    var ctaHeadline = PLAN ? PLAN.cta.headline : 'Give your team the full picture around the work.';
+    var ctaBody = PLAN ? PLAN.cta.body : 'See how Quely fits your workflow. Book a 30-minute walkthrough.';
+    var proofEyebrow = PLAN ? 'What this looks like in real teams' : 'What fragmented work looks like in real teams';
+    var proofHeadline = PLAN ? PLAN.proof.title : 'The same pattern shows up again and again: the work exists, but the context needed to understand it is split across tools, people, and memory.';
+    var proofPosts = (PLAN ? PLAN.proof.posts : []).map(function (po) {
+      return { sub: po.sub, badge: po.badge, up: po.up, comments: po.comments, title: po.title, body: po.body };
+    });
+
+    // Re-derive the block list from the live registry rather than trusting the stored
+    // plan: prospects created before a registry change carry keys for deleted blocks.
+    var LIVE = (window.QuelyPagePlans && window.QuelyPagePlans.BLOCK_FILES) || {};
+    var BLOCK_KEYS = [];
+    if (PLAN) {
+      var fresh = (window.QuelyPagePlans && window.QuelyPagePlans.blockKeysFor)
+        ? window.QuelyPagePlans.blockKeysFor(PLAN.topic) : null;
+      // a page composed in the Page Builder keeps its own order and blocks
+      BLOCK_KEYS = ((PLAN.custom && PLAN.blockKeys) ? PLAN.blockKeys : (fresh && fresh.length ? fresh : (PLAN.blockKeys || [])))
+        .filter(function (k) { return !!LIVE[k]; });
+    }
+    // one source of truth for which beats the mounted blocks own
+    var OWNED = (window.QuelyPagePlans && window.QuelyPagePlans.ownedSections)
+      ? window.QuelyPagePlans.ownedSections(BLOCK_KEYS)
+      : { hero:false, problem:false, space:false, orbit:false, lenses:false, proof:false, features:false, cta:false };
+
+    // Surfaces are computed from the keys actually rendered, then looked up BY KEY.
+    // A positional array built from the unfiltered plan desyncs the moment a block is
+    // filtered out, handing every later block its neighbour's colour.
+    var SURF_MAP = {};
+    (function () {
+      var fn = window.QuelyPagePlans && window.QuelyPagePlans.assignSurfaces;
+      var list = fn ? fn(BLOCK_KEYS) : [];
+      BLOCK_KEYS.forEach(function (k, i) { SURF_MAP[k] = list[i] || ''; });
+    })();
+    var SF = function (k) { return SURF_MAP[k] || ''; };
+    var ORD = function (k) {
+      var i = BLOCK_KEYS.indexOf(k);
+      return 'display:block; order:' + (i === -1 ? 99 : i) + ';';
+    };
+
+    // ---- optional-section flags (standard page shows all; advanced uses the plan)
+    var SEC = PLAN ? PLAN.sections : null;
+    var composed = !!(PLAN && BLOCK_KEYS && BLOCK_KEYS.length);
+    var secProof = composed ? false : (SEC ? !!SEC.proof : true);
+    var secSpace = composed ? false : (SEC ? !!SEC.space : true);
+    var secOrbit = composed ? false : (SEC ? !!SEC.orbit : true);
+    var secLenses = composed ? false : (SEC ? !!SEC.lenses : true);
+    var secCapacity = SEC ? !!SEC.capacity : false;
+    var secFeatures = OWNED.features ? false : (SEC ? !!SEC.features : true);
+    var secTimeline = SEC ? !!SEC.timeline : false;
+    var secMechanism = SEC ? !!SEC.mechanism : false;
+    var secOutcome = SEC ? !!SEC.outcome : false;
+
+    // ---- Reusable BLOCK data (rendered by Block *.dc.html — one source of truth).
+    // The viewer only supplies data; all block styling/interaction lives in the block files.
+    var selfT = this;
+    var TL = PLAN && PLAN.timeline;
+    var MECH = PLAN && PLAN.mechanism;
+    var OUT = PLAN && PLAN.outcome;
+    var heroVisual = PLAN ? (PLAN.heroVisual || 'product') : 'product';
+    var HS = PLAN && PLAN.heroScatter;
+    var heroArtifacts = [];
+    if (heroVisual === 'thread' && TL) {
+      heroArtifacts = TL.events.filter(function (e) {
+        return ['requirement','discussion','decision','ticketState','question'].indexOf(e.kind) !== -1;
+      }).slice(0, 5).map(function (e) {
+        return { source: e.source, label: e.title, kept: e.kept !== false, flag: !!e.unanswered };
+      });
+    }
+
+    // ---- CAPACITY board view model
+    var capDemo = PLAN && PLAN.capacityDemo;
+    var capAvail = capDemo ? (capDemo.avail || 10) : 10;
+    if (secCapacity && capDemo && !this._cap) this._cap = this.initCap(capDemo);
+    var capMembers = [], capBacklog = [], capCommitted = 0, capOverCount = 0;
+    if (this._cap) {
+      var selfC = this, palette = ['#5C28A4','#2563EB','#16A34A','#D97706','#DB2777','#0891B2'];
+      capMembers = this._cap.members.map(function (m, mi) {
+        var load = selfC.capLoad(m);
+        capCommitted += load;
+        var over = load > capAvail;
+        if (over) capOverCount++;
+        var pct = Math.min(100, Math.round(load / capAvail * 100));
+        var barColor = over ? '#EF4444' : (load / capAvail > 0.85 ? '#D97706' : '#5C28A4');
+        return {
+          name: m.name, role: m.role,
+          initials: (m.name.split(/\s+/).map(function (w) { return w[0]; }).join('').slice(0,2)).toUpperCase(),
+          color: palette[mi % palette.length],
+          barStyle: 'height:100%; width:' + pct + '%; background:' + barColor + '; border-radius:9999px; transition:width .25s cubic-bezier(.2,0,0,1);',
+          loadLabel: load + ' / ' + capAvail + ' pts' + (over ? ' \u00b7 overloaded' : ''),
+          loadColor: over ? '#B91C1C' : '#6B7280',
+          empty: m.items.length === 0,
+          items: m.items.map(function (it, ii) {
+            var k = selfC.CAP_KIND[it.kind] || selfC.CAP_KIND.sprint;
+            return {
+              label: it.label, pts: it.pts, icon: k.icon,
+              chipStyle: 'display:inline-flex; align-items:center; gap:6px; ' + k.chip + ' border-radius:9999px; padding:6px 11px; font-size:13px; font-weight:600;',
+              move: function () { selfC.capMove(mi, ii); },
+              remove: function () { selfC.capRemove(mi, ii); }
+            };
+          })
+        };
+      });
+      capBacklog = this._cap.backlog.map(function (b, bi) { return { label: b.label, pts: b.pts, add: function () { selfC.capAdd(bi); } }; });
+    }
+    var capAnyOver = capOverCount > 0;
+    var capBanner = capAnyOver
+      ? (capOverCount + (capOverCount === 1 ? ' teammate is over capacity — rebalance before you commit' : ' teammates are over capacity — rebalance before you commit'))
+      : ('Balanced — safe to commit ' + capCommitted + ' pts');
+    var capTitleTxt = 'See the plan against the capacity you actually have.';
+    var capIntroTxt = 'Add, remove, or reassign work and watch capacity update. Overload shows up here \u2014 before the sprint is committed, not halfway through it.';
+
+    return {
+      heroEyebrow: heroEyebrow, heroHeadline: heroHeadline, heroBody: heroBody,
+      // optional sections
+      // generated blocks, in the order the PagePlan chose. Each entry carries one
+      // truthy is* flag, so the template mounts exactly that block.
+      // Flat per-block flags + a CSS order per block, so the mounts stay static
+      // top-level nodes (dc-import does not resolve inside sc-for) while the
+      // PagePlan still controls their sequence.
+      useBlocks: !!(BLOCK_KEYS && BLOCK_KEYS.length),
+      // per-block copy overrides edited in the dashboard Library
+      ...(function () {
+        var out = {}, files = (window.QuelyPagePlans && window.QuelyPagePlans.BLOCK_FILES) || {};
+        Object.keys(files).forEach(function (k) {
+          var cap = k.charAt(0).toUpperCase() + k.slice(1);
+          var saved = (self.store && self.store.getBlockCopy) ? self.store.getBlockCopy(files[k]) : null;
+          // this prospect's own edits from the Page Builder win over library edits
+          var own = (PLAN && PLAN.copy && PLAN.copy[k]) || {};
+          out['cp' + cap] = { eyebrow: own.eyebrow || (saved && saved.eyebrow) || undefined,
+                              headline: own.headline || (saved && saved.headline) || undefined,
+                              body: own.body || (saved && saved.body) || undefined };
+        });
+        return out;
+      })(),
+      legacyBlocks: !(BLOCK_KEYS && BLOCK_KEYS.length),
+      blkCost: BLOCK_KEYS.indexOf('cost') !== -1, ordCost: ORD('cost'), sfCost: SF('cost'),
+      blkTimeline: BLOCK_KEYS.indexOf('timeline') !== -1, ordTimeline: ORD('timeline'), sfTimeline: SF('timeline'),
+      blkOutcome: BLOCK_KEYS.indexOf('outcome') !== -1, ordOutcome: ORD('outcome'), sfOutcome: SF('outcome'),
+      sfThread: SF('thread'),
+      sfCollision: SF('collision'),
+      sfBottleneck: SF('bottleneck'),
+      sfHandoff: SF('handoff'),
+      sfConverge: SF('converge'),
+      sfAnatomy: SF('anatomy'),
+      sfRelmap: SF('relmap'),
+      sfMultitool: SF('multitool'),
+      sfRecord: SF('record'),
+      sfLenses: SF('lenses'),
+      sfPlanning: SF('planning'),
+      sfRoles: SF('roles'),
+      sfBeforeafter: SF('beforeafter'),
+      sfHowitworks: SF('howitworks'),
+      sfCtaFrag: SF('ctaFrag'),
+      sfCtaDec: SF('ctaDec'),
+      sfCtaRisk: SF('ctaRisk'),
+      sfCtaKnow: SF('ctaKnow'),
+      sfCtaAction: SF('ctaAction'),
+      blkThread: BLOCK_KEYS.indexOf('thread') !== -1, ordThread: ORD('thread'),
+      blkCollision: BLOCK_KEYS.indexOf('collision') !== -1, ordCollision: ORD('collision'),
+      blkBottleneck: BLOCK_KEYS.indexOf('bottleneck') !== -1, ordBottleneck: ORD('bottleneck'),
+      blkHandoff: BLOCK_KEYS.indexOf('handoff') !== -1, ordHandoff: ORD('handoff'),
+      blkConverge: BLOCK_KEYS.indexOf('converge') !== -1, ordConverge: ORD('converge'),
+      blkAnatomy: BLOCK_KEYS.indexOf('anatomy') !== -1, ordAnatomy: ORD('anatomy'),
+      blkRelmap: BLOCK_KEYS.indexOf('relmap') !== -1, ordRelmap: ORD('relmap'),
+      blkMultitool: BLOCK_KEYS.indexOf('multitool') !== -1, ordMultitool: ORD('multitool'),
+      blkRecord: BLOCK_KEYS.indexOf('record') !== -1, ordRecord: ORD('record'),
+      blkLenses: BLOCK_KEYS.indexOf('lenses') !== -1, ordLenses: ORD('lenses'),
+      blkPlanning: BLOCK_KEYS.indexOf('planning') !== -1, ordPlanning: ORD('planning'),
+      blkRoles: BLOCK_KEYS.indexOf('roles') !== -1, ordRoles: ORD('roles'),
+      blkBeforeafter: BLOCK_KEYS.indexOf('beforeafter') !== -1, ordBeforeafter: ORD('beforeafter'),
+      blkHowitworks: BLOCK_KEYS.indexOf('howitworks') !== -1, ordHowitworks: ORD('howitworks'),
+      blkCtaFrag: BLOCK_KEYS.indexOf('ctaFrag') !== -1, ordCtaFrag: ORD('ctaFrag'),
+      blkCtaDec: BLOCK_KEYS.indexOf('ctaDec') !== -1, ordCtaDec: ORD('ctaDec'),
+      blkCtaRisk: BLOCK_KEYS.indexOf('ctaRisk') !== -1, ordCtaRisk: ORD('ctaRisk'),
+      blkCtaKnow: BLOCK_KEYS.indexOf('ctaKnow') !== -1, ordCtaKnow: ORD('ctaKnow'),
+      blkCtaAction: BLOCK_KEYS.indexOf('ctaAction') !== -1, ordCtaAction: ORD('ctaAction'),
+      secProof: secProof, secSpace: secSpace, secOrbit: secOrbit, secLenses: secLenses,
+
+      secCapacity: secCapacity, secFeatures: secFeatures, secOrbitSection: (secOrbit || secLenses),
+      // new advanced-only blocks
+      secTimeline: secTimeline, secMechanism: secMechanism, secOutcome: secOutcome,
+      tlWorkItem: (PLAN && PLAN.scenario) ? (PLAN.scenario.workItem.id + ' \u00b7 ' + PLAN.scenario.workItem.name) : '',
+      tlTitle: TL ? TL.title : '', tlIntro: TL ? TL.intro : '',
+      tlRawEvents: TL ? TL.events : [],
+      tlPeople: (PLAN && PLAN.scenario) ? PLAN.scenario.people : [],
+      tlOnEvent: function (id) { if (selfT.tracking) selfT.store.recordEvent(selfT.token, 'timeline_event', { id:id }); },
+      mechTitle: MECH ? MECH.title : '', mechBody: MECH ? MECH.body : '',
+      mechAttachedTo: MECH ? MECH.record.attachedTo : '',
+      mechRawRows: MECH ? MECH.record.rows : [],
+      outTitle: OUT ? OUT.title : '', outBody: OUT ? OUT.body : '', outPoints: OUT ? OUT.points : [],
+      heroProductShot: (heroVisual !== 'thread' && heroVisual !== 'scatter'), heroThread: heroVisual === 'thread', heroArtifacts: heroArtifacts,
+      heroScatter: heroVisual === 'scatter',
+      hsWorkId: HS ? HS.workId : '', hsWorkName: HS ? HS.workName : '', hsWorkDesc: HS ? HS.workDesc : '',
+      hsWorkStatus: HS ? HS.workStatus : '', hsWorkGapLabel: HS ? HS.workGapLabel : '',
+      hsCentreCaption: HS ? HS.centreCaption : '', hsFragments: HS ? HS.fragments : [], hsTally: HS ? HS.tally : [],
+      // capacity board
+      capTitle: capTitleTxt, capIntro: capIntroTxt, capSprint: (capDemo ? capDemo.sprint : 'Sprint 24'),
+      capTeamSize: capMembers.length, capAvail: capAvail, capCommitted: capCommitted,
+      capMembers: capMembers, capBacklog: capBacklog, capBacklogEmpty: capBacklog.length === 0,
+      capBanner: capBanner,
+      capBannerIcon: capAnyOver ? 'ph-fill ph-warning' : 'ph-fill ph-check-circle',
+      capBannerStyle: 'display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:700; border-radius:9999px; padding:5px 13px; ' + (capAnyOver ? 'background:#FEE2E2; color:#B91C1C;' : 'background:#DCFCE7; color:#16A34A;'),
+      capTotalStyle: 'display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#4B5563; background:#F3F4F6; border-radius:9999px; padding:5px 12px;',
+      standard: !PLAN, advanced: !!PLAN, workId: PLAN ? PLAN.workItem.id : 'CHECKOUT-1428',
+      // tailored content (per prospect focus)
+      problemTitle: problemTitle, problemBody: problemBody, problemPoints: problemPoints,
+      signalsLabel: signalsLabel, signals: signals,
+      featuresTitle: featuresTitle, features: features,
+      // Space intro + task + tabs
+      spaceTitle: spaceTitle, spaceBody: spaceBody, spaceBullets: spaceBullets, workName: workName,
+      discList: discList, docsList: docsList, decList: decList, actList: actList,
+      // Proof
+      proofEyebrow: proofEyebrow, proofHeadline: proofHeadline, proofPosts: proofPosts,
+      // Derived from the SAME live block keys that drive mounting, never from
+      // persisted plan fields — so plans stored before those fields existed still
+      // suppress correctly, and one beat is only ever told once.
+      secOwnCta: !OWNED.cta,
+      secOwnHero: !OWNED.hero,
+      secOwnProblem: !OWNED.problem,
+      // subjects + CTA
+      lensPills: this.lensPillVals(),
+      lensTools: this.lensToolVals(),
+      lensMenuClose: function () { self.setState({ lensMenu: null }); },
+      pmLabel: 'font-size:13.5px; font-weight:600; color:#1A1611; margin-bottom:6px;',
+      pmField: 'display:flex; align-items:center; gap:9px; box-sizing:border-box; background:#fff;'
+        + ' border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; font-size:14px; font-weight:500;',
+      pmJira: 'flex:none; width:19px; height:19px; background:url(\'assets/logos/jira.svg\') center/contain no-repeat;',
+      pmSite: 'fishyvisions',
+      pmProject: 'Apps (APPS)',
+      pmSummary: 'Onyi to review the performance of the first \u2018How We Use Quely\u2019 campaign, identify engaged users, and address remaining SendGrid email issues based on team and Ronma\u2019s feedback.',
+      pmWhy: 'By understanding who engaged with the campaign and addressing email issues, we can improve our email marketing effectiveness and user engagement.',
+      pmOpen: !(this.state.lensMenu === null || this.state.lensMenu === undefined),
+      smOpenFlag: !(this.state.smOpen === null || this.state.smOpen === undefined),
+      pmScrim: 'position:absolute; inset:0; z-index:7; background:rgba(3,7,18,.5);'
+        + (this.state.lensMenu === null || this.state.lensMenu === undefined ? ' display:none;' : ' display:block;'),
+      pmStyle: 'position:absolute; left:18px; right:18px; top:18px; bottom:18px; z-index:8;'
+        + ' box-sizing:border-box; background:#fff; border:2px solid #1A1611;'
+        + ' box-shadow:10px 10px 0 rgba(26,22,17,.2); overflow:hidden;'
+        + (this.state.lensMenu === null || this.state.lensMenu === undefined ? ' display:none;' : ' display:block;'),
+      pmCreateLabel: 'Create in ' + (this.state.lensPick || 'Jira'),
+      pmCreate: function () {
+        var idx = self.state.lensMenu;
+        if (idx === null || idx === undefined) return;
+        var tool = self.state.lensPick || 'Jira';
+        if (self.tracking) self.store.recordEvent(self.token, 'lens_push', { tool: tool });
+        var nx = Object.assign({}, self.state.lensAct);
+        nx[idx] = Object.assign({}, nx[idx], { pushed: tool });
+        self.setState({ lensAct: nx, lensMenu: null });
+      },
+      smScrim: 'position:absolute; inset:0; z-index:7; background:rgba(3,7,18,.5);'
+        + (this.state.smOpen === null || this.state.smOpen === undefined ? ' display:none;' : ' display:block;'),
+      smStyle: 'position:absolute; left:18px; right:18px; top:18px; bottom:18px; z-index:8;'
+        + ' box-sizing:border-box; background:#fff; border:2px solid #1A1611;'
+        + ' box-shadow:10px 10px 0 rgba(26,22,17,.2); overflow:hidden;'
+        + (this.state.smOpen === null || this.state.smOpen === undefined ? ' display:none;' : ' display:block;'),
+      smClose: function () { self.setState({ smOpen: null }); },
+      smTitle: (function () {
+        var i = self.state.smOpen;
+        var it = (i === null || i === undefined) ? null : self.LENS_ITEMS[i];
+        return it ? it.text : 'Lens item';
+      })(),
+      smMeetMark: 'flex:none; width:18px; height:18px; background:url(\'assets/logos/googlemeet.svg\') center/contain no-repeat;',
+      smDay: String(this.state.smDate || 17),
+      smDays: [{ dow:'Wed', num:16 }, { dow:'Thu', num:17 }, { dow:'Fri', num:18 }].map(function (d) {
+        var on = (self.state.smDate || 17) === d.num;
+        return { dow:d.dow, num:String(d.num),
+          pick: function () { self.setState({ smDate: d.num }); },
+          numStyle: 'margin-top:2px; font-size:30px; line-height:1.1; font-weight:800; letter-spacing:-.02em;'
+            + ' color:' + (on ? '#5C28A4' : '#1A1611') + ';',
+          style: 'cursor:pointer; box-sizing:border-box; text-align:center; border-radius:12px; padding:12px 8px; background:#fff;'
+            + (on ? ' border:2px solid #8F5BD7;' : ' border:1px solid #E5E7EB;') };
+      }),
+      smSlots: ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM'].map(function (lb) {
+        var busy = lb === '12:00 PM' || lb === '12:30 PM';
+        var on = (self.state.smTime || '10:00 AM') === lb;
+        return { label: lb,
+          pick: function () { if (!busy) self.setState({ smTime: lb }); },
+          style: 'box-sizing:border-box; white-space:nowrap; border-radius:9px; padding:9px 15px;'
+            + ' font-size:13.5px; font-weight:600;'
+            + (busy ? ' background:#FEF2F2; border:1px solid #FECACA; color:#B91C1C; cursor:default;'
+                    : (on ? ' background:#F0FDF4; border:1.5px solid #16A34A; color:#15803D; cursor:pointer;'
+                          : ' background:#fff; border:1px solid #E5E7EB; color:#1A1611; cursor:pointer;')) };
+      }),
+      smStart: (this.state.smTime || '10:00 AM'),
+      smEnd: (function () {
+        var map = { '9:00 AM':'9:30 AM','9:30 AM':'10:00 AM','10:00 AM':'10:30 AM',
+                    '10:30 AM':'11:00 AM','11:00 AM':'11:30 AM','11:30 AM':'12:00 PM' };
+        var s = self.state.smTime || '10:00 AM';
+        return (map[s] || '10:30 AM') + ' (30 min)';
+      })(),
+      smFree: 'All participants are free \u00b7 ' + (this.state.smTime || '10:00 AM') + ' \u00b7 30 min',
+      smConfirm: function () {
+        var idx = self.state.smOpen;
+        if (idx === null || idx === undefined) return;
+        var DOW = { 16:'Wed', 17:'Thu', 18:'Fri' };
+        var when = (DOW[self.state.smDate] || 'Thu') + ' ' + (self.state.smTime || '10:00 AM');
+        if (self.tracking) self.store.recordEvent(self.token, 'lens_meeting', { at: when });
+        var nx = Object.assign({}, self.state.lensAct);
+        nx[idx] = Object.assign({}, nx[idx], { met: when });
+        self.setState({ lensAct: nx, smOpen: null });
+      },
+      lensGroups: this.lensGroupVals(),
+      lensSubject: lensSubject, orbitIntro: orbitIntro,
+      footTagline: 'Your tools track the work. Quely connects the understanding.',
+      footNote: 'Keep the full context of every task in one place.',
+      ctaHeadline: ctaHeadline, ctaBody: ctaBody,
+      // explorable Space
+      tabDisc: tab === 'disc', tabDocs: tab === 'docs', tabDec: tab === 'dec', tabAct: tab === 'act',
+      sDisc: tabStyle(tab === 'disc'), sDocs: tabStyle(tab === 'docs'), sDec: tabStyle(tab === 'dec'), sAct: tabStyle(tab === 'act'),
+      showSpaceHint: !this.state.spaceTouched,
+      showDisc: function () { self.trackTab('disc'); self.setState({ spaceTab:'disc', spaceTouched:true }); },
+      showDocs: function () { self.trackTab('docs'); self.setState({ spaceTab:'docs', spaceTouched:true }); },
+      showDec: function () { self.trackTab('dec'); self.setState({ spaceTab:'dec', spaceTouched:true }); },
+      showAct: function () { self.trackTab('act'); self.setState({ spaceTab:'act', spaceTouched:true }); },
+      // interactive Lenses
+      suggestions: suggestions,
+      messages: messages,
+      orbitEmpty: messages.length === 0 && !this.state.thinking,
+      thinking: this.state.thinking,
+      orbitInput: this.state.orbitInput,
+      showOrbitHint: !this.state.orbitTouched,
+      actionsOpen: !!this.state.actionsOpen,
+      actionsCaret: this.state.actionsOpen ? 'ph ph-caret-up' : 'ph ph-caret-down',
+      toggleActions: function () { self.setState({ actionsOpen: !self.state.actionsOpen }); },
+      setOrbitInput: function (e) { self.setState({ orbitInput:e.target.value }); },
+      orbitKey: function (e) { if (e.key === 'Enter') { e.preventDefault(); self.runOrbit(self.state.orbitInput); } },
+      sendOrbit: function () { self.runOrbit(self.state.orbitInput); },
+      qPanelOpen: this.state.qPanelOpen,
+      qSubmitted: this.state.qSubmitted,
+      qFormOpen: !this.state.qSubmitted,
+      qText: this.state.qText,
+      qSection: this.state.qSection,
+      askingAs: askingAs,
+      openQ: function () { self._qStarted = false; self.setState({ qPanelOpen:true, qSubmitted:false, qText:'', qSection:self.current || 'hero' }); },
+      closeQ: function () { self.setState({ qPanelOpen:false }); },
+      setQText: function (e) {
+        var v = e.target.value;
+        // first keystroke = they began a question, even if they never send it
+        if (v && !self._qStarted) {
+          self._qStarted = true;
+          if (self.tracking) self.store.recordEvent(self.token, 'question_start', { section: self.state.qSection });
+        }
+        self.setState({ qText:v });
+      },
+      setQSection: function (e) { self.setState({ qSection:e.target.value }); },
+      submitQ: function () {
+        var text = (self.state.qText || '').trim();
+        if (!text) return;
+        if (self.tracking) self.store.addQuestion(self.token, { text:text, section:self.state.qSection });
+        self._qStarted = false;
+        self.setState({ qSubmitted:true });
+      },
+      clickCTA: function () { if (self.tracking) self.store.recordEvent(self.token, 'cta'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

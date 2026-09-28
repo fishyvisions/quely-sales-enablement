@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
-  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
-  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  body { margin:0; background:#1A1611; font-family:'Inter',sans-serif; }
+  a { color:#C9C1F2; } a:hover { color:#C9AEF0; }
   @keyframes qcd-in { to { opacity:1; transform:translateY(0); } }
   [data-qcd][data-go] [data-el="copy"] { animation:qcd-in 540ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
   @media (prefers-reduced-motion: reduce) {
@@ -23,14 +25,15 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#03070F; padding:92px 40px 100px; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:92px 40px 100px; display:flex; justify-content:center;">
   <div style="position:absolute; bottom:-34%; left:-6%; width:880px; height:620px; border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.2), rgba(143,91,215,0)); filter:blur(10px); pointer-events:none;"></div>
 
+  <!-- left-aligned, so it reads differently to the centred ceremonial CTA -->
   <div data-qcd style="position:relative; z-index:1; width:100%; max-width:860px; display:flex; flex-direction:column; align-items:center; text-align:center;">
 
     <div data-el="copy" style="{{ eyebrowStyle }}">
       <span style="flex:none; width:20px; height:20px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
-      <span style="min-width:0; font-size:11.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#AB84E1; text-wrap:pretty;">{{ eyebrow }}</span>
+      <span style="min-width:0; font-family:'Geist Mono',monospace; font-size:11.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#C9C1F2; text-wrap:pretty;">{{ eyebrow }}</span>
     </div>
 
     <h2 data-el="copy" style="{{ headlineStyle }}">{{ headline }}</h2>
@@ -43,20 +46,32 @@
         </span>
       </a>
     </div>
-    <div style="{{ contactStyle }}">{{ contact }}</div>
 
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:540}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:540},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See Quely with your own work&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See what was decided and why&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Quely gives you a Space for any task and the context around it, so you can easily see what was decided, why, what options were considered, and who owns the next step.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;primaryCta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Try Quely&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;primaryHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&amp;utm_medium=block&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'ink';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'See Quely with your own work',
-    headline: 'See every decision with the reasoning behind it.',
-    body: 'Bring a project or work item into Quely. See how it provides visibility into what was decided, why it changed, the options considered, and who owns the next step.',
+    headline: 'See what was decided and why',
+    body: 'Quely gives you a Space for any task and the context around it, so you can easily see what was decided, why, what options were considered, and who owns the next step.',
     primaryCta: 'Try Quely',
     primaryHref: 'https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=block',
-    contact: 'quely.io · ronma@quely.io'
   };
 
   componentDidMount() {
@@ -66,6 +81,8 @@ class Component extends DCLogic {
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         node.setAttribute('data-go', ''); return;
       }
+      // Imperative attribute flip drives the CSS animation (style-attribute holes do
+      // not re-apply on re-render). Plays once when it first enters view.
       const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
       if ('IntersectionObserver' in window) {
         this.io = new IntersectionObserver((entries) => {
@@ -85,13 +102,14 @@ class Component extends DCLogic {
 
   renderVals() {
     const p = this.props || {}, D = this.DEMO;
+    var S = this.surf();
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       body: p.body ?? D.body,
       primaryCta: p.primaryCta ?? D.primaryCta,
       primaryHref: p.primaryHref ?? D.primaryHref,
-      contact: p.contact ?? D.contact,
 
       eyebrowStyle: 'display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:22px;'
         + ' opacity:0; transform:translateY(10px); --d:100ms;',
@@ -100,7 +118,6 @@ class Component extends DCLogic {
         + ' opacity:0; transform:translateY(12px); --d:200ms;',
       bodyStyle: 'margin:20px 0 0; max-width:660px; font-size:17px; line-height:1.6; color:rgba(255,255,255,.66);'
         + ' text-wrap:pretty; opacity:0; transform:translateY(12px); --d:320ms;',
-      contactStyle: 'margin-top:26px; font-size:14px; color:rgba(255,255,255,.72);',
       actionsStyle: 'display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px;'
         + ' margin-top:36px; opacity:0; transform:translateY(12px); --d:440ms;'
     };

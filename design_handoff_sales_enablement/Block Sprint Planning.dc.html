@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<script src="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; }
+  ::selection { background:#5C28A4; color:#fff; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
+
+  /* The 6-col bento holds down to ~860px viewport (stage 780, span-2 = 249px).
+     Below that the spans halve so some variety survives, then stack. */
+  @media (max-width: 860px) {
+    [data-qsp] { grid-template-columns:repeat(2, minmax(0,1fr)) !important; }
+    [data-qsp] [data-card] { grid-column:span 1 !important; }
+    [data-qsp] [data-card][data-wide] { grid-column:1 / -1 !important; }
+  }
+  @media (max-width: 620px) {
+    [data-qsp] { grid-template-columns:1fr !important; }
+    [data-qsp] [data-card] { grid-column:1 / -1 !important; }
+  }
+
+  @keyframes qsp-in { to { opacity:1; transform:translateY(0); } }
+  [data-qsp][data-go] [data-el="card"] { animation:qsp-in 480ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qsp] [data-card] { transition:transform 200ms cubic-bezier(.2,0,0,1), box-shadow 200ms cubic-bezier(.2,0,0,1), border-color 200ms cubic-bezier(.2,0,0,1); }
+  [data-qsp] [data-card]:hover { transform:translateY(-3px); box-shadow:0 16px 32px -14px rgba(3,7,18,.20); }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qsp] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:80px 40px; display:flex; justify-content:center;">
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="max-width:840px; margin:0 auto; text-align:center;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:14px;">
+        <span style="flex:none; width:18px; height:18px; background:url('assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
+        <span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7C3AED;">{{ eyebrow }}</span>
+      </div>
+      <h2 style="margin:0 0 14px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.15; letter-spacing:-.04em; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#5C5345; text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <!-- ============ THE BENTO ============ -->
+    <div data-qsp style="margin-top:32px; display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:16px;">
+
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="7">
+        <div data-el="card" data-card data-wide="{{ c.wide }}" style="{{ c.wrapStyle }}">
+          <div style="display:flex; align-items:center; gap:11px; margin-bottom:12px;">
+            <span style="{{ c.markStyle }}"><i class="{{ c.icon }}" style="font-size:17px;"></i></span>
+            <span style="flex:1; min-width:0; font-size:16px; line-height:1.3; font-weight:700; letter-spacing:-.012em; color:#1A1611; text-wrap:pretty;">{{ c.title }}</span>
+          </div>
+
+          <p style="margin:0; font-size:13.5px; line-height:1.55; color:#5C5345; text-wrap:pretty;">{{ c.text }}</p>
+
+          <sc-if value="{{ c.note }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:10px 0 0; font-size:12px; line-height:1.5; color:#5C5345; text-wrap:pretty;">{{ c.note }}</p>
+          </sc-if>
+
+          <!-- ORBIT ESTIMATE -->
+          <sc-if value="{{ c.showEstimate }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px; background:#F9F6FE; border:1px solid #EADDF8; border-radius:11px; padding:12px 13px;">
+              <div style="display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
+                <span style="flex:none; width:18px; height:18px; background:url('assets/quely-orbit-pet.png') center/contain no-repeat;"></span>
+                <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:700; color:#41186F;">{{ estimateLabel }}</span>
+                <span style="flex:none; background:#5C28A4; border-radius:8px; padding:4px 11px; font-size:13px; font-weight:700; color:#fff;">{{ estimateValue }}</span>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:11px;">
+                <sc-for list="{{ subtasks }}" as="st" hint-placeholder-count="3">
+                  <span style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#fff; border:1px solid #C9C1F2; border-radius:9999px; padding:4px 10px; font-size:11px; font-weight:600; color:#41186F;"><i class="ph ph-check-square" style="font-size:11px;"></i>{{ st }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- FIBONACCI -->
+          <sc-if value="{{ c.showFib }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:14px;">
+              <sc-for list="{{ fib }}" as="f" hint-placeholder-count="6">
+                <span style="{{ f.style }}">{{ f.n }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- TOOLS -->
+          <sc-if value="{{ c.showTools }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; margin-top:14px;">
+              <sc-for list="{{ tools }}" as="t" hint-placeholder-count="8">
+                <span style="{{ t.style }}"></span>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- CAPACITY -->
+          <sc-if value="{{ c.showCapacity }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; gap:9px; margin-top:14px;">
+              <sc-for list="{{ capacity }}" as="cp" hint-placeholder-count="3">
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="{{ cp.avatarStyle }}">{{ cp.initials }}</span>
+                  <span style="flex:1 1 auto; min-width:0; font-size:12px; font-weight:600; color:#1A1611; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ cp.name }}</span>
+                  <span style="flex:1 1 60px; min-width:36px; height:7px; border-radius:9999px; background:#EEF0F4; overflow:hidden;"><span style="{{ cp.barStyle }}"></span></span>
+                  <span style="flex:none; font-size:11.5px; font-weight:600; color:{{ cp.labelColor }}; white-space:nowrap;">{{ cp.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <!-- TIMER -->
+          <sc-if value="{{ c.showTimer }}" hint-placeholder-val="{{ false }}">
+            <div style="display:inline-flex; align-items:center; gap:9px; margin-top:14px; background:#EFEAFB; border-radius:9px; padding:7px 12px;">
+              <i class="ph-fill ph-timer" style="font-size:15px; color:#5C28A4;"></i>
+              <span style="font-size:13px; font-weight:700; letter-spacing:.09em; color:#5C28A4; font-variant-numeric:tabular-nums;">{{ timerValue }}</span>
+              <span style="font-size:11.5px; font-weight:600; color:#41186F;">{{ timerLabel }}</span>
+            </div>
+          </sc-if>
+
+          <!-- MEETING -->
+          <sc-if value="{{ c.showMeeting }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:14px;">
+              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-calendar-plus" style="flex:none; font-size:13px; color:#8A3D06;"></i>{{ meetSchedule }}</span>
+              <i class="ph-bold ph-arrow-down" style="font-size:12px; color:#5C5345; padding-left:13px;"></i>
+              <span style="display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="ph-fill ph-microphone-stage" style="flex:none; font-size:13px; color:#8A3D06;"></i>{{ meetTranscript }}</span>
+            </div>
+          </sc-if>
+
+          <!-- DOCS -->
+          <sc-if value="{{ c.showDocs }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
+              <sc-for list="{{ docs }}" as="d" hint-placeholder-count="3">
+                <span style="display:inline-flex; align-items:center; gap:7px; white-space:nowrap; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:6px 11px; font-size:12px; font-weight:600; color:#374151;"><i class="{{ d.icon }}" style="font-size:13px; color:{{ d.tint }};"></i>{{ d.name }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1180},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One searchable space for the sprint&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Plan, commit, and run the sprint with the full history behind every decision.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Review the work, debate estimates, uncover blind spots, assign tasks against actual availability, and keep every decision connected to the sprint. Orbit makes it easy to retrieve why a task received its estimate, what changed, who owns it, and where capacity is tight before the team commits.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;estimateLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit suggests&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;estimateValue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5 pts&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;timerValue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;04:00:00&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;timerLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;left to contribute&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;meetSchedule&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Schedule from the Space&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;meetTranscript&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Transcript returns here&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cards&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{span:number;icon:string;tint:string;wash:string;title:string;text:string;note?:string;showEstimate?:boolean;showFib?:boolean;showTools?:boolean;showCapacity?:boolean;showTimer?:boolean;showMeeting?:boolean;showDocs?:boolean}&gt;&quot;},&quot;subtasks&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;fib&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;fibPicked&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;5&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tools&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string[]&quot;},&quot;docs&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;icon:string;tint:string}&gt;&quot;},&quot;capacity&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;initials:string;tint:string;pct:number;label:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
+  DEMO = {
+    eyebrow: 'One searchable space for the sprint',
+    headline: 'Plan, commit, and run the sprint with the full history behind every decision.',
+    body: 'Review the work, debate estimates, uncover blind spots, assign tasks against actual availability, and keep every decision connected to the sprint. Orbit makes it easy to retrieve why a task received its estimate, what changed, who owns it, and where capacity is tight before the team commits.',
+
+    // span = grid columns out of 6, so the bento has rhythm rather than a uniform grid
+    cards: [
+      { span: 3, icon: 'ph-fill ph-sparkle', tint: '#5C28A4', wash: '#F7F3FD', edge: '#C9C1F2',
+        title: 'Estimate with AI',
+        text: 'Orbit, our AI Assistant reviews the task context and suggests an estimate, including subtasks, open questions, and anything that could affect effort.',
+        showEstimate: true },
+
+      { span: 3, icon: 'ph-fill ph-cards', tint: '#2563EB', wash: '#F3F8FF', edge: '#DBEAFE',
+        title: 'Estimate together and preserve the reasoning',
+        text: 'Compare estimates, discuss the differences, and keep the final estimate with the reasoning behind it.',
+        showFib: true },
+
+      { span: 3, icon: 'ph-fill ph-chats-circle', tint: '#0E7490', wash: '#F2FDFE', edge: '#CFF3F8',
+        title: 'Discuss the sprint asynchronously',
+        text: 'Ask questions, share updates, make decisions, and explain estimates in the Space without moving the conversation elsewhere.',
+        showTimer: true },
+
+      { span: 3, icon: 'ph-fill ph-plugs-connected', tint: '#4F46E5', wash: '#F4F5FF', edge: '#DDE1FD',
+        title: 'Bring all your sprint work into one Space',
+        text: 'Pull relevant work from Jira, Linear, GitHub, Azure DevOps, and other tools directly into the Sprint Space.',
+        showTools: true },
+
+      { span: 2, icon: 'ph-fill ph-flow-arrow', tint: '#B91C1C', wash: '#FFF5F5', edge: '#FBD5D5',
+        title: 'Explain the work with quick docs and diagrams',
+        text: 'Create lightweight docs and diagrams for requirements, technical flows, edge cases, and implementation notes.',
+        showDocs: true },
+
+      { span: 2, icon: 'ph-fill ph-microphone-stage', tint: '#8A3D06', wash: '#FFFCF0', edge: '#FBE7BC',
+        title: 'Move from async discussion to a meeting',
+        text: 'Schedule a meeting from the Space when you need one. The recording and transcript come back to the same place.',
+        showMeeting: true },
+
+      { span: 2, icon: 'ph-fill ph-gauge', tint: '#12652F', wash: '#F4FDF7', edge: '#C6EFD5',
+        title: 'Assign work against real availability',
+        text: 'Set each person’s available time and assign work with a clear view of who has capacity and who is overloaded.',
+        showCapacity: true }
+    ],
+
+    estimateLabel: 'Orbit suggests',
+    estimateValue: '5 pts',
+    subtasks: ['Tokenization', 'Card flow', 'QA pass'],
+    fib: ['1', '2', '3', '5', '8', '13'],
+    fibPicked: '5',
+    timerValue: '04:00:00',
+    timerLabel: 'left to contribute',
+    tools: [
+      'assets/logos/jira.svg', 'assets/logos/linear.svg', 'assets/logos/azuredevops.svg',
+      'assets/logos/github.svg', 'assets/logos/monday.svg', 'assets/logos/trello.svg',
+      'assets/logos/wrike.png', 'assets/logos/todoist.svg'
+    ],
+    docs: [
+      { name: 'Requirements', icon: 'ph-fill ph-file-text', tint: '#2563EB' },
+      { name: 'Technical flow', icon: 'ph-fill ph-flow-arrow', tint: '#B91C1C' },
+      { name: 'Edge cases', icon: 'ph-fill ph-list-checks', tint: '#4F46E5' }
+    ],
+    meetSchedule: 'Schedule from the Space',
+    meetTranscript: 'Transcript returns here',
+    capacity: [
+      { name: 'Dana', initials: 'DR', tint: '#5C28A4', pct: 100, label: 'Full' },
+      { name: 'Ravi', initials: 'RS', tint: '#2563EB', pct: 62,  label: 'Room' },
+      { name: 'Mei',  initials: 'ML', tint: '#12652F', pct: 128, label: 'Over' }
+    ]
+  };
+
+  logoMark(src, px) {
+    return 'flex:none; width:' + px + 'px; height:' + px + 'px;'
+      + ' background:url(\'' + src + '\') center/contain no-repeat;';
+  }
+
+  componentDidMount() {
+    // The stage may not be in the DOM yet at mount in this runtime, so poll for it
+    // instead of early-returning, and guarantee reveal with an unconditional fallback.
+    this._played = false;
+    const play = () => {
+      if (this._played) return;
+      const n = document.querySelector('[data-qsp]');
+      if (!n) return;
+      this._played = true;
+      n.setAttribute('data-go', '');
+    };
+    this._safety = setTimeout(play, 2200);
+
+    let tries = 0;
+    const attach = () => {
+      const node = document.querySelector('[data-qsp]');
+      if (!node) { if (++tries < 40) { this._poll = setTimeout(attach, 60); } return; }
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { play(); return; }
+      if (!('IntersectionObserver' in window)) { play(); return; }
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 300); }
+          else if (!this._played) { clearTimeout(this._t); }
+        });
+      }, { threshold: 0.1 });
+      this.io.observe(node);
+    };
+    attach();
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._poll); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+
+    const cards = (p.cards && p.cards.length ? p.cards : D.cards).map((c, i) => ({
+      title: c.title, text: c.text, note: c.note || '', icon: c.icon,
+      showEstimate: !!c.showEstimate, showFib: !!c.showFib, showTools: !!c.showTools,
+      showCapacity: !!c.showCapacity, showTimer: !!c.showTimer,
+      showMeeting: !!c.showMeeting, showDocs: !!c.showDocs,
+      // the wider authored cards keep a full row at the 2-col step
+      wide: c.span >= 3 ? '' : null,
+      // each card carries its own tint as a solid icon tile on its own wash, so the
+      // set reads as a coloured bento rather than seven identical white cards
+      markStyle: 'flex:none; display:inline-flex; align-items:center; justify-content:center;'
+        + ' width:34px; height:34px; border-radius:10px; background:' + c.tint + '; color:#fff;',
+      // grid-column spans give the bento its rhythm; the @media rules above drop
+      // every card to a full row before these spans can crush their contents
+      wrapStyle: 'grid-column:span ' + c.span + '; box-sizing:border-box; background:' + c.wash + ';'
+        + ' border:1px solid ' + c.edge + '; border-radius:14px;'
+        + ' padding:20px 22px; opacity:0; transform:translateY(12px); --d:' + (200 + i * 90) + 'ms;'
+    }));
+
+    const fibPicked = p.fibPicked ?? D.fibPicked;
+    const fib = (p.fib && p.fib.length ? p.fib : D.fib).map((n) => ({
+      n: n,
+      style: 'display:inline-flex; align-items:center; justify-content:center; width:34px; height:38px;'
+        + ' border-radius:8px; font-size:14px; font-weight:700;'
+        + (n === fibPicked
+            ? ' background:#5C28A4; color:#fff; box-shadow:0 1px 2px rgba(3,7,18,.10);'
+            : ' background:#fff; border:1px solid #E5E7EB; color:#374151;')
+    }));
+
+    const capacity = (p.capacity && p.capacity.length ? p.capacity : D.capacity).map((cp) => {
+      const over = cp.pct > 100;
+      const near = !over && cp.pct >= 95;
+      return {
+        name: cp.name, initials: cp.initials, label: cp.label,
+        avatarStyle: 'flex:none; width:26px; height:26px; border-radius:50%; background:' + cp.tint
+          + '; color:#fff; font-size:11px; font-weight:700; display:inline-flex;'
+          + ' align-items:center; justify-content:center;',
+        barStyle: 'display:block; height:100%; width:' + Math.min(100, cp.pct) + '%;'
+          + ' border-radius:9999px; background:' + (over ? '#EF4444' : near ? '#8A3D06' : '#5C28A4') + ';',
+        labelColor: over ? '#B91C1C' : near ? '#8A3D06' : '#4B5563'
+      };
+    });
+
+    var S = this.surf();
+    return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      cards: cards,
+      estimateLabel: p.estimateLabel ?? D.estimateLabel,
+      estimateValue: p.estimateValue ?? D.estimateValue,
+      subtasks: p.subtasks && p.subtasks.length ? p.subtasks : D.subtasks,
+      fib: fib,
+      timerValue: p.timerValue ?? D.timerValue,
+      timerLabel: p.timerLabel ?? D.timerLabel,
+      tools: (p.tools && p.tools.length ? p.tools : D.tools).map((src) => ({ style: this.logoMark(src, 22) })),
+      docs: p.docs && p.docs.length ? p.docs : D.docs,
+      meetSchedule: p.meetSchedule ?? D.meetSchedule,
+      meetTranscript: p.meetTranscript ?? D.meetTranscript,
+      capacity: capacity
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="./quely-content-library.js"></script>
+<script src="./quely-page-plans.js"></script>
+<style>
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; color:#1A1611; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
+  select { font-family:inherit; }
+</style>
+</helmet>
+<div style="background:#ECE7F2; min-height:100vh;">
+<div style="max-width:1200px; margin:0 auto; padding:40px 32px 80px;">
+
+  <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:8px;">
+    <div>
+      <div style="font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C28A4;">Sales enablement · content library</div>
+      <h1 style="margin:6px 0 0; font-size:34px; letter-spacing:-.02em; font-weight:800;">Quely content library</h1>
+      <p style="margin:8px 0 0; font-size:15px; color:#5C5345; max-width:640px;">{{ blockCount }} tagged blocks distilled from the Quely Information Library. The generator selects and orders these by role and problem to build a focused page per prospect.</p>
+    </div>
+  </div>
+
+  <!-- ASSEMBLY SANDBOX -->
+  <div style="margin-top:28px; background:#1A1611; border-radius:16px; padding:24px 26px; color:#fff;">
+    <div style="font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#C9C1F2; margin-bottom:16px;">Try the generator</div>
+    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end;">
+      <label style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:rgba(255,255,255,.6);">Prospect role
+        <select value="{{ role }}" onChange="{{ setRole }}" style="background:#0f1524; color:#fff; border:1px solid rgba(255,255,255,.16); border-radius:9px; padding:11px 14px; font-size:14px; min-width:260px;">
+          <sc-for list="{{ roleOpts }}" as="r" hint-placeholder-count="6"><option value="{{ r.slug }}">{{ r.label }}</option></sc-for>
+        </select>
+      </label>
+      <label style="display:flex; flex-direction:column; gap:7px; font-size:12px; color:rgba(255,255,255,.6);">Primary problem
+        <select value="{{ topic }}" onChange="{{ setTopic }}" style="background:#0f1524; color:#fff; border:1px solid rgba(255,255,255,.16); border-radius:9px; padding:11px 14px; font-size:14px; min-width:320px;">
+          <sc-for list="{{ topicOpts }}" as="t" hint-placeholder-count="15"><option value="{{ t.slug }}">{{ t.label }}</option></sc-for>
+        </select>
+      </label>
+      <div style="display:inline-flex; align-items:center; gap:9px; background:rgba(171,132,225,.14); border:1px solid rgba(171,132,225,.4); border-radius:9px; padding:11px 16px; font-size:13px; font-weight:600; color:#C9AEF0;">
+        <i class="ph-fill ph-sparkle"></i>Best demo: {{ primaryDemo }}
+      </div>
+    </div>
+    <div style="margin-top:20px; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:12px;">Assembled page · {{ assembledCount }} blocks</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <sc-for list="{{ assembled }}" as="b" hint-placeholder-count="8">
+        <div style="display:flex; align-items:center; gap:14px; background:#0f1524; border:1px solid rgba(255,255,255,.1); border-radius:11px; padding:13px 16px;">
+          <span style="flex:none; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:{{ b.typeColorDark }}; min-width:88px;">{{ b.type }}</span>
+          <span style="flex:1; min-width:0; font-size:15px; font-weight:600; color:#fff;">{{ b.title }}</span>
+          <sc-if value="{{ b.demo }}" hint-placeholder-val="{{ false }}"><span style="flex:none; font-size:12px; color:#C9C1F2; display:inline-flex; align-items:center; gap:6px;"><i class="ph-fill ph-monitor-play"></i>{{ b.demo }}</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- VISUAL BLOCKS -->
+  <div style="margin-top:44px;">
+    <div style="font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C5345; margin-bottom:6px;">Visual blocks</div>
+    <p style="margin:0 0 22px; font-size:14px; color:#5C5345; max-width:680px;">Reusable, designed page blocks. Each one lives in its own file and is pulled into a prospect page by the generator. Shown here on their own, with sample content.</p>
+
+    <div style="display:flex; flex-direction:column; gap:34px;">
+
+
+      <div style="border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+        <div style="padding:18px 22px; border-bottom:1px solid #F3F4F6; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:16px; font-weight:800; color:#1A1611;">Decision record</span>
+          <span style="font-size:12px; font-weight:600; color:#5C5345; background:#F3F4F6; border-radius:9999px; padding:3px 10px;">static</span>
+          <span style="font-size:12px; color:#5C5345;">Block Decision Record.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: decisions &middot; knowledge</span>
+        </div>
+        <div data-row="1" style="min-height:1380px;"><sc-if value="{{ vis1 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Decision Record" hint-size="100%,1380px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+        <div style="padding:18px 22px; border-bottom:1px solid #F3F4F6; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:16px; font-weight:800; color:#1A1611;">Hero thread</span>
+          <span style="font-size:12px; font-weight:600; color:#5C5345; background:#F3F4F6; border-radius:9999px; padding:3px 10px;">hero visual</span>
+          <span style="font-size:12px; color:#5C5345;">Block Hero Thread.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: decisions &middot; knowledge</span>
+        </div>
+        <div data-row="2" style="min-height:820px;"><sc-if value="{{ vis2 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Hero Thread" hint-size="100%,820px"></dc-import></sc-if></div>
+      </div>
+
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Hero &mdash; discussion becomes tracked work</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Hero Handoff.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: outputs do not turn into action</span>
+        </div>
+        <div data-row="4" style="min-height:940px;"><sc-if value="{{ vis4 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Hero Handoff" hint-size="100%,940px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Hero &mdash; history outlasts the person</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Hero Bottleneck.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: knowledge depends on a few people</span>
+        </div>
+        <div data-row="5" style="min-height:820px;"><sc-if value="{{ vis5 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Hero Bottleneck" hint-size="100%,820px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Mechanism &mdash; scattered into one Space</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Space Converge.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: scattered information &middot; knowledge</span>
+        </div>
+        <div data-row="6" style="min-height:1000px;"><sc-if value="{{ vis6 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Space Converge" hint-size="100%,1000px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+        <div style="padding:18px 22px; border-bottom:1px solid #F3F4F6; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span style="font-size:16px; font-weight:800; color:#1A1611;">Hero &mdash; delivery risks surface too late</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Hero Collision.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: late risk</span>
+        </div>
+        <div data-row="8" style="min-height:700px;"><sc-if value="{{ vis8 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Hero Collision" hint-size="100%,700px"></dc-import></sc-if></div>
+      </div>
+
+
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Anatomy of a Space — what each part replaces</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">interactive</span>
+          <span style="font-size:12px; color:#5C5345;">Block Space Anatomy.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: scattered information · all five</span>
+        </div>
+        <div data-row="10" style="min-height:1100px;"><sc-if value="{{ vis10 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Space Anatomy" hint-size="100%,1100px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Relationship map — how work connects</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Relationship Map.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: late risk · scattered information</span>
+        </div>
+        <div data-row="11" style="min-height:900px;"><sc-if value="{{ vis11 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Relationship Map" hint-size="100%,900px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Many tools, one shared Space</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block Multi Tool Space.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: scattered information</span>
+        </div>
+        <div data-row="12" style="min-height:1200px;"><sc-if value="{{ vis12 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Multi Tool Space" hint-size="100%,1200px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Orbit Lenses — discussion into outcomes</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">interactive</span>
+          <span style="font-size:12px; color:#5C5345;">Block Orbit Lenses.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: lost outputs · late risk</span>
+        </div>
+        <div data-row="13" style="min-height:1400px;"><sc-if value="{{ vis13 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Orbit Lenses" hint-size="100%,1400px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Sprint planning — the full bento</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">static</span>
+          <span style="font-size:12px; color:#5C5345;">Block Sprint Planning.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: planning · all five</span>
+        </div>
+        <div data-row="14" style="min-height:1600px;"><sc-if value="{{ vis14 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Sprint Planning" hint-size="100%,1600px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">What each role gets</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">static</span>
+          <span style="font-size:12px; color:#5C5345;">Block Team Roles.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: all five</span>
+        </div>
+        <div data-row="15" style="min-height:900px;"><sc-if value="{{ vis15 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Team Roles" hint-size="100%,900px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">Before Quely / With Quely</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">static</span>
+          <span style="font-size:12px; color:#5C5345;">Block Before After.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: all five</span>
+        </div>
+        <div data-row="16" style="min-height:1800px;"><sc-if value="{{ vis16 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block Before After" hint-size="100%,1800px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">How Quely works — the process diagram</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">animated</span>
+          <span style="font-size:12px; color:#5C5345;">Block How It Works.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: all five</span>
+        </div>
+        <div data-row="17" style="min-height:1240px;"><sc-if value="{{ vis17 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block How It Works" hint-size="100%,1240px"></dc-import></sc-if></div>
+      </div>
+
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">CTA — work spread across tools</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">cta</span>
+          <span style="font-size:12px; color:#5C5345;">Block CTA Fragmentation.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: scattered information</span>
+        </div>
+        <div data-row="19" style="min-height:620px;"><sc-if value="{{ vis19 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block CTA Fragmentation" hint-size="100%,620px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">CTA — decisions lose their history</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">cta</span>
+          <span style="font-size:12px; color:#5C5345;">Block CTA Decisions.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: decisions</span>
+        </div>
+        <div data-row="20" style="min-height:540px;"><sc-if value="{{ vis20 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block CTA Decisions" hint-size="100%,540px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">CTA — delivery risks surface too late</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">cta</span>
+          <span style="font-size:12px; color:#5C5345;">Block CTA Risks.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: late risk</span>
+        </div>
+        <div data-row="21" style="min-height:420px;"><sc-if value="{{ vis21 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block CTA Risks" hint-size="100%,420px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">CTA — knowledge depends on a few people</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">cta</span>
+          <span style="font-size:12px; color:#5C5345;">Block CTA Knowledge.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: knowledge</span>
+        </div>
+        <div data-row="22" style="min-height:520px;"><sc-if value="{{ vis22 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block CTA Knowledge" hint-size="100%,520px"></dc-import></sc-if></div>
+      </div>
+
+      <div style="margin-bottom:34px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff;">
+        <div style="display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
+          <span style="font-size:15px; font-weight:700; color:#1A1611;">CTA — discussions do not become action</span>
+          <span style="font-size:12px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">cta</span>
+          <span style="font-size:12px; color:#5C5345;">Block CTA Action.dc.html</span>
+          <span style="margin-left:auto; font-size:12px; color:#5C5345;">Used by: lost outputs</span>
+        </div>
+        <div data-row="23" style="min-height:300px;"><sc-if value="{{ vis23 }}" hint-placeholder-val="{{ false }}"><dc-import name="Block CTA Action" hint-size="100%,300px"></dc-import></sc-if></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FULL LIBRARY -->
+  <div style="margin-top:44px;">
+    <div style="font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#5C5345; margin-bottom:16px;">All blocks by type</div>
+    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="8">
+      <div style="margin-bottom:34px;">
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
+          <h2 style="margin:0; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:{{ g.color }};">{{ g.label }}</h2>
+          <span style="font-size:13px; color:#5C5345;">{{ g.count }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
+          <sc-for list="{{ g.items }}" as="b" hint-placeholder-count="4">
+            <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:18px 20px; box-shadow:0 1px 2px rgba(3,7,18,.05);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px; flex-wrap:wrap;">
+                <span style="font-size:14px; font-weight:700; color:#1A1611; flex:1; min-width:0;">{{ b.title }}</span>
+                <sc-if value="{{ b.demo }}" hint-placeholder-val="{{ false }}"><span style="flex:none; font-size:11px; font-weight:600; color:#5C28A4; background:#F8F5FB; border-radius:9999px; padding:3px 10px;">{{ b.demo }}</span></sc-if>
+              </div>
+              <sc-if value="{{ b.body }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 10px; font-size:13px; line-height:1.5; color:#5C5345;">{{ b.body }}</p></sc-if>
+              <sc-if value="{{ b.text }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 10px; font-size:14px; line-height:1.5; font-style:italic; color:#1A1611;">{{ b.text }}</p></sc-if>
+              <sc-if value="{{ b.q }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 6px; font-size:13px; font-weight:600; color:#1A1611;">{{ b.q }}</p><p style="margin:0 0 10px; font-size:13px; line-height:1.5; color:#5C5345;">{{ b.a }}</p></sc-if>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;">
+                <sc-for list="{{ b.tags }}" as="tg" hint-placeholder-count="3">
+                  <span style="font-size:11px; font-weight:600; color:#5C5345; background:#F3F4F6; border-radius:9999px; padding:3px 10px;">{{ tg }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  get lib() { return window.QuelyLibrary; }
+
+  // Two maps, because the same type label renders on two opposite surfaces: the dark
+  // sandbox panel needs light tints, the light group headings need dark inks.
+  typeColor(t) {
+    return ({ problem:'#B91C1C', capability:'#5C28A4', usecase:'#1D4ED8', role:'#8A3D06', proof:'#12652F', objection:'#4338CA', statement:'#5C28A4', cta:'#111827' })[t] || '#4B5563';
+  }
+  typeColorOnDark(t) {
+    return ({ problem:'#FCA5A5', capability:'#C9AEF0', usecase:'#93C5FD', role:'#FCD34D', proof:'#86EFAC', objection:'#A5B4FC', statement:'#C9AEF0', cta:'#F3F4F6' })[t] || '#D1D5DB';
+  }
+  topicLabel(slug) { const t = (this.lib.TOPICS.find((x)=>x.slug===slug)||{}); return t.label || slug; }
+
+  decorate(b) {
+    return {
+      id: b.id, type: b.type, title: b.title || b.text || '', body: b.body || '', text: b.text || '',
+      q: b.q || '', a: b.a || '', demo: b.demo || '',
+      typeColor: this.typeColor(b.type),
+      typeColorDark: this.typeColorOnDark(b.type),
+      tags: (b.topic || []).map((s)=>this.topicLabel(s)).concat((b.role&&b.role.indexOf('any')===-1?b.role:[])),
+    };
+  }
+
+  setRole = (e) => this.setState({ role: e.target.value });
+  setTopic = (e) => this.setState({ topic: e.target.value });
+
+  // Lazy-mount: 24 blocks each install their own observers, animations and rAF loops,
+  // so mounting them all at once starves the main thread. Each catalogue row keeps its
+  // full height as a placeholder and only mounts its block once scrolled near view.
+  // The first rows mount eagerly so the catalogue is never empty, even if the page's
+  // async pipeline is starved. IntersectionObserver and scroll events proved unreliable
+  // here, so visibility is swept synchronously from an interval instead.
+  state = { role:'eng-leader', topic:'context-fragmentation', vis: { 0:true, 1:true, 2:true } };
+
+  sweep() {
+    const rows = document.querySelectorAll('[data-row]');
+    if (!rows.length) return;
+    // Bail until layout has resolved. Uses absolute document offsets, which do not
+    // change with scroll: a viewport-relative measure would also bail near the page
+    // bottom and permanently block the final rows from mounting.
+    if (!this._settled) {
+      const spread = rows[rows.length - 1].offsetTop - rows[0].offsetTop;
+      if (spread < 1000) return;
+      this._settled = true;
+    }
+    const vh = window.innerHeight || 800;
+    const y = window.scrollY || window.pageYOffset || 0;
+    // high-water mark, so scrolling fast or jumping can never skip a row
+    this._reach = Math.max(this._reach || 0, y + vh + 600);
+    let next = null;
+    rows.forEach((r) => {
+      const k = r.getAttribute('data-row');
+      if (this.state.vis[k]) return;
+      if (r.offsetTop <= this._reach) {
+        next = next || Object.assign({}, this.state.vis);
+        next[k] = true;
+      }
+    });
+    if (next) this.setState({ vis: next });
+  }
+
+  componentDidMount() {
+    // no synchronous first sweep: layout has not resolved yet at mount time
+    this._tick = setInterval(() => this.sweep(), 400);
+    this._onScroll = () => this.sweep();
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+  }
+  componentWillUnmount() {
+    clearInterval(this._tick);
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  renderVals() {
+    const lib = this.lib;
+    const vis = this.state.vis || {};
+    const lazy = {};
+    for (let i = 0; i < 40; i++) lazy['vis' + i] = !!vis[i];
+    if (!lib) return Object.assign({ blockCount: 0, assembled: [], groups: [] }, lazy);
+    const plan = lib.assemble({ role: this.state.role, topic: this.state.topic });
+    const assembled = plan.blockIds.map((id)=>this.decorate(lib.byId(id)));
+
+    const order = [
+      ['statement','Approved problem statements','#5C28A4'],
+      ['problem','Problems','#B91C1C'],
+      ['capability','Capabilities','#5C28A4'],
+      ['usecase','Use cases','#1D4ED8'],
+      ['role','Role benefits','#8A3D06'],
+      ['proof','Proof & outcomes','#12652F'],
+      ['objection','Objections','#4338CA'],
+      ['cta','Calls to action','#111827'],
+    ];
+    const groups = order.map(([type,label,color]) => {
+      const items = lib.BLOCKS.filter((b)=>b.type===type).map((b)=>this.decorate(b));
+      return { type, label, color, count: items.length, items };
+    }).filter((g)=>g.count>0);
+
+    return Object.assign(lazy, {
+      blockCount: lib.BLOCKS.length,
+      role: this.state.role, topic: this.state.topic,
+      roleOpts: lib.ROLES,
+      // dormant families are excluded from the testing flow
+      topicOpts: lib.TOPICS.filter(function (t) {
+        const P = window.QuelyPagePlans;
+        if (!P || !P.INACTIVE_FAMILIES || !P.TOPIC_FAMILY) return true;
+        return !P.INACTIVE_FAMILIES[P.TOPIC_FAMILY[t.slug]];
+      }),
+      primaryDemo: plan.primaryDemo,
+      assembled, assembledCount: assembled.length,
+      setRole: this.setRole, setTopic: this.setTopic,
+      groups,
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -3,15 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
   body { margin:0; background:#EEF2FF; font-family:'Inter',sans-serif; }
@@ -28,7 +25,7 @@
 
     <div style="max-width:820px; margin:0 auto; text-align:center;">
       <div data-el="r" style="{{ eyebrowStyle }}">
-        <span style="flex:none; width:19px; height:19px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
+        <span style="flex:none; width:19px; height:19px; background:url('assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
         <span style="min-width:0; font-size:12px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#4338CA; text-wrap:pretty;">{{ eyebrow }}</span>
       </div>
       <h2 data-el="r" style="{{ headlineStyle }}">{{ headline }}</h2>
@@ -53,7 +50,7 @@
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:9px;">
               <span style="{{ it.statusStyle }}"><i class="{{ it.statusIcon }}" style="font-size:12px;"></i>{{ it.status }}</span>
               <span style="flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:6px; padding:3px 8px; font-size:11px; font-weight:700; color:#111827;">
-                <span style="width:11px; height:11px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>{{ it.key }}
+                <span style="width:11px; height:11px; background:url('assets/logos/jira.svg') center/contain no-repeat;"></span>{{ it.key }}
               </span>
             </div>
             <div style="margin-top:9px; font-size:15px; line-height:1.35; font-weight:700; color:#111827; text-wrap:pretty;">{{ it.title }}</div>
@@ -81,7 +78,7 @@
 
       <div style="flex:1 1 300px; min-width:280px;">
         <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
-          <span style="flex:none; width:22px; height:22px; background:url('/assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
+          <span style="flex:none; width:22px; height:22px; background:url('assets/quely-orbit-mascot.png') center/contain no-repeat;"></span>
           <span style="flex:1; min-width:0; font-size:13px; font-weight:700; color:#111827;">{{ retroLabel }}</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:9px;">
@@ -98,7 +95,7 @@
 
       <div style="flex:1 1 300px; min-width:280px;">
         <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
-          <span style="flex:none; width:17px; height:17px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>
+          <span style="flex:none; width:17px; height:17px; background:url('assets/logos/jira.svg') center/contain no-repeat;"></span>
           <span style="flex:1; min-width:0; font-size:13px; font-weight:700; color:#111827;">{{ nextLabel }}</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:9px;">
@@ -122,7 +119,7 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1180}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1180},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sprint review and retrospective&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Understand what changed, what blocked delivery, and what should carry into the next sprint.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Review completed and unfinished work alongside the blockers, scope changes, decisions, dependencies, and discussions that shaped delivery. Convert agreed retrospective actions into assigned work for the next cycle.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sprintName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sprint 24&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sprintDates&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;11 - 24 August&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;retroLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit found 3 retrospective actions&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;nextLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Assigned work in Sprint 25&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;closer&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The review reads from the same Space the work happened in, so the reasons behind each outcome are already there.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;items&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{status:string;tone:string;key:string;title:string;context:Array&lt;{kind:string;icon:string;tint:string;text:string}&gt;}&gt;&quot;},&quot;tallies&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;icon:string;tone:string}&gt;&quot;},&quot;retroItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{text:string}&gt;&quot;},&quot;nextItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{text:string;owner:string;tint:string;key:string;sprint:string}&gt;&quot;}}">
 class Component extends DCLogic {
   DEMO = {
     eyebrow: 'Sprint review and retrospective',

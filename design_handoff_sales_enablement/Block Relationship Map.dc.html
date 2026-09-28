@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
+
+  /* the map draws itself: focal node first, then each related task with the
+     relationship that connects it, then the rail that lists the same links */
+  @keyframes qrm-node { to { opacity:1; transform:translateY(0) scale(1); } }
+  @keyframes qrm-edge { to { opacity:1; } }
+  @keyframes qrm-rail { to { opacity:1; transform:translateY(0); } }
+
+  [data-qrm][data-go] [data-el="node"] { animation:qrm-node 480ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qrm][data-go] [data-el="edge"] { animation:qrm-edge 420ms ease-out var(--d) forwards; }
+  [data-qrm][data-go] [data-el="rail"] { animation:qrm-rail 480ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qrm] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:80px 40px; display:flex; justify-content:center;">
+  <div style="position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="max-width:780px; margin:0 auto; text-align:center;">
+      <div style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">{{ eyebrow }}</div>
+      <h2 style="margin:0 0 14px; font-family:'Geist',sans-serif; font-size:32px; line-height:1.15; letter-spacing:-.04em; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#5C5345; text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <div data-qrm style="margin-top:36px; background:#fff; border:1px solid #E5E7EB; border-radius:12px; box-shadow:0 12px 24px rgba(3,7,18,.10), 0 4px 8px rgba(3,7,18,.06); overflow:hidden;">
+      <div style="display:flex; flex-wrap:wrap; align-items:stretch;">
+
+        <!-- ============ THE CANVAS ============ -->
+        <div data-canvas style="flex:1 1 620px; min-width:520px; position:relative; height:544px; background-color:#FBFBFC; background-image:radial-gradient(#E5E7EB 1px, transparent 1px); background-size:14px 14px;">
+
+          <!-- zoom + lock controls -->
+          <div style="position:absolute; left:14px; top:14px; z-index:5; display:flex; flex-direction:column; background:#fff; border:1px solid #E5E7EB; border-radius:10px; box-shadow:0 1px 2px rgba(3,7,18,.10); overflow:hidden;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-bottom:1px solid #F3F4F6;"><i class="ph-bold ph-plus" style="font-size:14px; color:#374151;"></i></span>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-bottom:1px solid #F3F4F6;"><i class="ph-bold ph-minus" style="font-size:14px; color:#374151;"></i></span>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-bottom:1px solid #F3F4F6;"><i class="ph ph-frame-corners" style="font-size:14px; color:#374151;"></i></span>
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;"><i class="ph-fill ph-lock-simple" style="font-size:14px; color:#374151;"></i></span>
+          </div>
+
+          <!-- edges, with the relationship named on each one -->
+          <sc-for list="{{ edges }}" as="ed" hint-placeholder-count="5">
+            <span data-el="edge" style="{{ ed.wrapStyle }}">
+              <sc-for list="{{ ed.segs }}" as="sg" hint-placeholder-count="2">
+                <span style="{{ sg.style }}"></span>
+              </sc-for>
+              <span style="{{ ed.arrowStyle }}"></span>
+              <span style="{{ ed.labelStyle }}">{{ ed.label }}</span>
+            </span>
+          </sc-for>
+
+          <!-- parent task -->
+          <div data-el="node" style="{{ nodeParent }}">
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:11.5px; font-weight:700; color:#1A1611; line-height:1.3;">{{ parentName }}</div>
+                <div style="margin-top:2px; font-size:10px; color:#5C5345;">{{ parentKey }}</div>
+              </div>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:3px; white-space:nowrap; font-size:9.5px; font-weight:600; color:#5C5345;">View <i class="ph ph-eye" style="font-size:11px;"></i></span>
+            </div>
+          </div>
+
+          <!-- the focal task -->
+          <div data-el="node" style="{{ nodeFocal }}">
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:11.5px; font-weight:700; color:#1A1611; line-height:1.3;">{{ focalTitle }}</div>
+                <div style="margin-top:2px; font-size:10px; color:#5C5345;">{{ focalKey }}</div>
+                <div style="margin-top:5px; font-size:10px; font-weight:700; color:#5C28A4;">{{ focusLabel }}</div>
+              </div>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:3px; white-space:nowrap; font-size:9.5px; font-weight:600; color:#5C5345;">View <i class="ph ph-eye" style="font-size:11px;"></i></span>
+            </div>
+            <div style="position:absolute; left:14px; bottom:-13px; display:flex; gap:3px;">
+              <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; background:#fff; border:1px solid #E5E7EB; border-radius:5px;"><i class="ph-bold ph-plus" style="font-size:10px; color:#5C5345;"></i></span>
+              <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; background:#fff; border:1px solid #E5E7EB; border-radius:5px;"><i class="ph ph-list" style="font-size:10px; color:#5C5345;"></i></span>
+              <span style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; background:#fff; border:1px solid #E5E7EB; border-radius:5px;"><i class="ph ph-selection" style="font-size:10px; color:#5C5345;"></i></span>
+            </div>
+          </div>
+
+          <!-- linked spaces panel -->
+          <div data-el="node" style="{{ nodeSpaces }}">
+            <div style="display:flex; align-items:center; gap:8px; padding:9px 11px; border-bottom:1px solid #DDD6FE;">
+              <span style="flex:1; min-width:0; font-size:10.5px; font-weight:700; color:#41186F;">{{ spacesLabel }}</span>
+              <i class="ph-bold ph-caret-up" style="flex:none; font-size:10px; color:#7C3AED;"></i>
+            </div>
+            <sc-for list="{{ linkedSpaces }}" as="sp" hint-placeholder-count="2">
+              <div style="{{ sp.style }}">
+                <div style="font-size:10.5px; font-weight:700; color:#1A1611;">{{ sp.name }}</div>
+                <div style="margin-top:1px; font-size:9px; color:#5C5345;">{{ sp.note }}</div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:6px;">
+                  <span style="display:flex;">
+                    <span style="width:15px; height:15px; border-radius:50%; background:#5C28A4; box-shadow:0 0 0 1.5px #F5F3FF;"></span>
+                    <span style="width:15px; height:15px; border-radius:50%; background:#2563EB; margin-left:-5px; box-shadow:0 0 0 1.5px #F5F3FF;"></span>
+                    <span style="width:15px; height:15px; border-radius:50%; background:#12652F; margin-left:-5px; box-shadow:0 0 0 1.5px #F5F3FF;"></span>
+                  </span>
+                  <span style="font-size:9px; color:#5C5345;">&middot;</span>
+                  <span style="display:inline-flex; align-items:center; gap:3px; font-size:9.5px; font-weight:600; color:#5C5345;">{{ sp.count }} <i class="ph ph-list-checks" style="font-size:10px;"></i></span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- all issues pill -->
+          <div data-el="node" style="{{ nodeIssues }}">{{ issuesLabel }}</div>
+
+          <!-- relationship pill -->
+          <div data-el="node" style="{{ nodeRelPill }}">{{ implLabel }}</div>
+
+          <!-- the implementing task -->
+          <div data-el="node" style="{{ nodeChild }}">
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:11px; font-weight:600; color:#1A1611; line-height:1.35;">{{ childName }}</div>
+                <div style="margin-top:3px; font-size:10px; color:#5C5345;">{{ childKey }}</div>
+              </div>
+              <span style="flex:none; display:inline-flex; align-items:center; gap:3px; white-space:nowrap; font-size:9.5px; font-weight:600; color:#5C5345;">View <i class="ph ph-eye" style="font-size:11px;"></i></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ THE LINKED UNITS RAIL ============ -->
+        <div data-el="rail" style="{{ railStyle }}">
+          <div style="display:flex; align-items:center; gap:10px; padding:16px 16px 14px;">
+            <i class="ph ph-link" style="flex:none; font-size:19px; color:#5C28A4;"></i>
+            <span style="flex:1; min-width:0; font-size:15px; font-weight:700; color:#1A1611;">{{ railTitle }}</span>
+            <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; background:#fff; border:1px solid #E5E7EB; border-radius:7px;"><i class="ph-bold ph-plus" style="font-size:12px; color:#374151;"></i></span>
+            <span style="flex:none; display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; background:#fff; border:1px solid #E5E7EB; border-radius:7px;"><i class="ph ph-eye-slash" style="font-size:12px; color:#374151;"></i></span>
+          </div>
+
+          <div style="height:1px; background:#E5E7EB; margin:0 16px;"></div>
+
+          <div style="padding:14px 16px 18px;">
+            <!-- the task everything else relates to -->
+            <div style="background:#F8F5FB; border:1.5px solid #C9C1F2; border-radius:10px; padding:11px 12px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <i class="ph-fill ph-book-bookmark" style="flex:none; font-size:15px; color:#12652F;"></i>
+                <span style="flex:none; background:#fff; border:1px solid #C9C1F2; border-radius:6px; padding:2px 8px; font-size:11px; font-weight:700; color:#1A1611;">{{ focalKey }}</span>
+              </div>
+              <div style="margin-top:8px; font-size:13px; font-weight:700; color:#41186F; line-height:1.35;">{{ focalTitle }}</div>
+            </div>
+
+            <sc-for list="{{ groups }}" as="gp" hint-placeholder-count="3">
+              <div style="margin-top:16px;">
+                <div style="display:flex; align-items:center; gap:7px; margin-bottom:8px;">
+                  <i class="ph-bold ph-caret-down" style="flex:none; font-size:11px; color:#5C5345;"></i>
+                  <span style="flex:none; font-size:12.5px; font-weight:700; color:#1A1611;">{{ gp.rel }}</span>
+                  <span style="flex:1; min-width:0; font-size:12px; color:#5C5345;">{{ gp.count }}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:9px 11px;">
+                  <i class="{{ gp.icon }}" style="flex:none; font-size:14px; color:{{ gp.color }};"></i>
+                  <span style="flex:none; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; background:#ECE7F2; border:1px solid #E5E7EB; border-radius:6px; padding:2px 7px; font-size:10.5px; font-weight:700; color:#1A1611;">{{ gp.key }} <i class="ph ph-arrow-square-out" style="font-size:10px; color:#5C5345;"></i></span>
+                  <span style="flex:1; min-width:0; font-size:11.5px; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ gp.name }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:880},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Relationships&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;See what else could be affected before you make a change.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;View the tasks and projects connected to the work, so you can spot dependencies, understand blockers, and see the downstream impact of a change.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focalKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QUEL-1065&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focalTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;[DESIGN] Session Builder&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focusLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Current Focus&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;parentKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QUEL-925&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;parentName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Orbit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;childKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;QL-23&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;childName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;A new/easier way for building a session with pre-built...&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;railTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Linked units&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;issuesLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;All issues (2)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;implLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;is implemented by (1)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;spacesLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Linked spaces (2)&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;groups&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{rel:string;count:string;key:string;name:string;icon:string;color:string}&gt;&quot;},&quot;linkedSpaces&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;note:string;count:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
+  DEMO = {
+    eyebrow: 'Relationships',
+    headline: 'See what else could be affected before you make a change.',
+    body: 'View the tasks and projects connected to the work, so you can spot dependencies, understand blockers, and see the downstream impact of a change.',
+
+    focalKey: 'QUEL-1065',
+    focalTitle: '[DESIGN] Session Builder',
+    focusLabel: 'Current Focus',
+    parentKey: 'QUEL-925',
+    parentName: 'Orbit',
+    childKey: 'QL-23',
+    childName: 'A new/easier way for building a session with pre-built...',
+    spacesLabel: 'Linked spaces (2)',
+    issuesLabel: 'All issues (2)',
+    implLabel: 'is implemented by (1)',
+    linkedSpaces: [
+      { name: 'Test Sprint To team', note: 'You are not part of this space', count: '4' },
+      { name: 'Founders World',      note: 'You are not part of this space', count: '10' }
+    ],
+
+    railTitle: 'Linked units',
+    groups: [
+      { rel: 'Parent',          count: '(1)', key: 'QUEL-925',  name: 'Orbit',                    icon: 'ph-fill ph-lightning',     color: '#7C3AED' },
+      { rel: 'Is Implemented By', count: '(1)', key: 'QL-23',   name: 'A new/easier way to build', icon: 'ph-fill ph-check-square',  color: '#2563EB' },
+      { rel: 'Merged Into',     count: '(1)', key: 'QUEL-1104', name: '[DESIGN] Homepage story',   icon: 'ph-fill ph-book-bookmark', color: '#12652F' }
+    ],
+
+  };
+
+  NODE = 'position:absolute; z-index:3; box-sizing:border-box; background:#fff; border:1px solid #E5E7EB;'
+       + ' border-radius:8px; box-shadow:0 1px 2px rgba(3,7,18,.05); padding:10px 12px;'
+       + ' opacity:0; transform:translateY(8px) scale(.97);';
+
+  seg(style) { return { style: 'position:absolute; ' + style }; }
+
+  // a straight run plus an optional elbow, with the relationship named on it
+  edge(o) {
+    return {
+      wrapStyle: 'position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; --d:' + o.at + 'ms;',
+      segs: o.segs.map((s) => this.seg(s)),
+      arrowStyle: 'position:absolute; ' + o.arrow,
+      label: o.label,
+      labelStyle: 'position:absolute; ' + o.labelPos + ' white-space:nowrap; background:#fff;'
+        + ' border:1px solid #E5E7EB; border-radius:5px; padding:2px 7px;'
+        + ' font-size:9.5px; font-weight:600; color:#5C5345;'
+    };
+  }
+
+  /* The canvas holds absolutely-positioned nodes, so a fixed height lets the lowest
+     one escape and land on whatever follows. Derive the height from the content. */
+  fitCanvas() {
+    var c = document.querySelector('[data-canvas]');
+    if (!c) return;
+    // Measure only the node cards. The edge/beam layers use inset:0, so they report
+    // the canvas's own height — measuring them would feed the height back into itself
+    // and the canvas would ratchet taller on every tick.
+    var low = 0, cw = c.clientWidth, ch = c.clientHeight;
+    [].forEach.call(c.children, function (el) {
+      var cs = getComputedStyle(el);
+      if (cs.position !== 'absolute') return;
+      if (el.offsetWidth >= cw - 1 || el.offsetHeight >= ch - 1) return;   // full-bleed layer
+      var b = (parseFloat(cs.top) || 0) + el.offsetHeight;
+      if (b > low) low = b;
+    });
+    if (!low) return;
+    // never below the authored height, and always derived purely from content
+    var want = Math.max(544, Math.ceil(low + 18));
+    if (Math.abs(parseFloat(c.style.height) - want) > 2) c.style.height = want + 'px';
+  }
+
+  componentDidMount() {
+    var self = this;
+    this._fitT = setInterval(function () { self.fitCanvas(); }, 400);
+    this._fitStop = setTimeout(function () { clearInterval(self._fitT); self.fitCanvas(); }, 6000);
+    this._onFitResize = function () { self.fitCanvas(); };
+    window.addEventListener('resize', this._onFitResize);
+    const node = document.querySelector('[data-qrm]');
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.setAttribute('data-go', ''); return;
+    }
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Plays once when it first enters view.
+    this._played = false;
+    const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
+    if ('IntersectionObserver' in window) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 340); }
+          else if (!this._played) { clearTimeout(this._t); }
+        });
+      }, { threshold: 0.15 });
+      this.io.observe(node);
+    } else { play(); }
+  }
+  componentWillUnmount() {
+    clearInterval(this._fitT); clearTimeout(this._fitStop);
+    if (this._onFitResize) window.removeEventListener('resize', this._onFitResize);
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const GREY = '#D1D5DB', VIO = '#A78BFA';
+
+    // Node geometry is fixed in px against the 544px canvas so edges and nodes
+    // can never drift apart; x uses a px offset from the left gutter.
+    const edges = [
+      // parent -> focal
+      this.edge({ at: 620, label: 'Parent \u2014 Child',
+        segs: ['left:118px; top:96px; width:1.5px; height:86px; background:' + GREY + ';'],
+        arrow: 'left:114px; top:180px; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid ' + GREY + ';',
+        labelPos: 'left:68px; top:126px;' }),
+      // parent -> linked spaces (violet: a space link, not a task link)
+      this.edge({ at: 760, label: 'Spaces',
+        segs: [
+          'left:226px; top:52px; width:78px; height:1.5px; background:' + VIO + ';',
+          'left:304px; top:52px; width:1.5px; height:56px; background:' + VIO + ';',
+          'left:304px; top:106px; width:38px; height:1.5px; background:' + VIO + ';'
+        ],
+        arrow: 'left:340px; top:102px; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid ' + VIO + ';',
+        labelPos: 'left:238px; top:24px;' }),
+      // focal -> all issues
+      this.edge({ at: 900, label: 'Linked',
+        segs: [
+          'left:118px; top:274px; width:1.5px; height:52px; background:' + GREY + ';',
+          'left:118px; top:326px; width:242px; height:1.5px; background:' + GREY + ';',
+          'left:360px; top:326px; width:1.5px; height:46px; background:' + GREY + ';'
+        ],
+        arrow: 'left:356px; top:370px; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid ' + GREY + ';',
+        labelPos: 'left:206px; top:316px;' }),
+      // all issues -> relationship pill
+      this.edge({ at: 1020, label: '',
+        segs: [
+          'left:360px; top:404px; width:1.5px; height:22px; background:' + GREY + ';',
+          'left:360px; top:426px; width:112px; height:1.5px; background:' + GREY + ';',
+          'left:472px; top:426px; width:1.5px; height:20px; background:' + GREY + ';'
+        ],
+        arrow: 'left:468px; top:444px; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid ' + GREY + ';',
+        labelPos: 'left:-999px; top:0;' }),
+      // relationship pill -> implementing task
+      this.edge({ at: 1120, label: '',
+        segs: ['left:472px; top:472px; width:1.5px; height:26px; background:' + GREY + ';'],
+        arrow: 'left:468px; top:496px; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:6px solid ' + GREY + ';',
+        labelPos: 'left:-999px; top:0;' })
+    ];
+
+    var S = this.surf();
+    return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+
+      focalKey: p.focalKey ?? D.focalKey,
+      focalTitle: p.focalTitle ?? D.focalTitle,
+      focusLabel: p.focusLabel ?? D.focusLabel,
+      parentKey: p.parentKey ?? D.parentKey,
+      parentName: p.parentName ?? D.parentName,
+      childKey: p.childKey ?? D.childKey,
+      childName: p.childName ?? D.childName,
+      spacesLabel: p.spacesLabel ?? D.spacesLabel,
+      issuesLabel: p.issuesLabel ?? D.issuesLabel,
+      implLabel: p.implLabel ?? D.implLabel,
+      linkedSpaces: (p.linkedSpaces && p.linkedSpaces.length ? p.linkedSpaces : D.linkedSpaces).map((sp, i) => ({
+        name: sp.name, note: sp.note, count: sp.count,
+        style: 'padding:9px 11px;' + (i === 0 ? ' border-bottom:1px solid #DDD6FE;' : '')
+      })),
+
+      railTitle: p.railTitle ?? D.railTitle,
+      groups: p.groups && p.groups.length ? p.groups : D.groups,
+
+      edges: edges,
+
+      nodeParent: this.NODE + ' left:58px; top:26px; width:186px; --d:480ms;',
+      nodeFocal: this.NODE.replace('border:1px solid #E5E7EB', 'border:1.5px solid #C9C1F2')
+        + ' left:58px; top:186px; width:186px; box-shadow:0 4px 8px rgba(3,7,18,.10); --d:340ms;',
+      nodeSpaces: 'position:absolute; z-index:3; box-sizing:border-box; left:344px; top:20px; width:218px;'
+        + ' background:#F5F3FF; border:1px solid #DDD6FE; border-radius:8px; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' opacity:0; transform:translateY(8px) scale(.97); --d:820ms;',
+      nodeIssues: 'position:absolute; z-index:3; left:294px; top:374px; box-sizing:border-box; background:#fff;'
+        + ' border:1px solid #E5E7EB; border-radius:8px; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' padding:8px 16px; font-size:11px; font-weight:600; color:#1A1611; white-space:nowrap;'
+        + ' opacity:0; transform:translateY(8px) scale(.97); --d:960ms;',
+      nodeRelPill: 'position:absolute; z-index:3; left:404px; top:448px; box-sizing:border-box; background:#fff;'
+        + ' border:1px solid #E5E7EB; border-radius:6px; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' padding:5px 11px; font-size:9.5px; font-weight:600; color:#5C5345; white-space:nowrap;'
+        + ' opacity:0; transform:translateY(8px) scale(.97); --d:1060ms;',
+      nodeChild: this.NODE + ' left:396px; top:498px; width:196px; --d:1160ms;',
+
+      railStyle: 'flex:1 1 336px; min-width:300px; box-sizing:border-box; border-left:1px solid #E5E7EB;'
+        + ' background:#FDFDFE; opacity:0; transform:translateY(10px); --d:1240ms;'
+    };
+  }
+}
+</script>
+</body>
+</html>

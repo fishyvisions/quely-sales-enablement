@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="enablement-store.js"></script>
+<script src="quely-page-plans.js"></script>
+<style>
+  body { margin:0; background:#ECE7F2; font-family:'Inter',sans-serif; color:#1A1611; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  textarea, input, select { font-family:inherit; }
+</style>
+</helmet>
+<div style="display:flex; flex-direction:column; height:100vh; background:#ECE7F2;">
+
+  <!-- top bar -->
+  <div style="flex:none; display:flex; align-items:center; gap:14px; padding:12px 22px; background:#1A1611; color:#ECE7F2;">
+    <a href="Quely Sales Dashboard.dc.html" style="display:inline-flex; align-items:center; gap:7px; color:#C9C1F2; font-size:13.5px; font-weight:600; text-decoration:none;"><i class="ph ph-arrow-left" style="font-size:15px;"></i>Dashboard</a>
+    <span style="width:1px; height:18px; background:rgba(236,231,242,.22);"></span>
+    <span style="font-family:'Geist',sans-serif; font-size:17px; font-weight:800; letter-spacing:-.02em;">Page Builder</span>
+    <span style="flex:1;"></span>
+    <span style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:rgba(236,231,242,.7);">{{ summary }}</span>
+  </div>
+
+  <div style="flex:1; min-height:0; display:flex;">
+
+    <!-- ================= LEFT: controls ================= -->
+    <div style="flex:none; width:380px; box-sizing:border-box; overflow-y:auto; background:#F8F5FB; border-right:2px solid #1A1611; padding:20px 20px 28px; display:flex; flex-direction:column; gap:20px;">
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-family:'Geist Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4;">1 &middot; Prospect</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <input value="{{ name }}" onInput="{{ setName }}" placeholder="Name" style="{{ field }}">
+          <input value="{{ company }}" onInput="{{ setCompany }}" placeholder="Company" style="{{ field }}">
+        </div>
+        <select value="{{ topic }}" onChange="{{ setTopic }}" style="{{ field }}">
+          <sc-for list="{{ topics }}" as="t" hint-placeholder-count="5">
+            <option value="{{ t.key }}">{{ t.label }}</option>
+          </sc-for>
+        </select>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="flex:1; font-family:'Geist Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4;">2 &middot; Blocks on the page</div>
+          <button onClick="{{ regenerate }}" style="{{ ghostBtn }}"><i class="ph ph-arrows-clockwise" style="font-size:13px;"></i>Regenerate</button>
+        </div>
+        <sc-if value="{{ confirming }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFF7ED; border:1px solid #FED7AA; border-radius:10px; padding:11px 12px;">
+            <div style="font-size:13px; line-height:1.45; color:#7C2D12;">{{ confirmText }}</div>
+            <div style="display:flex; gap:8px; margin-top:9px;">
+              <button onClick="{{ confirmYes }}" style="{{ ghostBtn }} background:#1A1611; color:#fff;">Yes, rebuild</button>
+              <button onClick="{{ confirmNo }}" style="{{ ghostBtn }}">Cancel</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="4">
+          <div style="{{ r.style }}">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span style="flex:none; font-family:'Geist Mono',monospace; font-size:11px; font-weight:700; color:#6B6280;">{{ r.num }}</span>
+              <div onClick="{{ r.select }}" style="flex:1; min-width:0; cursor:pointer;">
+                <div style="font-size:13.5px; font-weight:700; color:#1A1611; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</div>
+                <div style="font-size:11.5px; color:#4B5563;">{{ r.role }}{{ r.edited }}</div>
+              </div>
+              <button onClick="{{ r.up }}" title="Move up" style="{{ r.upStyle }}"><i class="ph-bold ph-caret-up" style="font-size:12px;"></i></button>
+              <button onClick="{{ r.down }}" title="Move down" style="{{ r.downStyle }}"><i class="ph-bold ph-caret-down" style="font-size:12px;"></i></button>
+              <button onClick="{{ r.remove }}" title="Remove" style="{{ iconBtn }}"><i class="ph ph-trash" style="font-size:13px; color:#B91C1C;"></i></button>
+            </div>
+
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:7px; margin-top:11px; padding-top:11px; border-top:1px solid #E4DCEF;">
+                <label style="{{ lbl }}">Eyebrow</label>
+                <input value="{{ r.eyebrow }}" onInput="{{ r.setEyebrow }}" placeholder="Block default" style="{{ field }}">
+                <label style="{{ lbl }}">Headline</label>
+                <textarea value="{{ r.headline }}" onInput="{{ r.setHeadline }}" placeholder="Block default" rows="2" style="{{ area }}"></textarea>
+                <label style="{{ lbl }}">Body</label>
+                <textarea value="{{ r.body }}" onInput="{{ r.setBody }}" placeholder="Block default" rows="4" style="{{ area }}"></textarea>
+                <button onClick="{{ r.reset }}" style="{{ ghostBtn }} align-self:flex-start;"><i class="ph ph-arrow-counter-clockwise" style="font-size:13px;"></i>Reset copy</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <!-- one click opens the library; one click on a block adds it -->
+        <div style="position:relative;">
+          <button onClick="{{ togglePicker }}" style="{{ addBtn }}"><i class="ph-bold ph-plus" style="font-size:14px;"></i>Add block</button>
+          <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:8px; background:#fff; border:2px solid #1A1611; box-shadow:4px 4px 0 #1A1611; max-height:320px; overflow-y:auto;">
+              <sc-for list="{{ addable }}" as="a" hint-placeholder-count="6">
+                <div onClick="{{ a.add }}" style="display:flex; align-items:center; gap:10px; padding:10px 12px; border-bottom:1px solid #F1EEF7; cursor:pointer;" style-hover="background:#F3EEFB;">
+                  <div style="flex:1; min-width:0;">
+                    <div style="font-size:13.5px; font-weight:700; color:#1A1611;">{{ a.name }}</div>
+                    <div style="font-size:11.5px; color:#4B5563;">{{ a.role }}</div>
+                  </div>
+                  <i class="ph-bold ph-plus" style="flex:none; font-size:13px; color:#5C28A4;"></i>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:auto;">
+        <div style="font-family:'Geist Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4;">3 &middot; Publish</div>
+        <button onClick="{{ publish }}" style="{{ publishBtn }}"><i class="ph-bold ph-paper-plane-tilt" style="font-size:15px;"></i>{{ publishLabel }}</button>
+        <sc-if value="{{ hasLink }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff; border:2px solid #1A1611; box-shadow:4px 4px 0 #1A1611; padding:12px 13px;">
+            <div style="font-size:12px; font-weight:700; color:#15803D; margin-bottom:6px;"><i class="ph-fill ph-check-circle"></i> Published</div>
+            <div style="font-family:'Geist Mono',monospace; font-size:12px; color:#1A1611; word-break:break-all;">{{ linkText }}</div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+              <button onClick="{{ copyLink }}" style="{{ ghostBtn }}"><i class="ph ph-copy" style="font-size:13px;"></i>{{ copyLabel }}</button>
+              <button onClick="{{ openLink }}" style="{{ ghostBtn }}"><i class="ph ph-arrow-square-out" style="font-size:13px;"></i>Open page</button>
+            </div>
+          </div>
+        </sc-if>
+        <div style="font-size:12px; line-height:1.5; color:#4B5563;">The published page matches this preview exactly.</div>
+      </div>
+    </div>
+
+    <!-- ================= RIGHT: live preview ================= -->
+    <div data-pcol style="flex:1; min-width:0; overflow-y:auto; overflow-x:hidden; background:#D8D2E4; padding:22px;">
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="height:300px; display:flex; align-items:center; justify-content:center; color:#4B5563; font-size:14px;">No blocks on the page. Add one, or regenerate from the rules.</div>
+      </sc-if>
+      <div data-pframe style="width:1260px; zoom:.56; display:flex; flex-direction:column; background:#ECE7F2; border:2px solid #1A1611; box-shadow:10px 10px 0 #1A1611;">
+        <sc-if value="{{ on_thread }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_thread }}"><dc-import surface="{{ sf_thread }}" eyebrow="{{ cp_thread.eyebrow }}" headline="{{ cp_thread.headline }}" body="{{ cp_thread.body }}" name="Block Hero Thread" hint-size="100%,800px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_collision }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_collision }}"><dc-import surface="{{ sf_collision }}" eyebrow="{{ cp_collision.eyebrow }}" headline="{{ cp_collision.headline }}" body="{{ cp_collision.body }}" name="Block Hero Collision" hint-size="100%,760px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_bottleneck }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_bottleneck }}"><dc-import surface="{{ sf_bottleneck }}" eyebrow="{{ cp_bottleneck.eyebrow }}" headline="{{ cp_bottleneck.headline }}" body="{{ cp_bottleneck.body }}" name="Block Hero Bottleneck" hint-size="100%,820px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_handoff }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_handoff }}"><dc-import surface="{{ sf_handoff }}" eyebrow="{{ cp_handoff.eyebrow }}" headline="{{ cp_handoff.headline }}" body="{{ cp_handoff.body }}" name="Block Hero Handoff" hint-size="100%,900px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_converge }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_converge }}"><dc-import surface="{{ sf_converge }}" eyebrow="{{ cp_converge.eyebrow }}" headline="{{ cp_converge.headline }}" body="{{ cp_converge.body }}" name="Block Space Converge" hint-size="100%,1000px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_anatomy }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_anatomy }}"><dc-import surface="{{ sf_anatomy }}" eyebrow="{{ cp_anatomy.eyebrow }}" headline="{{ cp_anatomy.headline }}" body="{{ cp_anatomy.body }}" name="Block Space Anatomy" hint-size="100%,1100px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_relmap }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_relmap }}"><dc-import surface="{{ sf_relmap }}" eyebrow="{{ cp_relmap.eyebrow }}" headline="{{ cp_relmap.headline }}" body="{{ cp_relmap.body }}" name="Block Relationship Map" hint-size="100%,880px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_multitool }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_multitool }}"><dc-import surface="{{ sf_multitool }}" eyebrow="{{ cp_multitool.eyebrow }}" headline="{{ cp_multitool.headline }}" body="{{ cp_multitool.body }}" name="Block Multi Tool Space" hint-size="100%,1120px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_record }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_record }}"><dc-import surface="{{ sf_record }}" eyebrow="{{ cp_record.eyebrow }}" title="{{ cp_record.headline }}" body="{{ cp_record.body }}" name="Block Decision Record" hint-size="100%,1120px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_lenses }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_lenses }}"><dc-import surface="{{ sf_lenses }}" eyebrow="{{ cp_lenses.eyebrow }}" headline="{{ cp_lenses.headline }}" body="{{ cp_lenses.body }}" name="Block Orbit Lenses" hint-size="100%,1100px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_planning }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_planning }}"><dc-import surface="{{ sf_planning }}" eyebrow="{{ cp_planning.eyebrow }}" headline="{{ cp_planning.headline }}" body="{{ cp_planning.body }}" name="Block Sprint Planning" hint-size="100%,1500px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_roles }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_roles }}"><dc-import surface="{{ sf_roles }}" eyebrow="{{ cp_roles.eyebrow }}" headline="{{ cp_roles.headline }}" body="{{ cp_roles.body }}" name="Block Team Roles" hint-size="100%,900px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_beforeafter }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_beforeafter }}"><dc-import surface="{{ sf_beforeafter }}" eyebrow="{{ cp_beforeafter.eyebrow }}" headline="{{ cp_beforeafter.headline }}" body="{{ cp_beforeafter.body }}" name="Block Before After" hint-size="100%,1400px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_howitworks }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_howitworks }}"><dc-import surface="{{ sf_howitworks }}" eyebrow="{{ cp_howitworks.eyebrow }}" headline="{{ cp_howitworks.headline }}" body="{{ cp_howitworks.body }}" name="Block How It Works" hint-size="100%,560px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_ctaFrag }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_ctaFrag }}"><dc-import surface="{{ sf_ctaFrag }}" eyebrow="{{ cp_ctaFrag.eyebrow }}" headline="{{ cp_ctaFrag.headline }}" body="{{ cp_ctaFrag.body }}" name="Block CTA Fragmentation" hint-size="100%,560px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_ctaDec }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_ctaDec }}"><dc-import surface="{{ sf_ctaDec }}" eyebrow="{{ cp_ctaDec.eyebrow }}" headline="{{ cp_ctaDec.headline }}" body="{{ cp_ctaDec.body }}" name="Block CTA Decisions" hint-size="100%,540px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_ctaRisk }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_ctaRisk }}"><dc-import surface="{{ sf_ctaRisk }}" eyebrow="{{ cp_ctaRisk.eyebrow }}" headline="{{ cp_ctaRisk.headline }}" body="{{ cp_ctaRisk.body }}" name="Block CTA Risks" hint-size="100%,420px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_ctaKnow }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_ctaKnow }}"><dc-import surface="{{ sf_ctaKnow }}" eyebrow="{{ cp_ctaKnow.eyebrow }}" headline="{{ cp_ctaKnow.headline }}" body="{{ cp_ctaKnow.body }}" name="Block CTA Knowledge" hint-size="100%,520px"></dc-import></div></sc-if>
+        <sc-if value="{{ on_ctaAction }}" hint-placeholder-val="{{ false }}"><div style="{{ ord_ctaAction }}"><dc-import surface="{{ sf_ctaAction }}" eyebrow="{{ cp_ctaAction.eyebrow }}" headline="{{ cp_ctaAction.headline }}" body="{{ cp_ctaAction.body }}" name="Block CTA Action" hint-size="100%,300px"></dc-import></div></sc-if>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  // Blocks the builder can place (the library minus blocks retired from it).
+  KEYS = ['thread','collision','bottleneck','handoff','converge','anatomy','relmap','multitool','record',
+          'lenses','planning','roles','beforeafter','howitworks','ctaFrag','ctaDec','ctaRisk','ctaKnow','ctaAction'];
+  ROLE = { thread:'Hero', collision:'Hero', bottleneck:'Hero', handoff:'Hero', converge:'Hero',
+           anatomy:'How Quely solves it', relmap:'How Quely solves it', multitool:'How Quely solves it',
+           record:'How Quely solves it', lenses:'How Quely solves it', planning:'How Quely solves it',
+           roles:'Benefit', beforeafter:'Problem', howitworks:'Process',
+           ctaFrag:'Pre-footer', ctaDec:'Pre-footer', ctaRisk:'Pre-footer', ctaKnow:'Pre-footer', ctaAction:'Pre-footer' };
+  TOPICS = [
+    { key:'context-fragmentation', label:'Work information is spread across too many tools' },
+    { key:'decision-traceability', label:'Decisions and changes lose their history' },
+    { key:'risk-dependencies',     label:'Delivery risks and dependencies surface too late' },
+    { key:'knowledge-loss',        label:'Project knowledge depends on a few people' },
+    { key:'ceremony-loss',         label:'Discussions and meeting outputs do not turn into action' }
+  ];
+
+  state = { name:'', company:'', topic:'context-fragmentation', order:[], copy:{}, open:null,
+            pickerOpen:false, confirm:null, token:null, copied:false };
+
+  get P() { return window.QuelyPagePlans; }
+  get S() { return window.QuelyEnablement; }
+  files() { return (this.P && this.P.BLOCK_FILES) || {}; }
+  label(k) { return (this.files()[k] || k).replace(/^Block /, ''); }
+
+  rulesFor(topic) {
+    var ks = (this.P && this.P.blockKeysFor) ? this.P.blockKeysFor(topic) : [];
+    var self = this;
+    return (ks || []).filter(function (k) { return self.KEYS.indexOf(k) !== -1; });
+  }
+
+  // The preview scales to fit its column, so it is never cropped. Sized from the
+  // window (never observed on the element it writes, which loops).
+  fitPreview() {
+    var col = document.querySelector('[data-pcol]'), fr = document.querySelector('[data-pframe]');
+    if (!col || !fr) return;
+    var w = col.clientWidth - 44;
+    if (w <= 0) return;
+    var z = Math.min(0.56, w / 1264);
+    if (fr._z !== z) { fr._z = z; fr.style.zoom = z; }
+  }
+
+  componentDidMount() {
+    var self = this;
+    this._onR = function () { self.fitPreview(); };
+    window.addEventListener('resize', this._onR);
+    this._fit = setInterval(this._onR, 400);
+    var boot = function () {
+      if (!self.P) { self._b = setTimeout(boot, 120); return; }
+      // a prospect handed over from the Dashboard's "Continue in Page Builder"
+      var pre = null;
+      try { pre = JSON.parse(localStorage.getItem('quely_builder_prefill') || 'null'); localStorage.removeItem('quely_builder_prefill'); } catch (e) {}
+      self.setState({ order: self.rulesFor(self.state.topic),
+                      name: (pre && pre.name) || '', company: (pre && pre.company) || '' });
+    };
+    boot();
+  }
+  componentWillUnmount() { clearTimeout(this._b); clearInterval(this._fit); window.removeEventListener('resize', this._onR); }
+
+  move(i, d) {
+    var o = this.state.order.slice(), j = i + d;
+    if (j < 0 || j >= o.length) return;
+    var t = o[i]; o[i] = o[j]; o[j] = t;
+    this.setState({ order:o, token:null });
+  }
+  editCopy(k, f, v) {
+    var c = Object.assign({}, this.state.copy);
+    c[k] = Object.assign({}, c[k] || {}); c[k][f] = v;
+    this.setState({ copy:c, token:null });
+  }
+
+  publish() {
+    var self = this, st = this.state;
+    if (!this.S || !this.P || !st.order.length) return;
+    var base = this.P.buildPagePlan ? this.P.buildPagePlan({ role:'eng-leader', topic:st.topic, company:st.company, name:st.name }) : {};
+    var plan = Object.assign({}, base, {
+      custom:true, topic:st.topic,
+      blockKeys: st.order.slice(),
+      blockOrder: st.order.map(function (k) { return self.files()[k]; }),
+      copy: JSON.parse(JSON.stringify(st.copy))
+    });
+    var p = this.S.createProspect({ name:st.name || 'Prospect', company:st.company || 'Their team',
+                                    advanced:true, focusTopic:st.topic, pagePlan:plan });
+    this.setState({ token: p && p.token, copied:false });
+  }
+
+  renderVals() {
+    var self = this, st = this.state, order = st.order;
+    var surf = (this.P && this.P.assignSurfaces) ? this.P.assignSurfaces(order) : [];
+    var btn = 'display:inline-flex; align-items:center; justify-content:center;';
+    var iconBtn = btn + ' width:28px; height:28px; border:1px solid #D8D2E4; background:#fff; border-radius:7px; cursor:pointer;';
+
+    var vals = {
+      name: st.name, company: st.company, topic: st.topic,
+      topics: this.TOPICS,
+      field: 'box-sizing:border-box; width:100%; padding:9px 11px; border:1px solid #D8D2E4; border-radius:8px; background:#fff; font-size:13.5px; color:#1A1611;',
+      area: 'box-sizing:border-box; width:100%; padding:9px 11px; border:1px solid #D8D2E4; border-radius:8px; background:#fff; font-size:13.5px; line-height:1.45; color:#1A1611; resize:vertical;',
+      lbl: 'font-size:11.5px; font-weight:600; color:#4B5563;',
+      iconBtn: iconBtn,
+      ghostBtn: 'display:inline-flex; align-items:center; gap:6px; white-space:nowrap; padding:7px 12px; border:1px solid #1A1611; background:#fff; border-radius:8px; font-size:12.5px; font-weight:600; color:#1A1611; cursor:pointer;',
+      publishBtn: 'display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:13px 16px; border:2px solid #1A1611; background:#5C28A4; color:#fff; font-size:14.5px; font-weight:700; cursor:pointer; box-shadow:4px 4px 0 #1A1611;'
+        + (order.length ? '' : ' opacity:.4; cursor:not-allowed;'),
+      publishLabel: st.token ? 'Publish again' : 'Publish and create link',
+      empty: !order.length,
+      summary: order.length + ' blocks \u00b7 ' + (this.TOPICS.find(function (t) { return t.key === st.topic; }) || {}).label,
+
+      setName: function (e) { self.setState({ name:e.target.value, token:null }); },
+      setCompany: function (e) { self.setState({ company:e.target.value, token:null }); },
+      // browser dialogs are blocked in the preview, so confirmation is inline
+      setTopic: function (e) {
+        var t = e.target.value;
+        if (Object.keys(st.copy).length) { self.setState({ confirm:{ kind:'topic', topic:t } }); return; }
+        self.setState({ topic:t, order:self.rulesFor(t), copy:{}, open:null, token:null });
+      },
+      regenerate: function () { self.setState({ confirm:{ kind:'regen' } }); },
+      confirming: !!st.confirm,
+      confirmText: st.confirm && st.confirm.kind === 'topic'
+        ? 'Changing the problem rebuilds the page and discards your edits.'
+        : 'Rebuild the page from the rules? Your added blocks, order changes and copy edits will be discarded.',
+      confirmYes: function () {
+        var c = st.confirm || {}, t = c.kind === 'topic' ? c.topic : st.topic;
+        self.setState({ topic:t, order:self.rulesFor(t), copy:{}, open:null, token:null, confirm:null, pickerOpen:false });
+      },
+      confirmNo: function () { self.setState({ confirm:null }); },
+      togglePicker: function () { self.setState({ pickerOpen: !st.pickerOpen }); },
+      pickerOpen: st.pickerOpen,
+      addBtn: 'display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:11px 14px; border:2px dashed #5C28A4; background:#F3EEFB; border-radius:10px; font-size:13.5px; font-weight:700; color:#4B1F88; cursor:pointer;',
+      // new blocks always go last; the rep moves them where they want
+      addable: this.KEYS.filter(function (k) { return order.indexOf(k) === -1; })
+        .map(function (k) { return { name: self.label(k), role: self.ROLE[k],
+          add: function () { self.setState({ order: order.concat([k]), pickerOpen:false, token:null }); } }; }),
+
+      publish: function () { self.publish(); },
+      hasLink: !!st.token,
+      linkText: st.token ? ('quely.io/v/' + st.token) : '',
+      copyLabel: st.copied ? 'Copied' : 'Copy link',
+      copyLink: function () {
+        var url = location.href.replace(/[^/]*$/, '') + encodeURI('Quely Prospect Viewer.dc.html') + '?p=' + st.token;
+        try { navigator.clipboard.writeText(url); } catch (e) {}
+        self.setState({ copied:true });
+      },
+      openLink: function () {
+        try { localStorage.setItem('quely_open', st.token); } catch (e) {}
+        window.open(encodeURI('Quely Prospect Viewer.dc.html') + '?p=' + st.token, '_blank');
+      },
+
+      rows: order.map(function (k, i) {
+        var c = st.copy[k] || {}, open = st.open === k;
+        var edited = (c.eyebrow || c.headline || c.body) ? ' \u00b7 edited' : '';
+        return {
+          num: String(i + 1).padStart(2, '0'), name: self.label(k), role: self.ROLE[k] || '', edited: edited,
+          open: open, eyebrow: c.eyebrow || '', headline: c.headline || '', body: c.body || '',
+          style: 'background:#fff; border:' + (open ? '2px solid #5C28A4' : '1px solid #D8D2E4') + '; border-radius:10px; padding:10px 11px;',
+          upStyle: iconBtn + (i === 0 ? ' opacity:.35; cursor:default;' : ''),
+          downStyle: iconBtn + (i === order.length - 1 ? ' opacity:.35; cursor:default;' : ''),
+          select: function () { self.setState({ open: open ? null : k }); },
+          up: function () { self.move(i, -1); },
+          down: function () { self.move(i, 1); },
+          remove: function () {
+            var o = order.slice(); o.splice(i, 1);
+            self.setState({ order:o, open: st.open === k ? null : st.open, token:null });
+          },
+          setEyebrow: function (e) { self.editCopy(k, 'eyebrow', e.target.value); },
+          setHeadline: function (e) { self.editCopy(k, 'headline', e.target.value); },
+          setBody: function (e) { self.editCopy(k, 'body', e.target.value); },
+          reset: function () { var cc = Object.assign({}, st.copy); delete cc[k]; self.setState({ copy:cc, token:null }); }
+        };
+      })
+    };
+
+    // static mounts, one per block: flag, CSS order, surface, and copy
+    this.KEYS.forEach(function (k) {
+      var i = order.indexOf(k), c = st.copy[k] || {};
+      vals['on_' + k] = i !== -1;
+      vals['ord_' + k] = 'order:' + (i === -1 ? 99 : i) + ';';
+      vals['sf_' + k] = i === -1 ? undefined : surf[i];
+      vals['cp_' + k] = { eyebrow: c.eyebrow || undefined, headline: c.headline || undefined, body: c.body || undefined };
+    });
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

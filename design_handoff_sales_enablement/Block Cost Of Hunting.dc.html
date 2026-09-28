@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#F9FAFB; font-family:'Inter',sans-serif; }
+  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+
+  /* The ticket is assigned at 0:00, but real work does not start until the
+     hunt ends. The bar fills with interruptions before any green appears. */
+  @keyframes qco-fill { to { width:var(--w); } }
+  @keyframes qco-in   { to { opacity:1; transform:translateY(0); } }
+  @keyframes qco-pop  { to { opacity:1; transform:scale(1); } }
+
+  [data-qco][data-go] [data-el="seg"]   { animation:qco-fill 620ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qco][data-go] [data-el="stop"]  { animation:qco-in 420ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  [data-qco][data-go] [data-el="tally"] { animation:qco-pop 460ms cubic-bezier(.3,0,0,1) var(--d) forwards; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-qco] [data-el] { animation-duration:1ms !important; animation-delay:0ms !important; }
+  }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#F9FAFB; padding:80px 40px; display:flex; justify-content:center;">
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="max-width:760px; margin:0 auto; text-align:center;">
+      <div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4; margin-bottom:14px;">{{ eyebrow }}</div>
+      <h2 style="margin:0 0 14px; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">{{ headline }}</h2>
+      <p style="margin:0; font-size:16px; line-height:1.6; color:#4B5563; text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <div data-qco style="margin-top:36px;">
+
+      <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:9px;">
+        <span style="flex:none; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">{{ startLabel }}</span>
+        <span style="flex:none; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">{{ endLabel }}</span>
+      </div>
+
+      <!-- the day, spent -->
+      <div style="display:flex; align-items:stretch; height:30px; border-radius:8px; overflow:hidden; background:#EEF0F4; border:1px solid #E5E7EB;">
+        <sc-for list="{{ segments }}" as="sg" hint-placeholder-count="5">
+          <div data-el="seg" style="{{ sg.style }}"></div>
+        </sc-for>
+      </div>
+
+      <!-- what each stretch actually was -->
+      <div style="display:flex; flex-wrap:wrap; gap:9px; margin-top:16px;">
+        <sc-for list="{{ stops }}" as="st" hint-placeholder-count="5">
+          <span data-el="stop" style="{{ st.style }}">
+            <i class="{{ st.icon }}" style="flex:none; font-size:13px; color:{{ st.color }};"></i>
+            <span style="flex:none; white-space:nowrap;">{{ st.label }}</span>
+            <b style="flex:none; white-space:nowrap; color:#6B7280;">{{ st.cost }}</b>
+          </span>
+        </sc-for>
+      </div>
+
+      <!-- the tally -->
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:28px;">
+        <sc-for list="{{ tallies }}" as="ty" hint-placeholder-count="3">
+          <div data-el="tally" style="{{ ty.style }}">
+            <div style="font-size:30px; line-height:1; font-weight:800; letter-spacing:-.02em; color:{{ ty.figureColor }};">{{ ty.figure }}</div>
+            <div style="margin-top:7px; font-size:12.5px; line-height:1.45; color:{{ ty.labelColor }}; text-wrap:pretty;">{{ ty.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:620},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The cost of scattered context&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The work does not start when the ticket is assigned.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;It starts once someone has asked around, interrupted the right people, and pieced together what the ticket actually means. That reconstruction happens before a line of code is written, and it happens again for the next person.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ticket assigned&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;endLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Work actually starts&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;segments&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{kind:'hunt'|'work';w:number}&gt;&quot;},&quot;stops&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label:string;cost:string;icon:string;color:string}&gt;&quot;},&quot;tallies&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{figure:string;label:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'The cost of scattered context',
+    headline: 'The work does not start when the ticket is assigned.',
+    body: 'It starts once someone has asked around, interrupted the right people, and pieced together what the ticket actually means. That reconstruction happens before a line of code is written, and it happens again for the next person.',
+    startLabel: 'Ticket assigned',
+    endLabel: 'Work actually starts',
+    // width is a share of the day; the green stretch is what was left
+    segments: [
+      { kind: 'hunt', w: 17 },
+      { kind: 'hunt', w: 14 },
+      { kind: 'hunt', w: 12 },
+      { kind: 'hunt', w: 15 },
+      { kind: 'work', w: 42 }
+    ],
+    stops: [
+      { label: 'Searching threads and docs', cost: '55 min', icon: 'ph-fill ph-magnifying-glass', color: '#A78BFA' },
+      { label: 'Asking who owns the dependency', cost: '40 min', icon: 'ph-fill ph-chat-circle', color: '#60A5FA' },
+      { label: 'Waiting on a reply', cost: '35 min', icon: 'ph-fill ph-hourglass-medium', color: '#FBBF24' },
+      { label: 'Reading the wrong version', cost: '45 min', icon: 'ph-fill ph-file-x', color: '#F87171' },
+      { label: 'Writing code', cost: 'what was left', icon: 'ph-fill ph-code', color: '#15803D' }
+    ],
+    tallies: [
+      { figure: 'Half the day', label: 'gone before the work begins', tone: 'bad' },
+      { figure: '4 people', label: 'interrupted to answer questions someone already answered', tone: 'bad' },
+      { figure: 'Every time', label: 'the next person repeats the same hunt from scratch', tone: 'bad' }
+    ]
+  };
+
+  componentDidMount() {
+    const node = document.querySelector('[data-qco]');
+    if (!node) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.setAttribute('data-go', ''); return;
+    }
+    // Imperative attribute flip drives the CSS animation (style-attribute holes do
+    // not re-apply on re-render). Plays once when it first enters view.
+    this._played = false;
+    const play = () => { if (this._played) return; this._played = true; node.setAttribute('data-go', ''); };
+    if ('IntersectionObserver' in window) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { this._t = setTimeout(play, 360); }
+          else if (!this._played) { clearTimeout(this._t); }
+        });
+      }, { threshold: 0.25 });
+      this.io.observe(node);
+    } else { play(); }
+    // never leave the payload hidden: IntersectionObserver callbacks do not fire
+    // in every render environment, and the content is gated behind the reveal
+    this._safety = setTimeout(play, 1200);
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    clearTimeout(this._t); clearTimeout(this._safety);
+  }
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const rawSegs = (p.segments && p.segments.length) ? p.segments : D.segments;
+    const rawStops = (p.stops && p.stops.length) ? p.stops : D.stops;
+    const rawTallies = (p.tallies && p.tallies.length) ? p.tallies : D.tallies;
+
+    // hunting stretches read as spent time; only the final stretch is real work
+    const HUNT = ['#A78BFA', '#60A5FA', '#FBBF24', '#F87171'];
+    let huntIdx = 0;
+    const segments = rawSegs.map((sg, i) => {
+      const work = sg.kind === 'work';
+      const fill = work ? '#4ADE80' : HUNT[huntIdx++ % HUNT.length];
+      return {
+        style: 'flex:none; width:0; --w:' + sg.w + '%; background:' + fill + ';'
+          + (i < rawSegs.length - 1 ? ' border-right:1px solid #F9FAFB;' : '')
+          + ' --d:' + (i * 170) + 'ms;'
+      };
+    });
+
+    const stops = rawStops.map((st, i) => ({
+      label: st.label, cost: st.cost, icon: st.icon, color: st.color,
+      style: 'display:inline-flex; align-items:center; gap:8px; white-space:nowrap;'
+        + ' background:#fff; border:1px solid #E5E7EB; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' border-radius:9999px; padding:7px 14px; font-size:12.5px; font-weight:600;'
+        + ' color:#374151; opacity:0; transform:translateY(8px);'
+        + ' --d:' + (900 + i * 130) + 'ms;'
+    }));
+
+    const tallies = rawTallies.map((ty, i) => ({
+      figure: ty.figure, label: ty.label,
+      figureColor: '#111827',
+      labelColor: '#4B5563',
+      style: 'flex:1 1 220px; min-width:200px; box-sizing:border-box;'
+        + ' background:#fff; border:1px solid #E5E7EB; box-shadow:0 1px 2px rgba(3,7,18,.05);'
+        + ' border-radius:12px; padding:20px 22px; opacity:0; transform:scale(.96);'
+        + ' --d:' + (1650 + i * 160) + 'ms;'
+    }));
+
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      startLabel: p.startLabel ?? D.startLabel,
+      endLabel: p.endLabel ?? D.endLabel,
+      segments: segments,
+      stops: stops,
+      tallies: tallies
+    };
+  }
+}
+</script>
+</body>
+</html>

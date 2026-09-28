@@ -9,17 +9,15 @@
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
   html { scroll-behavior:smooth; }
-  body { margin:0; background:#fff; }
-  a { color:#5C28A4; }
-  a:hover { color:#4B1F88; }
-  ::selection { background:#E4D3F5; }
+  body { margin:0; background:#ECE7F2; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
+  ::selection { background:#5C28A4; color:#fff; }
   @keyframes qfloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
   @keyframes qglow { 0%,100% { opacity:.5; } 50% { opacity:.9; } }
   @keyframes qring { 0% { transform:scale(1); opacity:.5; } 70%,100% { transform:scale(1.8); opacity:0; } }
   @keyframes qbob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
   @keyframes qdot { 0%,80%,100% { opacity:.3; } 40% { opacity:1; } }
   @keyframes qanswer { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-  @keyframes qnudge { 0%,100% { box-shadow:0 0 0 0 rgba(143,91,215,.0); } 50% { box-shadow:0 0 0 4px rgba(143,91,215,.18); } }
   @keyframes qping { 0% { transform:scale(.6); opacity:.75; } 70%,100% { transform:scale(2.4); opacity:0; } }
   @keyframes qreveal { from { opacity:0; transform:translateY(34px); } to { opacity:1; transform:none; } }
   @keyframes qrevealx { from { opacity:0; transform:translateY(26px); } to { opacity:1; transform:none; } }
@@ -27,134 +25,91 @@
     [data-reveal] { animation:qreveal linear both; animation-timeline:view(); animation-range:entry 2% entry 46%; }
     [data-stagger] > * { animation:qrevealx linear both; animation-timeline:view(); animation-range:entry 4% cover 12%; }
   }
-  /* hover affordances (the design prototype used a framework style-hover attr) */
-  .q-chip-hover { transition:transform .18s, box-shadow .18s; }
-  .q-chip-hover:hover { transform:translateY(-3px); box-shadow:0 10px 22px -10px rgba(3,7,18,.3); }
   .q-card-hover { transition:transform .2s, box-shadow .2s; }
   .q-card-hover:hover { transform:translateY(-5px); box-shadow:0 28px 60px -20px rgba(0,0,0,.7); }
   .q-feat-hover { transition:transform .18s, box-shadow .18s; }
   .q-feat-hover:hover { transform:translateY(-4px); box-shadow:0 16px 30px -14px rgba(3,7,18,.22); }
-  .q-cta-hover { transition:transform .18s; }
-  .q-cta-hover:hover { transform:translateY(-3px); }
-  .q-orbchip { transition:background .15s; }
-  .q-orbchip:hover { background:rgba(143,91,215,.3) !important; }
+  .q-sugg { transition:border-color .15s, box-shadow .15s; }
+  .q-sugg:hover { border-color:#C4B5DD !important; box-shadow:0 2px 8px rgba(92,40,164,.10) !important; }
+  .q-cta-hover { transition:transform .18s, box-shadow .18s; }
+  [data-lens-row]:hover { background:#F9FAFB !important; }
+  [data-lens-row]:hover [data-lens-bar] { display:flex !important; }
+  [data-lens-btn]:hover { background:#F3EEFB; color:#5C28A4; }
   .q-fab { transition:transform .18s; }
   .q-fab:hover { transform:translateY(-2px); }
 </style>
 </head>
 <body>
-<div style="font-family:'Inter',sans-serif; color:#111827;">
+<div style="font-family:'Inter',sans-serif; color:#1A1611;">
 
   <!-- scroll progress -->
   <div style="position:fixed; top:0; left:0; height:4px; width:100%; background:transparent; z-index:60;"><div data-progress style="height:100%; width:0%; background:#5C28A4; transition:width .12s linear;"></div></div>
 
-  <!-- section dots -->
-  <div style="position:fixed; right:26px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:14px; z-index:55;">
-    <a href="#hero" data-dot="hero" title="Intro" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#problem" data-dot="problem" title="The problem" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#proof" data-dot="proof" title="Real teams" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#spaces" data-dot="spaces" title="Spaces" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#orbit" data-dot="orbit" title="Orbit" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#features" data-dot="features" title="Features" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-    <a href="#cta" data-dot="cta" title="Book a demo" style="width:11px; height:11px; border-radius:50%; background:#D1D5DB; display:block; transition:all .2s;"></a>
-  </div>
-
-  <!-- HERO -->
-  <section id="hero" data-section="hero" style="background:#03070F; padding:64px 40px 80px; display:flex; flex-direction:column; align-items:center; text-align:center; overflow:hidden;">
-    <img src="/assets/quely-logo-dark.svg" alt="Quely" style="height:30px; margin-bottom:48px;">
-    <div data-reveal style="display:flex; flex-direction:column; align-items:center;">
-      <div id="heroEyebrow" style="font-size:15px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#AB84E1; margin-bottom:22px;">Built for product &amp; engineering teams</div>
-      <h1 id="heroHeadline" style="margin:0; max-width:960px; font-size:56px; line-height:1.06; letter-spacing:-.03em; font-weight:800; color:#fff;">Stop searching across five tools to understand one piece of work.</h1>
-      <p id="heroBody" style="margin:26px 0 0; max-width:740px; font-size:21px; line-height:1.5; color:rgba(255,255,255,.66);">Quely brings the ticket, conversations, docs, meetings, decisions, and updates around a work item into one Space, so anyone can see what changed, what's blocked, and what needs attention.</p>
-    </div>
-    <div data-reveal style="position:relative; margin-top:54px; width:100%; max-width:1000px;">
-      <div style="position:absolute; inset:-6% 8%; background:radial-gradient(closest-side, rgba(143,91,215,.55), rgba(143,91,215,0)); filter:blur(70px); animation:qglow 5s ease-in-out infinite; z-index:0;"></div>
-      <!-- Hero product visual.
-           The design's real screenshot (assets/quely-product-ui.png) exceeds the Design MCP's
-           256 KiB download cap and can't be retrieved intact here, so we ship a faithful inline
-           recreation of a Quely Space PLUS an <img> that AUTO-TAKES-OVER the moment the real PNG
-           is dropped into /assets/quely-product-ui.png — it falls back to the recreation while
-           the file is absent (onerror removes the img). No code change needed to switch. -->
-      <div style="position:relative; z-index:1; animation:qfloat 7s ease-in-out infinite; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.16); box-shadow:0 40px 90px -24px rgba(0,0,0,.75); background:#fff; text-align:left;">
-        <img id="heroShot" src="/assets/quely-product-ui.png" alt="A Quely Space" style="display:none; width:100%; height:auto; vertical-align:top;" onload="this.style.display='block'; var m=document.getElementById('heroMock'); if(m) m.style.display='none';" onerror="this.remove();">
-        <div id="heroMock">
-        <div style="display:flex; align-items:center; gap:8px; padding:13px 18px; background:#0A0F1C; border-bottom:1px solid rgba(255,255,255,.08);">
-          <span style="width:11px; height:11px; border-radius:50%; background:#F87171;"></span>
-          <span style="width:11px; height:11px; border-radius:50%; background:#FBBF24;"></span>
-          <span style="width:11px; height:11px; border-radius:50%; background:#22C55E;"></span>
-          <span style="margin-left:14px; display:inline-flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,.6);"><i class="ph-fill ph-kanban" style="color:#8F5BD7;"></i>Quely · Fix checkout flow</span>
-        </div>
-        <div style="display:flex;">
-          <div style="flex:none; width:210px; background:#F9FAFB; border-right:1px solid #E5E7EB; padding:18px 16px; display:flex; flex-direction:column; gap:5px;">
-            <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#9CA3AF; padding:0 8px 6px;">Spaces</div>
-            <div style="display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px; background:#EDE4F8; color:#5C28A4; font-size:14px; font-weight:600;"><i class="ph-fill ph-kanban"></i>Fix checkout flow</div>
-            <div style="display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px; color:#4B5563; font-size:14px;"><i class="ph ph-circle"></i>Billing revamp</div>
-            <div style="display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px; color:#4B5563; font-size:14px;"><i class="ph ph-circle"></i>Mobile onboarding</div>
-            <div style="display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:8px; color:#4B5563; font-size:14px;"><i class="ph ph-circle"></i>Search relevance</div>
-          </div>
-          <div style="flex:1; min-width:0; padding:22px 26px;">
-            <div style="display:flex; align-items:center; gap:9px; margin-bottom:12px;">
-              <span style="display:inline-flex; align-items:center; gap:6px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#2563EB;"><img src="/assets/logos/jira.svg" alt="" style="width:13px; height:13px;">CHECKOUT-1428</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#B45309;"><i class="ph-fill ph-circle-half"></i>In progress</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEE2E2; border:1px solid #FECACA; border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:#DC2626;"><i class="ph-fill ph-warning"></i>Renewal risk</span>
-            </div>
-            <div style="font-size:26px; font-weight:800; letter-spacing:-.01em; color:#111827; margin-bottom:18px;">Fix checkout flow</div>
-            <div style="display:flex; gap:12px;">
-              <span style="flex:none; width:32px; height:32px; border-radius:50%; background:#5C28A4; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">MP</span>
-              <div style="background:#F9FAFB; border-radius:12px; padding:12px 14px; font-size:14px; line-height:1.45; color:#1F2937;">Narrowing scope to card checkout only to hit the renewal deadline.</div>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:12px;">
-              <span style="flex:none; width:32px; height:32px; border-radius:50%; background:#2563EB; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">DK</span>
-              <div style="background:#F9FAFB; border-radius:12px; padding:12px 14px; font-size:14px; line-height:1.45; color:#1F2937;">Blocked on the payments tokenization PR — pinged the platform team.</div>
-            </div>
-            <div style="margin-top:18px; display:flex; align-items:center; gap:9px; background:#F5EEFB; border:1px solid #E4D3F5; border-radius:12px; padding:11px 14px;"><img src="/assets/quely-ai-bot-brand-duotone.svg" alt="" style="width:22px; height:22px;"><span style="font-size:13px; color:#5C28A4; font-weight:600;">Orbit: blocked on a payments dependency, scoped to card-only, flagged as a renewal risk.</span></div>
-          </div>
-        </div>
-        </div><!-- /#heroMock -->
+  <!-- ============ HERO ============ -->
+  <section id="hero" data-section="hero" style="position:relative; background:#1A1611; overflow:hidden; padding-bottom:64px;">
+    <div style="position:absolute; inset:0; z-index:0; opacity:.5; background-image:radial-gradient(rgba(236,231,242,0.07) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <!-- nav -->
+    <div style="position:relative; z-index:1; border-bottom:2px solid rgba(236,231,242,.22);">
+      <div style="max-width:1180px; margin:0 auto; padding:0 40px; height:72px; display:flex; align-items:center; gap:30px;">
+        <img src="/assets/quely-logo-dark.svg" alt="Quely" style="height:26px;">
+        <span style="flex:1;"></span>
+        <a href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" target="_blank" rel="noopener" style="text-decoration:none;"><span style="display:inline-flex; align-items:center; height:42px; padding:0 18px; background:#ECE7F2; color:#1A1611; border:2px solid #ECE7F2; font-size:14px; font-weight:600; box-shadow:4px 4px 0 rgba(147,133,230,.55);">Book a demo</span></a>
       </div>
     </div>
-    <div style="margin-top:52px; display:flex; flex-direction:column; align-items:center; gap:8px; font-size:15px; color:rgba(255,255,255,.5); animation:qbob 2.4s ease-in-out infinite;"><span>Scroll to explore</span><i class="ph ph-arrow-down" style="font-size:20px;"></i></div>
-  </section>
-
-  <!-- PROBLEM -->
-  <section id="problem" data-section="problem" style="background:#fff; padding:96px 40px; display:flex; justify-content:center;">
-    <div data-reveal style="width:100%; max-width:960px;">
-      <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#8F5BD7; margin-bottom:18px;">The problem</div>
-      <h2 id="probHeadline" style="margin:0; font-size:42px; line-height:1.1; letter-spacing:-.02em; font-weight:800;">The full context around a piece of work is spread across too many places.</h2>
-      <p id="probBody" style="margin:22px 0 0; font-size:19px; line-height:1.6; color:#4B5563; max-width:840px;">A ticket has a title and maybe a short description. But the customer call that created the urgency, the discussion about the tradeoff, the meeting where scope changed, and the decision history all live somewhere else. So the work doesn't start when the ticket is assigned. It starts when someone asks around and pieces together what the ticket actually means.</p>
-      <div style="margin-top:36px; font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:#9CA3AF; margin-bottom:16px;">One task, scattered across</div>
-      <div data-stagger style="display:flex; flex-wrap:wrap; gap:12px;">
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/jira.svg" alt="" style="width:20px; height:20px;">Ticket: Fix checkout flow</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/github.svg" alt="" style="width:20px; height:20px;">PR review on GitHub</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/linear.svg" alt="" style="width:20px; height:20px;">Linear sub-issue</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/figma.svg" alt="" style="width:20px; height:20px;">Figma design</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/confluence.svg" alt="" style="width:20px; height:20px;">Spec in Confluence</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/slack.svg" alt="" style="width:20px; height:20px;">Scope changed in Slack</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/googlemeet.svg" alt="" style="width:20px; height:20px;">Kickoff on Google Meet</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/notion.svg" alt="" style="width:20px; height:20px;">Notes in Notion</span>
-        <span class="q-chip-hover" style="display:inline-flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; padding:12px 18px; font-size:16px; font-weight:600; color:#374151; box-shadow:0 1px 2px rgba(3,7,18,.05);"><img src="/assets/logos/salesforce.svg" alt="" style="width:20px; height:20px;">Renewal risk in CRM</span>
+    <!-- content -->
+    <div style="position:relative; z-index:1; padding:clamp(56px,6vw,88px) 40px 0; display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div data-reveal style="display:flex; flex-direction:column; align-items:center;">
+        <div id="heroEyebrow" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#C9C1F2; margin-bottom:22px;">Built for product &amp; engineering teams</div>
+        <h1 id="heroHeadline" style="margin:0; max-width:960px; font-size:clamp(40px,5vw,64px); line-height:1.02; letter-spacing:-.035em; font-weight:800; color:#ECE7F2;">Stop searching across five tools to understand one piece of work.</h1>
+        <p id="heroBody" style="margin:26px 0 0; max-width:740px; font-size:21px; line-height:1.5; color:rgba(236,231,242,.74);">Quely brings the ticket, conversations, docs, meetings, decisions, and updates around a work item into one Space, so anyone can see what changed, what's blocked, and what needs attention.</p>
+        <div style="display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; justify-content:center;">
+          <a href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" id="ctaBook" target="_blank" rel="noopener" style="text-decoration:none;"><span style="display:inline-flex; align-items:center; gap:9px; height:50px; padding:0 24px; background:#ECE7F2; color:#1A1611; border:2px solid #ECE7F2; font-size:15px; font-weight:600; box-shadow:4px 4px 0 rgba(147,133,230,.55);">Book a demo <i class="ph-bold ph-arrow-right"></i></span></a>
+          <a href="#spaces" style="text-decoration:none;"><span style="display:inline-flex; align-items:center; height:50px; padding:0 24px; background:transparent; color:#ECE7F2; border:2px solid rgba(236,231,242,.5); font-size:15px; font-weight:600;">See Quely in action</span></a>
+        </div>
+      </div>
+      <div data-reveal style="position:relative; margin-top:54px; width:100%; max-width:1000px;">
+        <div style="position:absolute; inset:-6% 8%; background:radial-gradient(closest-side, rgba(143,91,215,.55), rgba(143,91,215,0)); filter:blur(70px); animation:qglow 5s ease-in-out infinite; z-index:0;"></div>
+        <div style="position:relative; z-index:1; animation:qfloat 7s ease-in-out infinite; border:2px solid #ECE7F2; box-shadow:6px 6px 0 rgba(147,133,230,.6); overflow:hidden; background:#F8F5FB;">
+          <img id="heroShot" src="/assets/quely-product-ui.png" alt="A Quely Space" style="display:block; width:100%; height:auto; vertical-align:top;">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- PROOF -->
-  <section id="proof" data-section="proof" style="position:relative; overflow:hidden; background:#03070F; padding:96px 40px; display:flex; justify-content:center;">
-    <div style="position:absolute; top:-10%; right:-6%; width:640px; height:640px; border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.20), rgba(143,91,215,0)); filter:blur(30px); pointer-events:none; z-index:0;"></div>
-    <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1180px;">
-      <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#AB84E1; margin-bottom:18px;">What fragmented work looks like in real teams</div>
-      <h2 style="margin:0 0 44px; font-size:36px; line-height:1.14; letter-spacing:-.02em; font-weight:800; color:#fff; max-width:960px;">The same pattern shows up again and again: the work exists, but the context needed to understand it is split across tools, people, and memory.</h2>
+  <!-- ============ PROBLEM ============ -->
+  <section id="problem" data-section="problem" style="position:relative; background:#ECE7F2; padding:96px 40px; display:flex; justify-content:center;">
+    <div style="position:absolute; inset:0; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div data-reveal style="width:100%; max-width:960px; text-align:center; position:relative; z-index:1;">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:18px;">
+        <span style="flex:none; font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#4B4560;">The problem</span>
+        <span style="flex:1; border-top:1px solid rgba(26,22,17,.22);"></span>
+      </div>
+      <h2 id="probHeadline" style="margin:0; font-size:42px; line-height:1.1; letter-spacing:-.03em; font-weight:800;">The full context around a piece of work is spread across too many places.</h2>
+      <p id="probBody" style="margin:22px auto 0; font-size:19px; line-height:1.6; color:#5C5345; max-width:840px;">A ticket has a title and maybe a short description. But the customer call that created the urgency, the discussion about the tradeoff, the meeting where scope changed, and the decision history all live somewhere else. So the work doesn't start when the ticket is assigned. It starts when someone asks around and pieces together what the ticket actually means.</p>
+      <div style="margin-top:44px; border:2px solid #1A1611; box-shadow:6px 6px 0 #1A1611; overflow:hidden; background:#F8F5FB;">
+        <img src="/assets/scattered-context.webp" alt="One ticket, with its context scattered across many tools" style="display:block; width:100%; height:auto;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROOF ============ -->
+  <section id="proof" data-section="proof" style="position:relative; overflow:hidden; background:#1A1611; padding:96px 40px; display:flex; justify-content:center; text-align:center;">
+    <div style="position:absolute; top:-10%; right:-6%; width:640px; height:640px; border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.20), rgba(143,91,215,0)); filter:blur(30px); pointer-events:none;"></div>
+    <div data-reveal style="position:relative; z-index:1; max-width:1180px;">
+      <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#C9C1F2; margin-bottom:18px;">What fragmented work looks like in real teams</div>
+      <h2 style="margin:0 auto 44px; font-size:36px; line-height:1.14; letter-spacing:-.03em; font-weight:800; color:#fff; max-width:960px;">The same pattern shows up again and again: the work exists, but the context needed to understand it is split across tools, people, and memory.</h2>
       <div data-stagger style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch;">
         <!-- POST 1 -->
-        <div class="q-card-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; box-shadow:0 18px 44px -18px rgba(0,0,0,.6); overflow:hidden; display:flex; flex-direction:column; height:600px;">
+        <div class="q-card-hover" style="background:#fff; border:2px solid #C9C1F2; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px;">
           <div style="padding:20px 24px 0;">
             <div style="display:flex; align-items:center; gap:11px;">
               <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
-              <div style="line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/agile <span style="color:#787C7E; font-weight:400;">· 10d ago</span></div><div style="font-size:14px; color:#787C7E;">Familiar_Network_108</div></div>
+              <div style="line-height:1.2; text-align:left;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/agile <span style="color:#787C7E; font-weight:400;">· 10d ago</span></div><div style="font-size:14px; color:#787C7E;">Familiar_Network_108</div></div>
               <i class="ph ph-dots-three" style="margin-left:auto; color:#787C7E; font-size:22px;"></i>
             </div>
-            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">How do you stop work from disappearing into tickets, chats, and random spreadsheets</div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px; text-align:left;">How do you stop work from disappearing into tickets, chats, and random spreadsheets</div>
           </div>
-          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px; text-align:left;">
             <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
               <p style="margin:0 0 10px;">Curious how others are dealing with this, because I feel like my job turned into human status aggregator right now if someone asks did task X ever get done i have to:</p>
               <p style="margin:0 0 2px;">Check the ticket system to see if the ticket is closed</p>
@@ -163,49 +118,48 @@
               <p style="margin:0 0 10px;">Dig through email where someone said we went live two weeks ago</p>
               <p style="margin:0 0 10px;">And half the time the answers all contradict each other.</p>
               <p style="margin:0 0 10px;">It feels like we brought in tools to make things clearer, then let every team build their own little island and now nothing lines up I can handle chaos if i at least know where to look what wears me down is spending more time hunting the status than doing the work.</p>
-              <p style="margin:0 0 10px;">I have already tried telling everyone if there is no ticket we are not doing it which lasted until some VP pinged someone directly, creating a simple template for requests so we stop getting can you just quickly with no details and setting up an ops channel where all done updates should go, but people still reply in old threads or DMs</p>
               <p style="margin:0;">Really curious what has worked in the real world and not just in slide decks.</p>
             </div>
           </div>
-          <div style="padding:14px 22px 16px; display:flex; align-items:center; gap:9px;">
+          <div style="flex:none; padding:14px 22px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:9px;">
             <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">1.2k</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">340</span></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
           </div>
         </div>
         <!-- POST 2 -->
-        <div class="q-card-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; box-shadow:0 18px 44px -18px rgba(0,0,0,.6); overflow:hidden; display:flex; flex-direction:column; height:600px;">
+        <div class="q-card-hover" style="background:#fff; border:2px solid #C9C1F2; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px;">
           <div style="padding:20px 24px 0;">
             <div style="display:flex; align-items:center; gap:11px;">
               <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
-              <div style="line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/EngineeringManagers <span style="color:#787C7E; font-weight:400;">· 18d ago</span></div><div style="font-size:14px; color:#787C7E;">Conscious-Fact9532</div></div>
+              <div style="line-height:1.2; text-align:left;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/EngineeringManagers <span style="color:#787C7E; font-weight:400;">· 18d ago</span></div><div style="font-size:14px; color:#787C7E;">Conscious-Fact9532</div></div>
               <i class="ph ph-dots-three" style="margin-left:auto; color:#787C7E; font-size:22px;"></i>
             </div>
-            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">anyone else turn into their team's human release notes?</div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px; text-align:left;">anyone else turn into their team's human release notes?</div>
           </div>
-          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px; text-align:left;">
             <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
               <p style="margin:0 0 12px;">Not sure when it happened but I've turned into the person everyone pings to find out what everyone else is doing. What shipped last week, who owns this thing, what's the status on that, did X actually land. Constant. Most of my day now, genuinely. And I've basically stopped doing anything that looks like actual work.</p>
               <p style="margin:0;">None of it shows up anywhere either - to anyone above me it just looks like I sit in Slack all day. You only notice the coordination when it stops and something falls through. So is this just me, or does every team grow one of these people? And if you've been the de facto &ldquo;context broker&rdquo; - how did you get out of it, or at least get it to count for something at review time?</p>
             </div>
           </div>
-          <div style="padding:14px 22px 16px; display:flex; align-items:center; gap:9px;">
+          <div style="flex:none; padding:14px 22px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:9px;">
             <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">940</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">268</span></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
           </div>
         </div>
         <!-- POST 3 -->
-        <div class="q-card-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; box-shadow:0 18px 44px -18px rgba(0,0,0,.6); overflow:hidden; display:flex; flex-direction:column; height:600px;">
+        <div class="q-card-hover" style="background:#fff; border:2px solid #C9C1F2; box-shadow:6px 6px 0 #5C28A4; overflow:hidden; display:flex; flex-direction:column; height:600px;">
           <div style="padding:20px 24px 0;">
             <div style="display:flex; align-items:center; gap:11px;">
               <span style="width:40px; height:40px; border-radius:9999px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:20px; flex:none;">r/</span>
-              <div style="line-height:1.2;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/agile <span style="color:#787C7E; font-weight:400;">· 24d ago</span></div><div style="font-size:14px; color:#787C7E;">DaveAstator2020</div></div>
+              <div style="line-height:1.2; text-align:left;"><div style="font-size:15px; font-weight:700; color:#1A1A1B;">r/agile <span style="color:#787C7E; font-weight:400;">· 24d ago</span></div><div style="font-size:14px; color:#787C7E;">DaveAstator2020</div></div>
               <i class="ph ph-dots-three" style="margin-left:auto; color:#787C7E; font-size:22px;"></i>
             </div>
-            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px;">Jira as a task pool - am i going crazy?</div>
+            <div style="font-size:19px; line-height:1.22; font-weight:700; color:#1A1A1B; margin:14px 0 12px; text-align:left;">Jira as a task pool - am i going crazy?</div>
           </div>
-          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px;">
+          <div style="flex:1; min-height:0; overflow-y:auto; padding:0 24px; text-align:left;">
             <div style="font-size:15px; line-height:1.5; color:#1A1A1B;">
               <p style="margin:0 0 4px;">Hey dear reddit. I tihnk im going insane and would like a second opinion on the topic:</p>
               <p style="margin:0 0 4px;">Today i had displeasure to discussworking jira with person high rank title.</p>
@@ -217,7 +171,7 @@
               <p style="margin:0;">I for one don't think it is workable at all at any scale but maybe im wrong or miss something?</p>
             </div>
           </div>
-          <div style="padding:14px 22px 16px; display:flex; align-items:center; gap:9px;">
+          <div style="flex:none; padding:14px 22px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:9px;">
             <div style="display:flex; align-items:center; gap:9px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph-fill ph-arrow-fat-up" style="color:#FF4500; font-size:18px;"></i><span style="font-size:14px; font-weight:700; color:#1A1A1B;">613</span><i class="ph ph-arrow-fat-down" style="color:#878A8C; font-size:18px;"></i></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-chat-circle" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">197</span></div>
             <div style="display:flex; align-items:center; gap:8px; background:#F6F7F8; border-radius:9999px; padding:6px 12px;"><i class="ph ph-share-fat" style="color:#878A8C; font-size:18px;"></i><span style="font-size:14px; font-weight:600; color:#1A1A1B;">Share</span></div>
@@ -227,45 +181,43 @@
     </div>
   </section>
 
-  <!-- SPACES -->
-  <section id="spaces" data-section="spaces" style="background:#F9FAFB; padding:96px 40px; display:flex; justify-content:center;">
-    <div data-reveal style="width:100%; max-width:1200px; display:flex; flex-wrap:wrap; gap:56px; align-items:center;">
+  <!-- ============ SPACES ============ -->
+  <section id="spaces" data-section="spaces" style="position:relative; background:#DED6F1; padding:96px 40px; display:flex; justify-content:center;">
+    <div style="position:absolute; inset:0; opacity:.5; background-image:radial-gradient(rgba(26,22,17,0.05) 1px, transparent 1px); background-size:26px 26px;"></div>
+    <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1200px; display:flex; flex-wrap:wrap; gap:56px; align-items:center;">
       <div style="flex:1 1 340px; min-width:0;">
-        <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#8F5BD7; margin-bottom:18px;">Quely's Space</div>
-        <h2 style="margin:0 0 16px; font-size:40px; line-height:1.08; letter-spacing:-.02em; font-weight:800;">A task and everything connected to it, in one place.</h2>
-        <p style="margin:0 0 26px; font-size:18px; line-height:1.55; color:#4B5563;">Bring the task in from your tools, then add the materials, discussion, and decisions that move it forward. <b style="color:#111827;">Click through the tabs</b> to see what lives in a Space.</p>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;"><span style="font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#5C28A4;">Quely's Space</span><span style="flex:1; border-top:1px solid rgba(26,22,17,.18);"></span></div>
+        <h2 style="margin:0 0 16px; font-size:40px; line-height:1.08; letter-spacing:-.03em; font-weight:800;">A task and everything connected to it, in one place.</h2>
+        <p style="margin:0 0 26px; font-size:18px; line-height:1.55; color:#5C5345;">Bring the task in from your tools, then add the materials, discussion, and decisions that move it forward. <b style="color:#1A1611;">Click through the tabs</b> to see what lives in a Space.</p>
         <div style="display:flex; flex-direction:column; gap:12px;">
           <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-plugs-connected" style="font-size:20px; color:#5C28A4;"></i>Task imported from Jira, Linear, GitHub &amp; more</div>
-          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-paperclip" style="font-size:20px; color:#5C28A4;"></i>Docs, Figma, notes &amp; assets attached</div>
-          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-chats-circle" style="font-size:20px; color:#5C28A4;"></i>Async discussion, on a timer</div>
-          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-seal-check" style="font-size:20px; color:#5C28A4;"></i>Decisions kept with the work</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-paperclip" style="font-size:20px; color:#5C28A4;"></i>Docs, Figma, notes &amp; other assets attached</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-chats-circle" style="font-size:20px; color:#5C28A4;"></i>All conversation in one place</div>
+          <div style="display:flex; align-items:center; gap:11px; font-size:15px; color:#374151;"><i class="ph-fill ph-seal-check" style="font-size:20px; color:#5C28A4;"></i>Decisions &amp; action items synthesized from conversations</div>
         </div>
       </div>
 
-      <!-- explorable Space panel -->
       <div style="position:relative; flex:1 1 440px; min-width:0;">
-        <div style="position:absolute; inset:14px -10px -14px 18px; background:#EEF0F4; border:1px solid #E5E7EB; border-radius:20px; z-index:0;"></div>
-        <div style="position:relative; z-index:1; background:#fff; border:1px solid #E5E7EB; border-radius:18px; box-shadow:0 30px 64px -28px rgba(3,7,18,.32); overflow:hidden;">
-          <div style="position:relative; padding:22px 24px; border-bottom:1px solid #F3F4F6;">
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div style="position:relative; z-index:1; background:#fff; border:2px solid #1A1611; box-shadow:6px 6px 0 #1A1611; overflow:hidden;">
+          <div style="padding:22px 24px; border-bottom:1px solid #F3F4F6;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
               <span style="display:inline-flex; align-items:center; gap:7px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#2563EB;"><img src="/assets/logos/jira.svg" alt="" style="width:15px; height:15px;">CHECKOUT-1428</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#B45309;"><i class="ph-fill ph-circle-half"></i>In progress</span>
-              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEE2E2; border:1px solid #FECACA; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#DC2626;"><i class="ph-fill ph-warning"></i>Renewal risk</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#8A3D06;"><i class="ph-fill ph-circle-half"></i>In progress</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; background:#FEE2E2; border:1px solid #FECACA; border-radius:9999px; padding:5px 11px; font-size:13px; font-weight:600; color:#B91C1C;"><i class="ph-fill ph-warning"></i>Renewal risk</span>
             </div>
-            <div style="font-size:24px; font-weight:800; letter-spacing:-.01em; color:#111827;">Fix checkout flow</div>
+            <div style="font-size:24px; font-weight:800; letter-spacing:-.01em; color:#1A1611;">Fix checkout flow</div>
           </div>
           <!-- tabs -->
-          <div style="display:flex; gap:4px; padding:10px 16px 0; border-bottom:1px solid #F3F4F6;">
+          <div style="display:flex; gap:4px; padding:10px 16px 0; border-bottom:1px solid #F3F4F6; flex-wrap:wrap;">
             <button data-space-tab="disc" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid #5C28A4; color:#5C28A4;"><i class="ph-fill ph-chats-circle" style="font-size:17px;"></i>Discussion <span style="opacity:.55;">3</span></button>
-            <button data-space-tab="docs" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:3px; right:-1px; width:13px; height:13px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-paperclip" style="font-size:17px;"></i>Docs &amp; assets <span style="opacity:.55;">4</span></button>
-            <button data-space-tab="dec" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:3px; right:-1px; width:13px; height:13px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-seal-check" style="font-size:17px;"></i>Decisions <span style="opacity:.55;">3</span></button>
-            <button data-space-tab="act" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:3px; right:-1px; width:13px; height:13px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-clock-counter-clockwise" style="font-size:17px;"></i>Activity</button>
+            <button data-space-tab="docs" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-paperclip" style="font-size:17px;"></i>Docs &amp; assets <span style="opacity:.55;">4</span></button>
+            <button data-space-tab="dec" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-seal-check" style="font-size:17px;"></i>Decisions <span style="opacity:.55;">3</span></button>
+            <button data-space-tab="act" style="position:relative; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:inherit; font-size:14px; font-weight:600; padding:11px 13px; border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; color:#6B7280;"><span class="space-ping" style="position:absolute; top:50%; right:-4px; width:13px; height:13px; margin-top:-6.5px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#5C28A4; opacity:.7; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#5C28A4;"></span></span><i class="ph-fill ph-clock-counter-clockwise" style="font-size:17px;"></i>Activity</button>
           </div>
           <!-- tab body -->
-          <div style="padding:20px 24px; min-height:298px;">
+          <div style="padding:20px 24px; height:360px; overflow:auto;">
             <div data-space-body="disc">
               <div style="display:flex; flex-direction:column; gap:16px;">
-                <div style="display:flex; align-items:center; gap:9px; align-self:flex-start; background:#F5EEFB; border:1px solid #E4D3F5; border-radius:9999px; padding:7px 13px; font-size:13px; font-weight:600; color:#5C28A4;"><i class="ph-fill ph-timer" style="font-size:16px;"></i>Discussion window closes in 6h</div>
                 <div style="display:flex; gap:12px;"><span style="flex:none; width:34px; height:34px; border-radius:50%; background:#5C28A4; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">MP</span><div><div style="font-size:14px; margin-bottom:3px;"><b>Maya Price</b> <span style="color:#9CA3AF;">· PM · 2d</span></div><div style="font-size:15px; line-height:1.45; color:#1F2937;">Narrowing scope to card checkout only to hit the renewal deadline. Wallet and ACH move to next cycle.</div></div></div>
                 <div style="display:flex; gap:12px;"><span style="flex:none; width:34px; height:34px; border-radius:50%; background:#2563EB; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">DK</span><div><div style="font-size:14px; margin-bottom:3px;"><b>Dev Kumar</b> <span style="color:#9CA3AF;">· Eng · 1d</span></div><div style="font-size:15px; line-height:1.45; color:#1F2937;">Blocked on the payments tokenization PR. Pinged the platform team to prioritize.</div></div></div>
                 <div style="display:flex; gap:12px;"><span style="flex:none; width:34px; height:34px; border-radius:50%; background:#16A34A; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">SC</span><div><div style="font-size:14px; margin-bottom:3px;"><b>Sara Cole</b> <span style="color:#9CA3AF;">· CS · 22h</span></div><div style="font-size:15px; line-height:1.45; color:#1F2937;">Acme is expecting this before their renewal on the 30th. Flagging as a risk.</div></div></div>
@@ -273,7 +225,7 @@
             </div>
             <div data-space-body="docs" style="display:none;">
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><img src="/assets/logos/notion.svg" alt="" style="width:22px; height:22px;"><div><div style="font-size:15px; font-weight:600;">Checkout requirements</div><div style="font-size:13px; color:#9CA3AF;">Notion doc</div></div></div>
+                <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><img src="/assets/logos/confluence.svg" alt="" style="width:22px; height:22px;"><div><div style="font-size:15px; font-weight:600;">Checkout requirements</div><div style="font-size:13px; color:#9CA3AF;">Confluence</div></div></div>
                 <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><img src="/assets/logos/figma.svg" alt="" style="width:22px; height:22px;"><div><div style="font-size:15px; font-weight:600;">Card checkout flow</div><div style="font-size:13px; color:#9CA3AF;">Figma design</div></div></div>
                 <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><i class="ph-fill ph-phone-call" style="font-size:22px; color:#8039DF;"></i><div><div style="font-size:15px; font-weight:600;">Customer call notes</div><div style="font-size:13px; color:#9CA3AF;">Gong · 32 min</div></div></div>
                 <div style="display:flex; align-items:center; gap:12px; border:1px solid #E5E7EB; border-radius:12px; padding:14px 16px;"><img src="/assets/logos/salesforce.svg" alt="" style="width:22px; height:22px;"><div><div style="font-size:15px; font-weight:600;">Renewal risk brief</div><div style="font-size:13px; color:#9CA3AF;">Salesforce</div></div></div>
@@ -290,8 +242,7 @@
               <div style="display:flex; flex-direction:column; gap:0;">
                 <div style="display:flex; gap:13px; padding-bottom:16px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#5C28A4;"></span><span style="flex:1; width:2px; background:#E5E7EB;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1F2937;"><b>Dev Kumar</b> linked the payments tokenization PR</div><div style="font-size:12px; color:#9CA3AF;">1d ago</div></div></div>
                 <div style="display:flex; gap:13px; padding-bottom:16px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#DC2626;"></span><span style="flex:1; width:2px; background:#E5E7EB;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1F2937;"><b>Sara Cole</b> flagged a renewal risk</div><div style="font-size:12px; color:#9CA3AF;">22h ago</div></div></div>
-                <div style="display:flex; gap:13px; padding-bottom:16px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#16A34A;"></span><span style="flex:1; width:2px; background:#E5E7EB;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1F2937;">Scope decision recorded from planning</div><div style="font-size:12px; color:#9CA3AF;">2d ago</div></div></div>
-                <div style="display:flex; gap:13px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#9CA3AF;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1F2937;">Task imported from Jira</div><div style="font-size:12px; color:#9CA3AF;">3d ago</div></div></div>
+                <div style="display:flex; gap:13px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:10px; height:10px; border-radius:50%; background:#16A34A;"></span></div><div style="margin-top:-3px;"><div style="font-size:14px; color:#1F2937;">Task imported from Jira</div><div style="font-size:12px; color:#9CA3AF;">3d ago</div></div></div>
               </div>
             </div>
           </div>
@@ -300,57 +251,115 @@
     </div>
   </section>
 
-  <!-- ORBIT -->
-  <section id="orbit" data-section="orbit" style="position:relative; overflow:hidden; background:#03070F; padding:96px 40px; display:flex; justify-content:center;">
-    <div style="position:absolute; bottom:-12%; left:-8%; width:720px; height:720px; border-radius:50%; background:radial-gradient(closest-side, rgba(92,40,164,.28), rgba(92,40,164,0)); filter:blur(30px); pointer-events:none; z-index:0;"></div>
+  <!-- ============ ORBIT + LENSES ============ -->
+  <section id="orbit" data-section="orbit" style="position:relative; overflow:hidden; background:#ECE7F2; background-image:radial-gradient(rgba(26,22,17,.06) 1px, transparent 1px); background-size:26px 26px; padding:96px 40px; display:flex; justify-content:center;">
     <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1040px;">
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;"><img src="/assets/quely-ai-bot-brand-duotone.svg" alt="" style="width:34px; height:34px;"><div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#AB84E1;">Quely AI · Orbit</div></div>
-      <h2 style="margin:0 0 10px; font-size:42px; line-height:1.1; letter-spacing:-.02em; font-weight:800; color:#fff;">Ask anything. Get the answer.</h2>
-      <p id="orbitIntro" style="margin:0 0 30px; font-size:18px; line-height:1.5; color:rgba(255,255,255,.6); max-width:720px;">This is what an Orbit session looks like, using an example task, &ldquo;Fix checkout flow.&rdquo; Ask Orbit a question below and watch it answer from everything in the Space.</p>
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px;"><img src="/assets/quely-orbit-pet.png" alt="" style="width:34px; height:34px;"><div style="font-size:13px; font-weight:600; letter-spacing:.10em; text-transform:uppercase; color:#5C28A4;">Quely AI · Orbit</div></div>
+      <h2 style="margin:0 0 10px; font-size:42px; line-height:1.1; letter-spacing:-.03em; font-weight:800; color:#1A1611; text-align:center;">Ask anything. Get the answer.</h2>
+      <p id="orbitIntro" style="margin:0 auto 30px; font-size:18px; line-height:1.5; color:#4B5563; max-width:720px; text-align:center;">This is a simulation of an Orbit session for the task &ldquo;Fix checkout flow.&rdquo; Ask a question below and watch how Orbit answers from everything in the Space.</p>
 
-      <div style="position:relative;">
-        <div style="position:absolute; inset:16px -12px -16px 22px; background:#0b1120; border:1px solid rgba(255,255,255,.06); border-radius:22px; z-index:0;"></div>
-        <div style="position:relative; z-index:1; background:#0f1524; border:1px solid rgba(255,255,255,.12); border-radius:20px; box-shadow:0 44px 100px -34px rgba(0,0,0,.85); overflow:hidden;">
-          <div style="display:flex; align-items:center; gap:12px; padding:18px 22px; border-bottom:1px solid rgba(255,255,255,.08);">
-            <img src="/assets/quely-ai-bot-brand-duotone.svg" alt="" style="width:30px; height:30px;">
-            <div style="line-height:1.25;"><div style="font-size:16px; font-weight:700; color:#fff;">Orbit</div><div style="font-size:13px; color:rgba(255,255,255,.5);">Answers from everything in this Space</div></div>
-            <span style="margin-left:auto; display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:9999px; padding:6px 13px; font-size:13px; font-weight:600; color:rgba(255,255,255,.8);"><i class="ph-fill ph-kanban" style="color:#60A5FA;"></i>Fix checkout flow</span>
+      <!-- Orbit chat panel -->
+      <div style="position:relative; z-index:1; background:#fff; border:2px solid #1A1611; box-shadow:6px 6px 0 #1A1611; overflow:hidden; display:flex; flex-direction:column; height:640px;">
+        <div style="display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #EEF0F3;">
+          <span style="display:inline-flex; align-items:center; gap:7px; background:#F5F6F8; border-radius:9px; padding:7px 12px; font-size:13px; font-weight:600; color:#4B5563;"><i class="ph ph-caret-double-left"></i>Threads</span>
+          <span style="margin-left:auto; display:inline-flex; align-items:center; gap:8px; background:#F5F6F8; border-radius:9999px; padding:6px 13px; font-size:13px; font-weight:600; color:#374151;"><i class="ph-fill ph-kanban" style="color:#2563EB;"></i>Fix checkout flow</span>
+          <i class="ph ph-clock-counter-clockwise" style="font-size:18px; color:#4B5563;"></i>
+          <i class="ph ph-note-pencil" style="font-size:18px; color:#4B5563;"></i>
+        </div>
+        <div id="orbitScroll" data-orbit-scroll style="flex:1; min-height:0; overflow:auto; padding:22px 22px 8px; display:flex; flex-direction:column; gap:16px;">
+          <div id="orbitEmpty" style="margin:auto; text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px;">
+            <img src="/assets/quely-orbit-pet.png" alt="" style="width:52px; height:auto;">
+            <div style="font-size:24px; line-height:1.2; letter-spacing:-.02em; font-weight:700; color:#1A1611;">What can I help you with?</div>
+            <div style="display:flex; align-items:center; gap:7px;"><i class="ph-fill ph-sparkle" style="color:#8B5CF6; font-size:15px;"></i><span style="font-size:12.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:#6B7280;">Suggested prompts</span></div>
+            <div id="orbitChips" style="width:100%; max-width:620px; display:flex; flex-direction:column; gap:10px; margin-top:2px;"></div>
           </div>
-          <div id="orbitChips" style="padding:16px 22px 4px; display:flex; flex-wrap:wrap; align-items:center; gap:8px;"></div>
-          <div id="orbitScroll" data-orbit-scroll style="padding:18px 22px; min-height:210px; max-height:330px; overflow:auto; display:flex; flex-direction:column; gap:14px;">
-            <div id="orbitEmpty" style="margin:auto; text-align:center; color:rgba(255,255,255,.42); font-size:15px; display:flex; flex-direction:column; align-items:center; gap:10px;"><i class="ph ph-sparkle" style="font-size:26px; color:#8F5BD7;"></i>Tap a question, or type your own below.</div>
+        </div>
+        <!-- Actions row -->
+        <div style="margin:0 16px 10px; border:1px solid #E5E7EB; border-radius:14px; overflow:hidden;">
+          <button id="orbitActionsToggle" style="width:100%; display:flex; align-items:center; gap:9px; padding:13px 16px; background:#fff; border:none; cursor:pointer; font-family:inherit; text-align:left;">
+            <span style="color:#8B5CF6;">&#10022;</span><span style="font-size:15px; font-weight:700; color:#1A1611;">Actions</span>
+            <span style="background:#FEE2E2; color:#B91C1C; border-radius:9999px; padding:1px 8px; font-size:12px; font-weight:700;">3</span>
+            <span style="border:1px solid #BFDBFE; border-radius:9999px; padding:2px 9px; font-size:11px; font-weight:700; color:#2563EB;">BETA</span>
+            <i id="orbitActionsCaret" class="ph ph-caret-down" style="margin-left:auto; color:#6B7280;"></i>
+          </button>
+          <div id="orbitActionsBody" style="display:none; border-top:1px solid #EEF0F3; padding:6px 8px 10px;">
+            <div style="display:flex; align-items:center; gap:12px; padding:10px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#EFF6FF; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-note-pencil" style="color:#2563EB;"></i></span><div><div style="font-size:14px; font-weight:600; color:#1A1611;">Update description</div><div style="font-size:12.5px; color:#6B7280;">Rewrite the work item description from this thread</div></div></div>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#F3EEFB; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-chat-circle-dots" style="color:#5C28A4;"></i></span><div style="flex:1;"><div style="font-size:14px; font-weight:600; color:#1A1611;">Ask</div><div style="font-size:12.5px; color:#6B7280;">Post a question to the team in this Space</div></div><span style="flex:none; width:34px; height:20px; border-radius:9999px; background:#5C28A4; position:relative;"><span style="position:absolute; top:2px; right:2px; width:16px; height:16px; border-radius:50%; background:#fff;"></span></span></div>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px;"><span style="flex:none; width:32px; height:32px; border-radius:9px; background:#DCFCE7; display:inline-flex; align-items:center; justify-content:center;"><i class="ph ph-lightning" style="color:#15803D;"></i></span><div><div style="font-size:14px; font-weight:600; color:#1A1611;">Estimations</div><div style="font-size:12.5px; color:#6B7280;">Suggest an estimate and break the work into subtasks</div></div></div>
           </div>
-          <div style="display:flex; gap:10px; padding:14px 18px; border-top:1px solid rgba(255,255,255,.08);">
-            <input id="orbitInput" placeholder="Ask Orbit about this work…" style="flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:12px 14px; font-family:inherit; font-size:15px; color:#fff; outline:none;">
-            <button id="orbitSend" style="flex:none; background:#5C28A4; color:#fff; border:none; border-radius:10px; padding:0 18px; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; font-size:15px; font-weight:600;"><i class="ph-bold ph-paper-plane-right" style="font-size:18px;"></i></button>
+        </div>
+        <!-- Composer -->
+        <div style="margin:0 16px 16px; border:1.5px solid #C4B5DD; border-radius:14px; padding:12px 14px; box-shadow:0 0 0 3px rgba(139,92,246,.08);">
+          <div style="margin-bottom:8px;"><span style="display:inline-flex; align-items:center; gap:6px; border:1px solid #E5E7EB; border-radius:9999px; padding:6px 12px; font-size:13px; font-weight:600; color:#4B5563;"><i class="ph ph-at"></i>Add tool</span></div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <input id="orbitInput" placeholder="Ask a question about this Space" style="flex:1; background:transparent; border:none; padding:6px 0; font-family:inherit; font-size:15px; color:#1A1611; outline:none;">
+            <button id="orbitSend" style="flex:none; background:none; border:none; cursor:pointer; padding:0; display:inline-flex; align-items:center;"><i class="ph-fill ph-paper-plane-right" style="font-size:22px; color:#5C28A4;"></i></button>
           </div>
         </div>
       </div>
 
+      <!-- Lens panel -->
       <div style="margin-top:34px;">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-          <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#AB84E1;">Lenses</div>
-          <div style="font-size:14px; color:rgba(255,255,255,.5);">Orbit distills the whole discussion. Pick a lens, then push any item into your tools.</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+          <div style="font-size:13px; font-weight:600; letter-spacing:.10em; text-transform:uppercase; color:#5C28A4;">Lenses</div>
+          <div style="font-size:15px; color:#4B5563;">Every decision, action, risk and opportunity, pulled out of the discussion.</div>
         </div>
-        <div style="background:#0f1524; border:1px solid rgba(255,255,255,.12); border-radius:18px; overflow:hidden; box-shadow:0 40px 90px -34px rgba(0,0,0,.8);">
-          <div style="display:flex; align-items:center; gap:12px; padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.08);">
-            <span style="width:34px; height:34px; border-radius:9px; background:#5C28A4; display:flex; align-items:center; justify-content:center; flex:none;"><i class="ph-fill ph-graph" style="font-size:19px; color:#fff;"></i></span>
-            <div style="line-height:1.3;"><div style="font-size:16px; font-weight:700; color:#fff;">Lens Map</div><div style="font-size:13px; color:rgba(255,255,255,.5); margin-top:3px;">for &ldquo;Fix checkout flow&rdquo;</div></div>
-            <span id="lensTotal" style="margin-left:auto; font-size:13px; font-weight:600; color:rgba(255,255,255,.6);">— items · 3 signals</span>
-          </div>
-          <div style="display:flex; align-items:stretch;">
-            <!-- LENS EXPLORER rail -->
-            <div id="lensRail" style="flex:none; width:236px; border-right:1px solid rgba(255,255,255,.08); padding:16px 12px; display:flex; flex-direction:column; gap:3px;">
-              <div style="font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.4); padding:0 8px 10px;">Lens Explorer</div>
+        <div style="position:relative; background:#fff; border:2px solid #1A1611; box-shadow:8px 8px 0 rgba(147,133,230,.5);">
+          <div style="padding:13px 20px; border-bottom:1px solid #F3F4F6; font-size:13px; font-weight:600; color:#4B5563;"><i class="ph-bold ph-caret-double-left"></i> Threads</div>
+          <div style="padding:18px 20px 20px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;"><span style="font-size:26px; font-weight:800; color:#1A1611;">Lenses</span><span id="lensTotal" style="background:#F3F4F6; border-radius:8px; padding:2px 9px; font-size:13px; font-weight:700; color:#374151;">37</span></div>
+            <div style="display:flex; align-items:center; gap:7px; margin-bottom:14px; font-size:13px; color:#4B5563;"><span style="color:#5C28A4;">&#10022;</span>Synthesized from 2 sources</div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+              <span style="display:inline-flex; align-items:center; gap:8px; border:1px solid #E5E7EB; border-radius:9999px; padding:9px 16px; font-size:13px; color:#6B7280;"><i class="ph ph-magnifying-glass"></i>Search lenses...</span>
+              <span style="display:inline-flex; align-items:center; gap:7px; border:1px solid #E5E7EB; border-radius:9999px; padding:9px 14px; font-size:13px; font-weight:600; color:#374151;"><i class="ph-fill ph-graph" style="color:#5C28A4;"></i>Lens Map</span>
             </div>
-            <!-- items for selected lens -->
-            <div style="flex:1; min-width:0; padding:18px 20px;">
-              <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;">
-                <i id="activeLensIcon" class="ph-fill ph-seal-check" style="font-size:19px; color:#22C55E;"></i>
-                <div id="activeLensLabel" style="font-size:15px; font-weight:700; color:#fff;">Decisions</div>
-                <div style="font-size:13px; color:rgba(255,255,255,.45);">· distilled from the discussion &amp; meeting transcript</div>
+            <div id="lensPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+            <div id="lensList" style="display:flex; flex-direction:column;"></div>
+          </div>
+          <!-- push modal -->
+          <div id="lensPushModal" style="display:none; position:absolute; inset:0; z-index:8;">
+            <div class="lensModalScrim" style="position:absolute; inset:0; background:rgba(3,7,18,.5);"></div>
+            <div style="position:absolute; left:18px; right:18px; top:18px; bottom:18px; background:#fff; border:2px solid #1A1611; box-shadow:10px 10px 0 rgba(26,22,17,.2); display:flex; overflow:hidden;">
+              <div id="lensToolRail" style="flex:none; width:196px; background:#FBFAFE; border-right:1px solid #E5E7EB; padding:12px 10px; overflow:auto;"></div>
+              <div style="flex:1; min-width:0; padding:20px 22px; overflow:auto;">
+                <div style="font-size:16px; font-weight:800; color:#1A1611; margin-bottom:14px;">Configure issue details</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                  <div><div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Site</div><div style="display:flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; font-size:14px; font-weight:500;"><span style="width:16px; height:16px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>fishyvisions</div></div>
+                  <div><div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Project</div><div style="display:flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; font-size:14px; font-weight:500;"><span style="width:16px; height:16px; background:url('/assets/logos/jira.svg') center/contain no-repeat;"></span>Apps (APPS)</div></div>
+                  <div><div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Issue type</div><div style="display:flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; font-size:14px; font-weight:500;"><i class="ph-fill ph-check-square" style="color:#2563EB;"></i>Task</div></div>
+                  <div><div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Priority</div><div style="display:flex; align-items:center; gap:9px; background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; font-size:14px; font-weight:500;"><i class="ph ph-arrow-up"></i>None</div></div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-top:20px;">
+                  <button class="lensModalClose" style="background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;">Cancel</button>
+                  <button id="lensPushCreate" style="display:inline-flex; align-items:center; gap:7px; background:#5C28A4; color:#fff; border:none; border-radius:9px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;"><i class="ph-bold ph-plus"></i>Create in Jira</button>
+                </div>
               </div>
-              <div id="lensItems" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+          </div>
+          <!-- schedule modal -->
+          <div id="lensSchedModal" style="display:none; position:absolute; inset:0; z-index:8;">
+            <div class="lensModalScrim" style="position:absolute; inset:0; background:rgba(3,7,18,.5);"></div>
+            <div style="position:absolute; left:18px; right:18px; top:18px; bottom:18px; background:#fff; border:2px solid #1A1611; box-shadow:10px 10px 0 rgba(26,22,17,.2); display:flex; overflow:hidden;">
+              <div style="flex:none; width:280px; border-right:1px solid #E5E7EB; padding:20px; overflow:auto;">
+                <div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Title</div>
+                <div id="lensSchedTitle" style="font-size:14px; color:#374151; border:1px solid #E5E7EB; border-radius:9px; padding:10px 12px; margin-bottom:14px;">Lens item</div>
+                <div style="display:flex; align-items:center; gap:9px; margin-bottom:12px; font-size:14px; font-weight:600;"><img src="/assets/logos/googlemeet.svg" alt="" style="width:18px; height:18px;">Google Meet · 30 minutes</div>
+                <div style="font-size:13px; font-weight:600; color:#1A1611; margin-bottom:6px;">Participants</div>
+                <span style="display:inline-flex; align-items:center; gap:7px; background:#F5F6F8; border-radius:9999px; padding:5px 10px; font-size:13px;"><span style="width:22px; height:22px; border-radius:50%; background:#1D4ED8; color:#fff; font-size:10px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">ON</span>Onyi Nwankwo</span>
+              </div>
+              <div style="flex:1; min-width:0; padding:20px 20px 0; overflow:auto;">
+                <div style="font-weight:700; margin-bottom:12px;">Select a time</div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+                  <span style="border:1px solid #E5E7EB; border-radius:9px; padding:10px 16px; font-size:14px;">Wed 16</span>
+                  <span style="border:2px solid #8F5BD7; border-radius:9px; padding:10px 16px; font-size:14px; color:#5C28A4; font-weight:700;">Thu 17</span>
+                  <span style="border:1px solid #E5E7EB; border-radius:9px; padding:10px 16px; font-size:14px;">Fri 18</span>
+                </div>
+                <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:12px 14px; font-size:13px; color:#15803D;">All participants are free · 10:00 AM · 30 min</div>
+                <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; margin-top:18px;">
+                  <button class="lensModalClose" style="background:#fff; border:1px solid #E5E7EB; border-radius:9px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;">Cancel</button>
+                  <button id="lensSchedConfirm" style="background:#5C28A4; color:#fff; border:none; border-radius:9px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;">Schedule</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -358,39 +367,59 @@
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section id="features" data-section="features" style="background:#fff; padding:96px 40px; display:flex; justify-content:center;">
-    <div data-reveal style="width:100%; max-width:1040px;">
-      <div style="font-size:14px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#8F5BD7; margin-bottom:18px;">Everything in one place</div>
-      <h2 style="margin:0 0 36px; font-size:42px; line-height:1.1; letter-spacing:-.02em; font-weight:800;">Built to keep the work moving.</h2>
+  <!-- ============ FEATURES ============ -->
+  <section id="features" data-section="features" style="position:relative; background:#41186F; padding:96px 40px; display:flex; justify-content:center;">
+    <div data-reveal style="position:relative; z-index:1; width:100%; max-width:1040px;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;"><span style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#C9C1F2;">Everything in one place</span><span style="flex:1; border-top:1px solid rgba(255,255,255,.26);"></span></div>
+      <h2 style="margin:0 0 36px; font-size:42px; line-height:1.1; letter-spacing:-.03em; font-weight:800; color:#fff;">Built to keep the work moving.</h2>
       <div data-stagger style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-plugs-connected" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Integrations</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">Jira, Azure DevOps, Linear, GitHub, and more.</div></div></div>
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-chats-circle" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Async discussion</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">Conversations anchored to the work.</div></div></div>
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-files" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Docs &amp; assets</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">Requirements, designs, and files attached.</div></div></div>
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-timer" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Discussion timers</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">A clear window to contribute.</div></div></div>
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-microphone-stage" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Meeting transcripts</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">Decisions captured from the call.</div></div></div>
-        <div class="q-feat-hover" style="border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-seal-check" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Decision log</div><div style="font-size:14px; line-height:1.4; color:#6B7280;">What was decided, and why.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-plugs-connected" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Integrations</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">Jira, Azure DevOps, Linear, GitHub, and more.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-chats-circle" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Async discussion</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">Conversations anchored to the work.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-files" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Docs &amp; assets</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">Requirements, designs, and files attached.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-timer" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Discussion timers</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">A clear window to contribute.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-microphone-stage" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Meeting transcripts</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">Decisions captured from the call.</div></div></div>
+        <div class="q-feat-hover" style="background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:24px; display:flex; gap:14px; align-items:flex-start;"><i class="ph ph-seal-check" style="font-size:26px; color:#5C28A4;"></i><div><div style="font-size:17px; font-weight:700; margin-bottom:4px;">Decision log</div><div style="font-size:14px; line-height:1.4; color:#5C5345;">What was decided, and why.</div></div></div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section id="cta" data-section="cta" style="background:#5C28A4; padding:100px 40px; display:flex; justify-content:center;">
+  <!-- ============ CTA ============ -->
+  <section id="cta" data-section="cta" style="background:#1A1611; padding:100px 40px 44px; display:flex; justify-content:center;">
     <div data-reveal style="width:100%; max-width:940px; text-align:center;">
-      <h2 id="ctaHeadline" style="margin:0; font-size:48px; line-height:1.08; letter-spacing:-.02em; font-weight:800; color:#fff;">Give your team the full picture around the work.</h2>
+      <h2 id="ctaHeadline" style="margin:0; font-size:48px; line-height:1.08; letter-spacing:-.03em; font-weight:800; color:#fff;">Give your team the full picture around the work.</h2>
       <p id="ctaBody" style="margin:22px 0 0; font-size:20px; line-height:1.5; color:rgba(255,255,255,.72);">See how Quely fits your workflow. Book a 30-minute walkthrough.</p>
       <div style="margin-top:38px; display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;">
-        <a id="ctaBook" href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" target="_blank" rel="noopener" style="text-decoration:none;"><span class="q-cta-hover" style="display:inline-flex; align-items:center; gap:10px; background:#fff; color:#03070F; font-size:18px; font-weight:600; padding:16px 34px; border-radius:10px;">Book a demo <i class="ph-bold ph-arrow-right"></i></span></a>
-        <button id="ctaAsk" style="display:inline-flex; align-items:center; gap:10px; background:transparent; color:#fff; font-size:18px; font-weight:600; padding:16px 30px; border-radius:10px; border:1px solid rgba(255,255,255,.4); cursor:pointer; font-family:inherit;">Ask a question</button>
+        <a id="ctaBook2" href="https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=viewer" target="_blank" rel="noopener" style="text-decoration:none;"><span class="q-cta-hover" style="display:inline-flex; align-items:center; gap:10px; background:#9385E6; color:#1A1611; font-size:18px; font-weight:700; padding:16px 34px; border:2px solid #1A1611; box-shadow:5px 5px 0 rgba(236,231,242,.9);">Book a demo <i class="ph-bold ph-arrow-right"></i></span></a>
+        <button id="ctaAsk" style="display:inline-flex; align-items:center; gap:10px; background:transparent; color:#fff; font-size:18px; font-weight:600; padding:16px 30px; border-radius:10px; border:1px solid rgba(255,255,255,.62); cursor:pointer; font-family:inherit;">Ask a question</button>
       </div>
-      <div style="margin-top:34px; font-size:15px; color:rgba(255,255,255,.6);">quely.io · ronma@quely.io</div>
     </div>
   </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="footer" style="background:#1A1611; padding:56px 40px 40px; display:flex; justify-content:center;">
+    <div style="width:100%; max-width:940px;">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:40px; padding-bottom:36px;">
+        <div style="flex:1 1 300px;">
+          <img src="/assets/quely-logo-dark.svg" alt="Quely" style="height:32px; width:auto;">
+          <p style="margin:16px 0 0; max-width:320px; font-size:15.5px; line-height:1.55; color:rgba(236,231,242,.62);">Your tools track the work. Quely connects the understanding.</p>
+        </div>
+        <div style="display:flex; gap:56px; flex-wrap:wrap;">
+          <div><div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#9385E6; margin-bottom:12px;">Website</div><a href="https://quely.io" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:#ECE7F2; text-decoration:none; border-bottom:1px solid rgba(147,133,230,.45); padding-bottom:2px;">quely.io <i class="ph-bold ph-arrow-up-right"></i></a></div>
+          <div><div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#9385E6; margin-bottom:12px;">Get in touch</div><a href="mailto:ronma@quely.io" style="display:inline-flex; align-items:center; gap:6px; color:#ECE7F2; text-decoration:none; border-bottom:1px solid rgba(147,133,230,.45); padding-bottom:2px;">ronma@quely.io <i class="ph-bold ph-envelope-simple"></i></a></div>
+        </div>
+      </div>
+      <div style="height:1px; background:rgba(236,231,242,.16);"></div>
+      <div style="padding-top:26px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:12px; letter-spacing:.06em; color:rgba(236,231,242,.5);">
+        <span>© QUELY 2026</span>
+        <span>Keep the full context of every task in one place.</span>
+      </div>
+    </div>
+  </footer>
 
   <!-- PERSISTENT ASK BUTTON -->
   <div style="position:fixed; right:26px; bottom:26px; z-index:56;">
     <span style="position:absolute; inset:0; border-radius:9999px; background:#5C28A4; animation:qring 2.6s ease-out infinite; z-index:0;"></span>
-    <button id="askFab" class="q-fab" style="position:relative; z-index:1; display:inline-flex; align-items:center; gap:10px; background:#5C28A4; color:#fff; font-size:16px; font-weight:600; padding:14px 22px; border:none; border-radius:9999px; box-shadow:0 12px 28px -8px rgba(92,40,164,.6); cursor:pointer; font-family:inherit;"><i class="ph-fill ph-chat-teardrop-text" style="font-size:20px;"></i>Ask a question</button>
+    <button id="askFab" class="q-fab" style="position:relative; z-index:1; display:inline-flex; align-items:center; gap:10px; background:#1A1611; color:#ECE7F2; font-size:16px; font-weight:600; padding:14px 22px; border:2px solid #1A1611; box-shadow:4px 4px 0 #1A1611; cursor:pointer; font-family:inherit;"><i class="ph-fill ph-chat-teardrop-text" style="font-size:20px;"></i>Ask a question</button>
   </div>
 
   <!-- QUESTION PANEL -->
@@ -425,6 +454,8 @@
   </div>
 
 </div>
+<script src="/js/default-page-check.js"></script>
+<script src="/js/blocks-render.js"></script>
 <script src="/js/viewer.js"></script>
 </body>
 </html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/quely-ds-final-b7eb1583-b8b7-4d02-9172-22ca351f866c/colors_and_type.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  body { margin:0; background:#03070F; font-family:'Inter',sans-serif; }
+  a { color:#AB84E1; } a:hover { color:#C9AEF0; }
+  @keyframes qdrift { 0%,100% { transform:translate(0,0); } 50% { transform:translate(var(--dx,6px), var(--dy,-7px)); } }
+  @keyframes qcaret { 0%,100% { opacity:1; } 50% { opacity:0; } }
+  @keyframes qpool { 0%,100% { opacity:.72; } 50% { opacity:1; } }
+</style>
+</helmet>
+<section style="position:relative; overflow:hidden; background:#03070F; padding:70px 40px 84px; display:flex; justify-content:center;">
+
+  <div style="position:relative; z-index:1; width:100%; max-width:1180px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+      <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:16px;">
+        <img src="assets/quely-mark-brand.svg" alt="" style="width:19px; height:19px;">
+        <span style="font-size:12.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:#AB84E1;">{{ eyebrow }}</span>
+      </div>
+      <h1 style="margin:0 0 20px; max-width:900px; font-size:54px; line-height:1.05; letter-spacing:-.03em; font-weight:800; color:#fff; text-wrap:pretty;">{{ headline }}</h1>
+      <p style="margin:0; max-width:760px; font-size:19px; line-height:1.6; color:rgba(255,255,255,.62); text-wrap:pretty;">{{ body }}</p>
+    </div>
+
+    <!-- VISUAL — the task sits in the light; its meaning is scattered in the dark -->
+    <div style="position:relative; width:100%; height:470px; margin-top:52px;">
+
+      <!-- the pool of light: everything you can actually see from the ticket -->
+      <div style="position:absolute; left:50%; top:49%; width:660px; height:420px; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(closest-side, rgba(143,91,215,.30), rgba(143,91,215,.07) 62%, rgba(143,91,215,0)); filter:blur(6px); animation:qpool 7s ease-in-out infinite; pointer-events:none;"></div>
+
+      <!-- scattered context, outside the light, unconnected -->
+      <sc-for list="{{ fragments }}" as="f" hint-placeholder-count="6">
+        <div style="{{ f.wrapStyle }}">
+          <div style="{{ f.cardStyle }}">
+            <div style="display:flex; align-items:center; gap:7px; margin-bottom:7px;">
+              <sc-if value="{{ f.logo }}" hint-placeholder-val="{{ false }}"><img src="{{ f.logo }}" alt="" style="width:14px; height:14px; flex:none;"></sc-if>
+              <sc-if value="{{ f.icon }}" hint-placeholder-val="{{ true }}"><i class="{{ f.icon }}" style="font-size:13px; color:{{ f.color }};"></i></sc-if>
+              <span style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:rgba(255,255,255,.62);">{{ f.tool }}</span>
+            </div>
+            <div style="font-size:13.5px; line-height:1.45; color:rgba(255,255,255,.78);">{{ f.text }}</div>
+            <div style="position:absolute; left:0; right:0; bottom:0; height:26px; background:linear-gradient(to bottom, rgba(6,10,20,0), rgba(6,10,20,.96)); pointer-events:none;"></div>
+          </div>
+        </div>
+      </sc-for>
+
+      <!-- the ticket: complete-looking, and almost empty -->
+      <div style="position:absolute; left:50%; top:49%; width:322px; transform:translate(-50%,-50%); z-index:3;">
+        <div style="box-sizing:border-box; width:100%; background:#fff; border-radius:16px; padding:18px 20px 16px; box-shadow:0 30px 70px -22px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.1), 0 0 44px -8px rgba(143,91,215,.4);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; background:#EFF6FF; border:1px solid #DBEAFE; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#2563EB;"><img src="assets/logos/jira.svg" alt="" style="width:13px; height:13px;">{{ ticketId }}</span>
+            <span style="flex:none; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; background:#FEF3C7; border:1px solid #FDE68A; border-radius:9999px; padding:4px 10px; font-size:11.5px; font-weight:700; color:#B45309;"><i class="ph-fill ph-circle-half" style="font-size:11px;"></i>{{ ticketStatus }}</span>
+          </div>
+          <div style="font-size:21px; font-weight:800; letter-spacing:-.015em; color:#111827; margin-bottom:13px;">{{ ticketTitle }}</div>
+          <div style="display:flex; flex-direction:column; gap:7px; margin-bottom:15px;">
+            <div style="height:7px; width:88%; border-radius:9999px; background:#EEF0F4;"></div>
+            <div style="height:7px; width:41%; border-radius:9999px; background:#EEF0F4;"></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; padding-top:13px; border-top:1px solid #F3F4F6;">
+            <span style="flex:none; width:23px; height:23px; border-radius:50%; background:#5C28A4; color:#fff; font-size:10px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;">{{ assigneeInitials }}</span>
+            <span style="font-size:12.5px; color:#6B7280;">{{ assignee }}</span>
+            <span style="margin-left:auto; display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; color:#B91C1C;"><i class="ph-fill ph-question" style="font-size:13px;"></i>{{ ticketGap }}<span style="width:1.5px; height:12px; background:#B91C1C; animation:qcaret 1.1s step-end infinite;"></span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:1020},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One task, six places to look&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;The full context around a piece of work is spread across too many places.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;A ticket has a title and a short description. The call that created the urgency, the thread about the trade-off, the meeting where scope changed — each of them lives somewhere else.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CHECKOUT-1428&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketStatus&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;In progress&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketTitle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Fix checkout flow&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;assignee&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Assigned to Sam&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ticketGap&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Fix what, exactly?&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fragments&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{tool:string;icon:string;color:string;text:string;x:number;y:number;rot:number;depth:'near'|'mid'|'far';dx?:string;dy?:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  DEMO = {
+    eyebrow: 'One task, six places to look',
+    headline: 'The full context around a piece of work is spread across too many places.',
+    body: 'A ticket has a title and a short description. The call that created the urgency, the thread about the trade-off, the meeting where scope changed \u2014 each of them lives somewhere else.',
+    ticketId: 'CHECKOUT-1428',
+    ticketStatus: 'In progress',
+    ticketTitle: 'Fix checkout flow',
+    assignee: 'Assigned to Sam',
+    ticketGap: 'Fix what, exactly?',
+    fragments: [
+      { tool: 'Slack thread',  logo: 'assets/logos/slack.svg',      text: 'Scope narrowed to card only \u2014 wallet can wait.',   x: 21, y: 7,  rot: 4,  depth: 'far',  dx: '-6px', dy: '7px'  },
+      { tool: 'Notion doc',    logo: 'assets/logos/notion.svg',     text: 'Checkout requirements, v3 \u2014 superseded v2.',      x: 79, y: 7,  rot: -4, depth: 'mid',  dx: '6px',  dy: '8px'  },
+      { tool: 'Customer call', icon: 'ph-fill ph-phone-call', color: '#C084FC', text: 'They need card checkout before the renewal date.', x: 12, y: 50, rot: -6, depth: 'mid',  dx: '7px',  dy: '-8px' },
+      { tool: 'Salesforce',    logo: 'assets/logos/salesforce.svg', text: 'Renewal risk flagged by CS on this account.',        x: 88, y: 50, rot: 5,  depth: 'far',  dx: '-7px', dy: '-6px' },
+      { tool: 'Meeting notes', icon: 'ph-fill ph-note-blank', color: '#FBBF24', text: 'Decision: defer wallet and ACH to next cycle.',   x: 21, y: 92, rot: 5,  depth: 'near', dx: '-5px', dy: '-8px' },
+      { tool: 'Linear',        logo: 'assets/logos/linear.svg',     text: 'Payment dependency still open, no owner.',           x: 79, y: 92, rot: -3, depth: 'near', dx: '5px',  dy: '-7px' }
+    ]
+  };
+
+  DEPTH = {
+    near: { op: 1,   sc: 1,    blur: 0,   z: 2, shadow: '0 22px 44px -18px rgba(0,0,0,.7)' },
+    mid:  { op: .74, sc: .945, blur: .4,  z: 1, shadow: '0 16px 34px -16px rgba(0,0,0,.6)' },
+    far:  { op: .52, sc: .89,  blur: .9,  z: 0, shadow: '0 12px 26px -14px rgba(0,0,0,.5)' }
+  };
+
+  renderVals() {
+    const p = this.props || {}, D = this.DEMO;
+    const raw = (p.fragments && p.fragments.length) ? p.fragments : D.fragments;
+    const fragments = raw.map((f) => {
+      const d = this.DEPTH[f.depth] || this.DEPTH.mid;
+      return {
+        tool: f.tool, logo: f.logo || '', icon: f.logo ? '' : (f.icon || 'ph-fill ph-file'), color: f.color || '#AB84E1', text: f.text,
+        wrapStyle: 'position:absolute; left:' + f.x + '%; top:' + f.y + '%; width:196px;'
+          + ' transform:translate(-50%,-50%) rotate(' + f.rot + 'deg) scale(' + d.sc + ');'
+          + ' opacity:' + d.op + '; filter:blur(' + d.blur + 'px); z-index:' + d.z + ';'
+          + ' --dx:' + (f.dx || '6px') + '; --dy:' + (f.dy || '-7px') + ';',
+        cardStyle: 'position:relative; overflow:hidden; box-sizing:border-box; width:100%; height:98px;'
+          + ' background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.11); border-radius:13px;'
+          + ' padding:13px 14px 0; box-shadow:' + d.shadow + ';'
+          + ' animation:qdrift ' + (9 + (f.x % 5)) + 's ease-in-out infinite; animation-delay:' + ((f.y % 6) * .35) + 's;'
+      };
+    });
+    const assignee = p.assignee ?? D.assignee;
+    return {
+      eyebrow: p.eyebrow ?? D.eyebrow,
+      headline: p.headline ?? D.headline,
+      body: p.body ?? D.body,
+      ticketId: p.ticketId ?? D.ticketId,
+      ticketStatus: p.ticketStatus ?? D.ticketStatus,
+      ticketTitle: p.ticketTitle ?? D.ticketTitle,
+      ticketGap: p.ticketGap ?? D.ticketGap,
+      assignee: assignee,
+      assigneeInitials: (assignee.replace(/^Assigned to\s+/i, '').trim().split(/\s+/).map((w) => w[0]).join('').slice(0, 2) || 'S').toUpperCase(),
+      fragments: fragments
+    };
+  }
+}
+</script>
+</body>
+</html>

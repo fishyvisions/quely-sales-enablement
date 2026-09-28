@@ -12,10 +12,12 @@
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="/assets/colors_and_type.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <style>
   body { margin:0; background:#F5F1FC; font-family:'Inter',sans-serif; }
-  a { color:#5C28A4; } a:hover { color:#4B1F88; }
+  a { color:#5C28A4; } a:hover { color:#41186F; }
 
   /* three equal columns hold to ~820px viewport; below that they stack, and the
      separator and accent radii switch so the stacked state is styled on purpose */
@@ -36,7 +38,7 @@
   }
 </style>
 </helmet>
-<section style="position:relative; overflow:hidden; background:#F5F1FC; padding:0; display:flex; justify-content:center;">
+<section style="position:relative; overflow:hidden; background:{{ sBg }}; padding:0; display:flex; justify-content:center;">
   <div style="position:relative; z-index:1; width:100%;">
 
     <div data-qtr style="padding:80px 40px; display:flex; justify-content:center;">
@@ -44,21 +46,21 @@
         <div style="max-width:860px; margin:0 auto; text-align:center;">
         <div style="display:inline-flex; align-items:center; gap:9px; margin-bottom:14px;">
           <span style="flex:none; width:18px; height:18px; background:url('/assets/quely-mark-brand.svg') center/contain no-repeat;"></span>
-          <span style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4;">{{ eyebrow }}</span>
+          <span style="font-family:'Geist Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5C28A4;">{{ eyebrow }}</span>
         </div>
-        <h2 style="margin:0; font-size:32px; line-height:1.15; letter-spacing:-.022em; font-weight:700; color:#111827; text-wrap:pretty;">{{ headline }}</h2>
+        <h2 style="margin:0; font-family:'Geist',sans-serif; font-size:32px; line-height:1.15; letter-spacing:-.04em; font-weight:700; color:#1A1611; text-wrap:pretty;">{{ headline }}</h2>
         </div>
 
         <!-- one bordered container, divided into three columns by hairline rules -->
-        <div data-cols style="margin-top:34px; background:#fff; border:1px solid #E4D3F5; border-radius:14px; box-shadow:0 1px 2px rgba(3,7,18,.10); display:grid; grid-template-columns:repeat(3, minmax(0,1fr));">
+        <div data-cols style="margin-top:34px; background:#fff; border:1px solid #C9C1F2; border-radius:14px; box-shadow:0 1px 2px rgba(3,7,18,.10); display:grid; grid-template-columns:repeat(3, minmax(0,1fr));">
           <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
             <div data-el="col" data-col style="{{ r.wrapStyle }}">
               <span data-edge style="{{ r.edgeStyle }}"></span>
               <div style="display:flex; align-items:center; gap:11px;">
                 <i class="{{ r.icon }}" style="flex:none; font-size:19px; color:{{ r.tint }};"></i>
-                <span style="flex:1; min-width:0; font-size:18px; line-height:1.25; font-weight:700; letter-spacing:-.014em; color:#111827; text-wrap:pretty;">{{ r.name }}</span>
+                <span style="flex:1; min-width:0; font-size:18px; line-height:1.25; font-weight:700; letter-spacing:-.014em; color:#1A1611; text-wrap:pretty;">{{ r.name }}</span>
               </div>
-              <p style="margin:12px 0 0; font-size:14.5px; line-height:1.6; color:#4B5563; text-wrap:pretty;">{{ r.text }}</p>
+              <p style="margin:12px 0 0; font-size:14.5px; line-height:1.6; color:#5C5345; text-wrap:pretty;">{{ r.text }}</p>
             </div>
           </sc-for>
         </div>
@@ -68,8 +70,22 @@
   </div>
 </section>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:520}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:520},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;One shared view for the whole team&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Give everyone the information they need to move the work forward.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;roles&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{name:string;icon:string;tint:string;text:string}&gt;&quot;}}">
 class Component extends DCLogic {
+  DEFAULT_SURFACE = 'paper';
+  /* Surfaces are assigned by position on an assembled page, so a block must repaint
+     itself rather than insist on the colour it shipped with. */
+  SURFACES = {
+    ink:    { bg:'#1A1611', ink:'#ECE7F2', dim:'rgba(236,231,242,.72)', line:'rgba(236,231,242,.16)', accent:'#9385E6', card:'#241F19', dark:true  },
+    paper:  { bg:'#ECE7F2', ink:'#1A1611', dim:'#4B5563',               line:'#D9D2E6',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    lilac:  { bg:'#DED6F1', ink:'#1A1611', dim:'#4B5563',               line:'#C9C1E4',               accent:'#5C28A4', card:'#FFFFFF', dark:false },
+    violet: { bg:'#41186F', ink:'#FFFFFF', dim:'rgba(255,255,255,.76)', line:'rgba(255,255,255,.20)', accent:'#C9C1F2', card:'#FFFFFF', dark:true  }
+  };
+  surf() {
+    var k = (this.props && this.props.surface) || this.DEFAULT_SURFACE || 'paper';
+    return this.SURFACES[k] || this.SURFACES.paper;
+  }
+
   DEMO = {
     eyebrow: 'One shared view for the whole team',
     headline: 'Give everyone the information they need to move the work forward.',
@@ -78,8 +94,8 @@ class Component extends DCLogic {
         text: 'See what changed, what is blocked, where capacity is tight, and which decisions need attention, without interrupting the team for updates.' },
       { name: 'Product managers', icon: 'ph-fill ph-git-branch', tint: '#2563EB',
         text: 'Keep requirements, scope changes, decisions, and supporting information connected to the work, so you do not have to repeat the same explanation across tickets, chat, and meetings.' },
-      { name: 'Engineers', icon: 'ph-fill ph-code', tint: '#15803D',
-        text: 'Understand what the task requires, why decisions were made, and what has changed without searching through several tools or relying on someone’s memory.' }
+      { name: 'Engineers', icon: 'ph-fill ph-code', tint: '#12652F',
+        text: 'Understand what the task requires, why decisions were made, and what has changed without searching through several tools or relying on someone\u2019s memory.' }
     ]
   };
 
@@ -133,7 +149,10 @@ class Component extends DCLogic {
         + ' opacity:0; transform:translateY(14px); --d:' + (220 + i * 120) + 'ms;'
     }));
 
+    var S = this.surf();
+
     return {
+      sBg: S.bg, sInk: S.ink, sDim: S.dim, sLine: S.line, sAccent: S.accent, sCard: S.card,
       eyebrow: p.eyebrow ?? D.eyebrow,
       headline: p.headline ?? D.headline,
       roles: roles

@@ -1,17 +1,17 @@
-/* Quely Prospect Viewer — client behaviour.
+/* Quely Prospect Viewer — client behaviour (v3).
  *
- * Ports the design prototype's interactions to a real backend: the token comes
- * from the /v/<token> URL, personalization + tracking go through the API, and
- * the Orbit demo / Space tabs / Lens Map behave exactly as the prototype.
+ * Standard mode: the frozen, approved default page (verified by
+ * default-page-check.js). Advanced/custom mode: a page assembled from the design
+ * blocks (see applyPlan). The token comes from the /v/<token> URL; personalization
+ * + tracking go through the API.
  */
 (function () {
   'use strict';
 
-  // token from /v/<token>
   var parts = location.pathname.split('/').filter(Boolean);
   var token = parts[0] === 'v' && parts[1] ? decodeURIComponent(parts[1]) : null;
 
-  var tracking = false;      // only record if the token resolves to a real prospect
+  var tracking = false;
   var prospect = null;
   var current = 'hero';
 
@@ -19,10 +19,8 @@
   function post(path, body) {
     try {
       return fetch(path, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body || {}),
-        keepalive: true
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body || {}), keepalive: true
       }).catch(function () {});
     } catch (e) {}
   }
@@ -35,40 +33,16 @@
   }
   function recordEvent(type, meta) { if (tracking) post('/api/v/' + encodeURIComponent(token) + '/event', { type: type, meta: meta || null }); }
 
-  // ── Orbit answer engine (canned-smart; swap for a real AI call later) ─────
-  var SRC = {
-    jira:    { label: 'Jira · CHECKOUT-1428', icon: 'ph-fill ph-kanban', color: '#60A5FA' },
-    slack:   { label: 'Slack thread', icon: 'ph-fill ph-chat-circle', color: '#A78BFA' },
-    gong:    { label: 'Gong · customer call', icon: 'ph-fill ph-phone-call', color: '#C084FC' },
-    meeting: { label: 'Meeting · Nov 18 planning', icon: 'ph-fill ph-note-blank', color: '#FBBF24' },
-    crm:     { label: 'Salesforce · renewal note', icon: 'ph-fill ph-cloud', color: '#38BDF8' },
-    doc:     { label: 'Doc · Checkout requirements', icon: 'ph-fill ph-file-text', color: '#34D399' }
-  };
+  // ── Orbit answer engine (canned-smart) ────────────────────────────────────
   var ANSWERS = [
-    { keys: ['block', 'stuck', 'wait', 'depend'],
-      text: "It's blocked on a payments dependency. The card-tokenization change owned by the Platform team has to land first, and that work is still in review, so checkout can't be finished until it merges.",
-      sources: ['jira', 'slack', 'meeting'] },
-    { keys: ['chang', 'update', 'happen', 'latest', 'status', 'going on', 'new'],
-      text: "Since last week: scope was narrowed to card checkout only, a payments dependency was flagged as the blocker, and CS raised that a customer is expecting this for their renewal. The ticket itself still just says “Fix checkout flow.”",
-      sources: ['slack', 'meeting', 'crm'] },
-    { keys: ['customer', 'renew', 'churn', 'account', 'client'],
-      text: "A customer is expecting this fix before their upcoming renewal. CS logged it as a renewal risk, and it came up directly on the last customer call, which is why it got prioritized.",
-      sources: ['crm', 'gong'] },
-    { keys: ['why', 'decid', 'reason', 'choose', 'chose', 'approach', 'scope'],
-      text: "Scope was narrowed to card checkout only. In the Nov 18 planning session the team decided to cut the wallet/ACH paths for now to hit the renewal timeline, and to revisit them afterward.",
-      sources: ['meeting', 'slack'] },
-    { keys: ['next', 'todo', 'action', 'do now', 'should'],
-      text: "Next steps: unblock the payments dependency with the Platform team, confirm the card-only scope with the customer via CS, then finish and QA the checkout flow. Owner on the dependency is still unassigned.",
-      sources: ['jira', 'meeting', 'crm'] },
-    { keys: ['who', 'own', 'assign', 'responsible'],
-      text: "The ticket is assigned to the checkout squad, but the blocking payments dependency has no owner yet. The renewal context is owned by CS, and the scope decision came from the Nov 18 planning group.",
-      sources: ['jira', 'meeting', 'crm'] }
+    { keys: ['block', 'stuck', 'wait', 'depend'], text: "It's blocked on a payments dependency. The card-tokenization change owned by the Platform team has to land first, and that work is still in review, so checkout can't be finished until it merges." },
+    { keys: ['chang', 'update', 'happen', 'latest', 'status', 'going on', 'new'], text: "Since last week: scope was narrowed to card checkout only, a payments dependency was flagged as the blocker, and CS raised that a customer is expecting this for their renewal. The ticket itself still just says “Fix checkout flow.”" },
+    { keys: ['customer', 'renew', 'churn', 'account', 'client'], text: "A customer is expecting this fix before their upcoming renewal. CS logged it as a renewal risk, and it came up directly on the last customer call, which is why it got prioritized." },
+    { keys: ['why', 'decid', 'reason', 'choose', 'chose', 'approach', 'scope'], text: "Scope was narrowed to card checkout only. In the Nov 18 planning session the team decided to cut the wallet/ACH paths for now to hit the renewal timeline, and to revisit them afterward." },
+    { keys: ['next', 'todo', 'action', 'do now', 'should'], text: "Next steps: unblock the payments dependency with the Platform team, confirm the card-only scope with the customer via CS, then finish and QA the checkout flow. Owner on the dependency is still unassigned." },
+    { keys: ['who', 'own', 'assign', 'responsible'], text: "The ticket is assigned to the checkout squad, but the blocking payments dependency has no owner yet. The renewal context is owned by CS, and the scope decision came from the Nov 18 planning group." }
   ];
-  // Default fallback answer (overridden by a personalized plan's orbit.fallback).
-  var ORBIT_FALLBACK = {
-    text: "Here's what the Space shows on that: the work is “Fix checkout flow,” currently blocked on a payments dependency, scoped to card checkout only, and flagged as a renewal risk by CS. Ask about what's blocking it, what changed, why the scope was set, or what's next.",
-    sources: ['jira', 'slack', 'meeting', 'crm']
-  };
+  var ORBIT_FALLBACK = { text: "Here's what the Space shows on that: the work is “Fix checkout flow,” currently blocked on a payments dependency, scoped to card checkout only, and flagged as a renewal risk by CS. Ask about what's blocking it, what changed, why the scope was set, or what's next." };
   function answerFor(qtext) {
     var s = (qtext || '').toLowerCase();
     for (var i = 0; i < ANSWERS.length; i++) {
@@ -78,68 +52,78 @@
     return ORBIT_FALLBACK;
   }
 
-  var LENSES = [
-    { id: 'decisions', label: 'Decisions', icon: 'ph-fill ph-seal-check', color: '#22C55E', items: [
-      'Scope narrowed to card checkout only', 'Defer wallet & ACH to the next cycle', 'Prioritize ahead of the Acme renewal' ] },
-    { id: 'action', label: 'Action', icon: 'ph-fill ph-list-checks', color: '#60A5FA', items: [
-      'Unblock the payments tokenization PR', 'Confirm card-only scope with the customer', 'QA the full checkout flow before launch' ] },
-    { id: 'risks', label: 'Risks', icon: 'ph-fill ph-warning', color: '#F87171', items: [
-      'Payments dependency has no owner yet', 'Renewal deadline on the 30th is at risk', 'Wallet users need a clear interim message' ] },
-    { id: 'opportunities', label: 'Opportunities', icon: 'ph-fill ph-lightbulb', color: '#FBBF24', items: [
-      'Reuse tokenization for subscriptions', 'Position the fix in the renewal conversation' ] },
-    { id: 'questions', label: 'Open Questions', icon: 'ph-fill ph-question', color: '#C4B5FD', items: [
-      'Who owns the payments dependency?', 'Do ACH users need a fallback path?' ] },
-    { id: 'next', label: 'Next Steps', icon: 'ph-fill ph-arrow-right', color: '#818CF8', items: [
-      'Assign an owner to the dependency', 'Schedule a pre-launch review', 'Send the customer a status update via CS' ] }
+  // Suggested prompts (full-width cards). Labels must include blocking/changed/scope/next.
+  var SUGGESTIONS = [
+    { label: "What's blocking this?", q: 'What is blocking this right now?' },
+    { label: 'What changed recently?', q: 'What changed recently?' },
+    { label: 'Why this scope?', q: 'Why did we decide on this scope?' },
+    { label: "What's next?", q: 'What are the next steps?' }
   ];
 
-  // Supported project-management tools for the lens-item "Push to tool" menu (order matters).
+  // ── Lenses (product-faithful; the marketing scenario) ─────────────────────
+  var LENS_CATS = [
+    { id: 'decisions', label: 'Decisions', color: '#16A34A', count: 1 },
+    { id: 'actions', label: 'Action Items', color: '#2563EB', count: 17 },
+    { id: 'risks', label: 'Risks', color: '#B91C1C', count: 10 },
+    { id: 'opps', label: 'Opportunities', color: '#8B5CF6', count: 9 }
+  ];
+  var LENS_TOTAL = 37;
+  var LENS_ITEMS = [
+    { cat: 'decisions', when: '10 days ago', signals: 1, decided: true, text: "Ronma's main focus is now continuous weekly new customer acquisition via LinkedIn outreach, supported by a simple reporting dashboard." },
+    { cat: 'actions', when: '10 days ago', signals: 4, text: "Onyi to review the performance of the first ‘How We Use Quely’ campaign and identify who engaged, then fix the remaining SendGrid email issues based on team and Ronma's feedback." },
+    { cat: 'actions', when: '10 days ago', signals: 2, decided: true, text: "Ronma to continue refining outreach based on prospect responses, objections, and described workflows to move qualified interest toward Quely pilots." },
+    { cat: 'risks', when: '10 days ago', signals: 2, text: "If the HubSpot form and SendGrid issues are not resolved, campaign replies may keep going unanswered." },
+    { cat: 'opps', when: '10 days ago', signals: 3, text: "Repurposing the ‘How We Use Quely’ series for YouTube could compound reach without new production effort." }
+  ];
+
+  // Project-management tools for the push modal (GitHub Issues is the only "Soon").
   var PM_TOOLS = [
-    { id: 'jira',        label: 'Jira',          logo: '/assets/logos/jira.svg' },
-    { id: 'linear',      label: 'Linear',        logo: '/assets/logos/linear.svg' },
-    { id: 'monday',      label: 'monday.com',    logo: '/assets/logos/monday.svg' },
-    { id: 'wrike',       label: 'Wrike',         logo: '/assets/logos/wrike.png' },
-    { id: 'todoist',     label: 'Todoist',       logo: '/assets/logos/todoist.svg' },
-    { id: 'trello',      label: 'Trello',        logo: '/assets/logos/trello.svg' },
-    { id: 'azuredevops', label: 'Azure DevOps',  logo: '/assets/logos/azuredevops.svg' },
-    { id: 'github',      label: 'GitHub Issues', logo: '/assets/logos/github.svg' }
+    { id: 'jira', label: 'Jira', logo: '/assets/logos/jira.svg' },
+    { id: 'linear', label: 'Linear', logo: '/assets/logos/linear.svg' },
+    { id: 'todoist', label: 'Todoist', logo: '/assets/logos/todoist.svg' },
+    { id: 'azuredevops', label: 'Azure DevOps', logo: '/assets/logos/azuredevops.svg' },
+    { id: 'wrike', label: 'Wrike', logo: '/assets/logos/wrike.png' },
+    { id: 'monday', label: 'monday.com', logo: '/assets/logos/monday.svg' },
+    { id: 'trello', label: 'Trello', logo: '/assets/logos/trello.svg' },
+    { id: 'github', label: 'GitHub Issues', logo: '/assets/logos/github.svg', soon: true }
   ];
-  function toolById(id) { for (var i = 0; i < PM_TOOLS.length; i++) { if (PM_TOOLS[i].id === id) return PM_TOOLS[i]; } return null; }
 
-  // ── DOM refs ──────────────────────────────────────────────────────────────
+  // ── DOM refs / state ──────────────────────────────────────────────────────
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var orbitScroll = $('#orbitScroll');
   var orbitEmpty = $('#orbitEmpty');
   var orbitInput = $('#orbitInput');
 
-  // state
   var state = {
-    spaceTouched: false, orbitTouched: false, lens: 'decisions', lensTouched: false, pushed: {}, pushMenu: null
+    spaceTouched: false, orbitTouched: false, lensFilter: 'all',
+    lensPick: 'Jira', dismissed: {}, done: {}
   };
   var pendingThink = 0;
 
-  // ── Orbit chips ────────────────────────────────────────────────────────────
-  var SUGGESTIONS = [
-    { label: 'What’s blocking this?', q: 'What is blocking this right now?' },
-    { label: 'What changed recently?', q: 'What changed recently?' },
-    { label: 'Why this scope?', q: 'Why did we decide on this scope?' },
-    { label: 'What’s next?', q: 'What are the next steps?' }
-  ];
+  // ── Orbit suggested prompts ───────────────────────────────────────────────
   function renderChips() {
     var wrap = $('#orbitChips');
+    if (!wrap) return;
     wrap.innerHTML = '';
     SUGGESTIONS.forEach(function (s, i) {
       var b = document.createElement('button');
-      b.className = 'q-orbchip';
-      b.style.cssText = 'position:relative; background:rgba(143,91,215,.16); border:1px solid rgba(143,91,215,.4); color:#E4D3F5; font-family:inherit; font-size:14px; font-weight:600; padding:9px 15px; border-radius:9999px; cursor:pointer;';
+      b.className = 'q-sugg';
+      b.style.cssText = 'position:relative; display:flex; align-items:center; gap:12px; width:100%; background:#fff; border:1px solid #E5E7EB; border-radius:11px; color:#1F2937; padding:15px 17px; font-size:15px; font-weight:500; line-height:1.35; text-align:left; font-family:inherit; cursor:pointer; box-shadow:0 1px 2px rgba(3,7,18,.04);';
+      var lbl = document.createElement('span');
+      lbl.style.cssText = 'flex:1;';
+      lbl.textContent = s.label;
+      b.appendChild(lbl);
+      var arr = document.createElement('i');
+      arr.className = 'ph ph-arrow-up-right';
+      arr.style.cssText = 'color:#9CA3AF; font-size:16px;';
+      b.appendChild(arr);
       if (i === 0 && !state.orbitTouched) {
         var ping = document.createElement('span');
         ping.className = 'orbit-ping';
-        ping.style.cssText = 'position:absolute; top:-6px; right:-6px; width:15px; height:15px; pointer-events:none;';
-        ping.innerHTML = '<span style="position:absolute; inset:0; border-radius:50%; background:#AB84E1; opacity:.75; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#AB84E1;"></span>';
+        ping.style.cssText = 'position:absolute; top:-5px; right:-5px; width:14px; height:14px; pointer-events:none;';
+        ping.innerHTML = '<span style="position:absolute; inset:0; border-radius:50%; background:#8B5CF6; opacity:.75; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#8B5CF6;"></span>';
         b.appendChild(ping);
       }
-      b.appendChild(document.createTextNode(s.label));
       b.addEventListener('click', function () { runOrbit(s.q); });
       wrap.appendChild(b);
     });
@@ -157,23 +141,15 @@
   }
   function addOrbitBubble(ans) {
     var row = document.createElement('div');
-    row.style.cssText = 'display:flex; justify-content:flex-start;';
+    row.style.cssText = 'display:flex; justify-content:flex-start; gap:10px;';
+    var pet = document.createElement('img');
+    pet.src = '/assets/quely-orbit-pet.png';
+    pet.style.cssText = 'width:30px; height:30px; flex:none;';
+    row.appendChild(pet);
     var bub = document.createElement('div');
-    bub.style.cssText = 'max-width:88%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:#EAECEF; font-size:15px; line-height:1.5; padding:14px 17px; border-radius:14px; border-bottom-left-radius:4px; animation:qanswer .45s cubic-bezier(.2,0,0,1);';
+    bub.style.cssText = 'max-width:88%; background:#F9FAFB; border:1px solid #E5E7EB; color:#1A1611; font-size:15px; line-height:1.5; padding:14px 17px; border-radius:14px; border-bottom-left-radius:4px; animation:qanswer .45s cubic-bezier(.2,0,0,1);';
     bub.appendChild(document.createTextNode(ans.text));
-    if (ans.sources && ans.sources.length) {
-      var srcWrap = document.createElement('div');
-      srcWrap.style.cssText = 'display:flex; flex-wrap:wrap; gap:7px; margin-top:12px;';
-      ans.sources.forEach(function (id) {
-        var s = SRC[id] || { label: id, icon: 'ph-fill ph-file', color: '#9CA3AF' };
-        var chip = document.createElement('span');
-        chip.style.cssText = 'display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:9999px; padding:4px 10px; font-size:12px; font-weight:600; color:rgba(255,255,255,.72);';
-        chip.innerHTML = '<i class="' + s.icon + '" style="font-size:14px; color:' + s.color + ';"></i>';
-        chip.appendChild(document.createTextNode(s.label));
-        srcWrap.appendChild(chip);
-      });
-      bub.appendChild(srcWrap);
-    }
+    // v3: answers show NO Sources row.
     row.appendChild(bub);
     orbitScroll.appendChild(row);
   }
@@ -183,19 +159,16 @@
       if (existing) return;
       var t = document.createElement('div');
       t.id = 'orbitThinking';
-      t.style.cssText = 'display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:14px; border-bottom-left-radius:4px; padding:15px 17px; align-self:flex-start;';
-      t.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#AB84E1; animation:qdot 1.2s infinite;"></span><span style="width:7px; height:7px; border-radius:50%; background:#AB84E1; animation:qdot 1.2s infinite .2s;"></span><span style="width:7px; height:7px; border-radius:50%; background:#AB84E1; animation:qdot 1.2s infinite .4s;"></span>';
+      t.style.cssText = 'display:flex; align-items:center; gap:10px; align-self:flex-start;';
+      t.innerHTML = '<img src="/assets/quely-orbit-pet.png" style="width:30px; height:30px;">' +
+        '<span style="display:inline-flex; align-items:center; gap:8px; background:#F5F6F8; border-radius:9999px; padding:9px 14px; font-size:13px; color:#4B5563;">Analyzing work item context' +
+        '<span style="display:inline-flex; gap:3px;"><span style="width:6px;height:6px;border-radius:50%;background:#8B5CF6;animation:qdot 1.2s infinite;"></span><span style="width:6px;height:6px;border-radius:50%;background:#8B5CF6;animation:qdot 1.2s infinite .3s;"></span></span></span>';
       orbitScroll.appendChild(t);
-    } else if (existing) {
-      existing.remove();
-    }
+    } else if (existing) { existing.remove(); }
   }
-  // Reveal the FULL answer at once after a think delay (no char streaming — that
-  // raced and dropped in the prototype).
   function runOrbit(qtext) {
     qtext = (qtext || '').trim();
     if (!qtext) return;
-    // first orbit interaction: remove the chip ping
     if (!state.orbitTouched) { state.orbitTouched = true; document.querySelectorAll('.orbit-ping').forEach(function (n) { n.remove(); }); }
     recordEvent('orbit_demo', { q: qtext });
     addUserBubble(qtext);
@@ -212,7 +185,21 @@
     requestAnimationFrame(function () { orbitScroll.scrollTop = orbitScroll.scrollHeight; });
   }
 
-  // ── Space tabs ──────────────────────────────────────────────────────────────
+  // ── Orbit Actions toggle ──────────────────────────────────────────────────
+  function initActions() {
+    var t = $('#orbitActionsToggle'), body = $('#orbitActionsBody'), caret = $('#orbitActionsCaret');
+    if (!t) return;
+    t.addEventListener('click', function () {
+      var open = body.style.display !== 'none' && body.style.display !== '';
+      // toggle: treat current hidden as closed
+      var isOpen = body.style.display === 'block';
+      body.style.display = isOpen ? 'none' : 'block';
+      if (caret) caret.className = isOpen ? 'ph ph-caret-down' : 'ph ph-caret-up';
+      if (caret) caret.style.marginLeft = 'auto';
+    });
+  }
+
+  // ── Space tabs ────────────────────────────────────────────────────────────
   function initSpace() {
     var tabs = document.querySelectorAll('[data-space-tab]');
     tabs.forEach(function (btn) {
@@ -232,163 +219,161 @@
     });
   }
 
-  // ── Lens Map ──────────────────────────────────────────────────────────────
-  function renderLensRail() {
-    var rail = $('#lensRail');
-    // keep the "Lens Explorer" header (first child), rebuild the rest
-    while (rail.children.length > 1) rail.removeChild(rail.lastChild);
-    LENSES.forEach(function (l, li) {
-      var on = l.id === state.lens;
-      var b = document.createElement('button');
-      b.style.cssText = 'position:relative; display:flex; align-items:center; gap:10px; width:100%; font-family:inherit; padding:9px 10px; border:none; border-radius:9px; cursor:pointer; transition:background .14s; color:#fff; background:' + (on ? 'rgba(143,91,215,.22)' : 'transparent') + ';';
-      if (li === 0 && !state.lensTouched) {
-        var ping = document.createElement('span');
-        ping.style.cssText = 'position:absolute; top:8px; right:10px; width:13px; height:13px; pointer-events:none;';
-        ping.innerHTML = '<span style="position:absolute; inset:0; border-radius:50%; background:#AB84E1; opacity:.75; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:3.5px; border-radius:50%; background:#AB84E1;"></span>';
-        b.appendChild(ping);
-      }
-      var icon = document.createElement('i');
-      icon.className = l.icon;
-      icon.style.cssText = 'flex:none; font-size:18px; color:' + l.color + ';';
-      b.appendChild(icon);
-      var lbl = document.createElement('span');
-      lbl.style.cssText = 'flex:1; text-align:left; font-size:14px; font-weight:600;';
-      lbl.textContent = l.label;
-      b.appendChild(lbl);
-      var cnt = document.createElement('span');
-      cnt.style.cssText = 'flex:none; min-width:22px; text-align:center; font-size:12px; font-weight:700; padding:2px 7px; border-radius:9999px; ' + (on ? 'background:rgba(255,255,255,.16); color:#fff;' : 'background:rgba(255,255,255,.08); color:rgba(255,255,255,.55);');
-      cnt.textContent = l.items.length;
-      b.appendChild(cnt);
-      b.addEventListener('click', function () { selectLens(l.id); });
-      rail.appendChild(b);
-    });
-    var total = LENSES.reduce(function (a, l) { return a + l.items.length; }, 0);
-    $('#lensTotal').textContent = total + ' items · 3 signals';
-  }
-  function renderLensItems(animate) {
-    var def = LENSES.filter(function (l) { return l.id === state.lens; })[0] || LENSES[0];
-    $('#activeLensIcon').className = def.icon;
-    $('#activeLensIcon').style.color = def.color;
-    $('#activeLensLabel').textContent = def.label;
-    var wrap = $('#lensItems');
+  // ── Lenses (pills + grouped list + push/schedule modals) ──────────────────
+  function renderLensPills() {
+    var wrap = $('#lensPills');
+    if (!wrap) return;
     wrap.innerHTML = '';
-    var btnBase = 'position:relative; display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13px; font-weight:600; padding:8px 13px; border-radius:9px; cursor:pointer; white-space:nowrap;';
-    def.items.forEach(function (text, idx) {
-      var key = state.lens + '-' + idx;
-      var pk = state.pushed[key];
-
-      // outer row is a column so the tool menu can drop in below the item content
-      var row = document.createElement('div');
-      row.style.cssText = 'display:flex; flex-direction:column; align-items:stretch; gap:11px; padding:13px 14px; border-radius:12px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);' + (animate ? (' animation:qanswer .4s cubic-bezier(.2,0,0,1) both; animation-delay:' + (idx * 55) + 'ms;') : '');
-
-      var top = document.createElement('div');
-      top.style.cssText = 'display:flex; align-items:center; gap:13px;';
-      var icon = document.createElement('i');
-      icon.className = def.icon;
-      icon.style.cssText = 'flex:none; font-size:20px; color:' + def.color + ';';
-      top.appendChild(icon);
-      var txt = document.createElement('div');
-      txt.style.cssText = 'flex:1; min-width:0; font-size:15px; line-height:1.4; color:#EAECEF;';
-      txt.textContent = text;
-      top.appendChild(txt);
-
-      if (pk) {
-        // confirmation state: "Added to {tool}" (with logo tile) or "Meeting scheduled"
-        var done = document.createElement('span');
-        done.style.cssText = 'flex:none; display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; padding:8px 13px; border-radius:9px; background:rgba(34,197,94,.14); border:1px solid rgba(34,197,94,.4); color:#4ADE80; animation:qanswer .4s cubic-bezier(.2,0,0,1);';
-        if (pk === 'meeting') {
-          done.innerHTML = '<i class="ph-fill ph-calendar-check"></i>Meeting scheduled';
-        } else {
-          var tool = toolById(pk) || { label: 'tool', logo: '' };
-          done.innerHTML = '<span style="width:18px; height:18px; border-radius:5px; background:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none;"><img src="' + tool.logo + '" alt="" style="width:13px; height:13px;"></span>Added to ' + tool.label;
-        }
-        top.appendChild(done);
-      } else {
-        // action controls: "Push to tool ▾" menu trigger + separate "Schedule"
-        var btns = document.createElement('div');
-        btns.style.cssText = 'display:flex; gap:7px; flex:none;';
-        var menuOpen = state.pushMenu === key;
-        var firstPush = (idx === 0 && Object.keys(state.pushed).length === 0);
-
-        var trigger = document.createElement('button');
-        trigger.style.cssText = btnBase + ' background:#fff; border:1px solid #fff; color:#111827;';
-        var caretStyle = 'font-size:14px; margin-left:-1px; transition:transform .14s; transform:rotate(' + (menuOpen ? '180' : '0') + 'deg);';
-        trigger.innerHTML = (firstPush ? '<span style="position:absolute; top:-6px; right:-6px; width:14px; height:14px; pointer-events:none;"><span style="position:absolute; inset:0; border-radius:50%; background:#60A5FA; opacity:.8; animation:qping 1.6s cubic-bezier(0,0,.2,1) infinite;"></span><span style="position:absolute; inset:4px; border-radius:50%; background:#60A5FA;"></span></span>' : '') +
-          '<i class="ph-fill ph-paper-plane-tilt" style="font-size:15px;"></i>Push to tool<i class="ph-bold ph-caret-down" style="' + caretStyle + '"></i>';
-        trigger.addEventListener('click', function (e) { e.stopPropagation(); togglePushMenu(key); });
-
-        var meet = document.createElement('button');
-        meet.style.cssText = btnBase + ' background:transparent; border:1px solid rgba(255,255,255,.22); color:#fff;';
-        meet.innerHTML = '<i class="ph-bold ph-calendar-plus" style="font-size:15px;"></i>Schedule';
-        meet.addEventListener('click', function () { pushItem(key, 'meeting'); });
-
-        btns.appendChild(trigger);
-        btns.appendChild(meet);
-        top.appendChild(btns);
-      }
-      row.appendChild(top);
-
-      // tool menu (drops in below the item when its trigger is open)
-      if (!pk && state.pushMenu === key) {
-        var menu = document.createElement('div');
-        menu.style.cssText = 'background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px; animation:qanswer .28s cubic-bezier(.2,0,0,1);';
-        var mlbl = document.createElement('div');
-        mlbl.style.cssText = 'font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.4); padding:4px 10px 8px;';
-        mlbl.textContent = 'Push this item to';
-        menu.appendChild(mlbl);
-        var grid = document.createElement('div');
-        grid.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:2px;';
-        PM_TOOLS.forEach(function (tl) {
-          var opt = document.createElement('button');
-          opt.style.cssText = 'display:flex; align-items:center; gap:10px; width:100%; font-family:inherit; font-size:14px; font-weight:600; text-align:left; padding:9px 12px; border:none; background:transparent; color:#EAECEF; cursor:pointer; border-radius:8px; transition:background .12s;';
-          opt.onmouseenter = function () { opt.style.background = 'rgba(255,255,255,.08)'; };
-          opt.onmouseleave = function () { opt.style.background = 'transparent'; };
-          opt.innerHTML = '<span style="width:26px; height:26px; border-radius:7px; background:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none;"><img src="' + tl.logo + '" alt="" style="width:17px; height:17px;"></span>' + tl.label;
-          opt.addEventListener('click', function (e) { e.stopPropagation(); pushItem(key, tl.id); });
-          grid.appendChild(opt);
-        });
-        menu.appendChild(grid);
-        row.appendChild(menu);
-      }
-
-      wrap.appendChild(row);
+    var pills = [{ id: 'all', label: 'All', color: '#8F5BD7', count: LENS_TOTAL }].concat(LENS_CATS);
+    pills.forEach(function (p) {
+      var on = state.lensFilter === p.id;
+      var b = document.createElement('button');
+      b.style.cssText = 'display:inline-flex; align-items:center; gap:7px; border-radius:9999px; padding:6px 13px; font-size:12.5px; font-weight:600; cursor:pointer; font-family:inherit;'
+        + (on ? ' background:#F3EEFB; border:1.5px solid #8F5BD7; color:#4B1F88;' : ' background:#fff; border:1px solid #E5E7EB; color:#4B5563;');
+      if (p.id !== 'all') b.innerHTML = '<span style="width:6px; height:6px; border-radius:50%; background:' + p.color + ';"></span>';
+      b.appendChild(document.createTextNode(p.label + ' '));
+      var c = document.createElement('b'); c.style.opacity = '.7'; c.textContent = p.count; b.appendChild(c);
+      b.addEventListener('click', function () { state.lensFilter = p.id; renderLensPills(); renderLensList(); recordEvent('lens_view', { lens: p.id }); });
+      wrap.appendChild(b);
     });
   }
-  function selectLens(id) {
-    recordEvent('lens_view', { lens: id });
-    state.lens = id;
-    state.lensTouched = true;
-    state.pushMenu = null;
-    renderLensRail();
-    renderLensItems(true);
+
+  function renderLensList() {
+    var list = $('#lensList');
+    if (!list) return;
+    list.innerHTML = '';
+    LENS_CATS.forEach(function (cat) {
+      if (state.lensFilter !== 'all' && state.lensFilter !== cat.id) return;
+      var items = LENS_ITEMS.filter(function (it) { return it.cat === cat.id; });
+      // group header (always show the category so the four labels are present)
+      var head = document.createElement('div');
+      head.style.cssText = 'display:flex; align-items:center; gap:8px; padding:14px 0 8px; font-size:17px; font-weight:800; color:#1A1611;';
+      head.innerHTML = '<span style="width:8px; height:8px; border-radius:50%; background:' + cat.color + ';"></span>' + cat.label + ' <span style="font-size:13px; font-weight:700; color:#6B7280;">' + cat.count + '</span>';
+      list.appendChild(head);
+      items.forEach(function (it, idx) {
+        var key = cat.id + '-' + idx;
+        var row = document.createElement('div');
+        row.setAttribute('data-lens-row', '');
+        row.style.cssText = 'position:relative; border-radius:10px; padding:11px 13px; margin:0 -13px 4px;';
+        var dismissed = !!state.dismissed[key];
+        var done = state.done[key];
+        row.innerHTML =
+          '<div style="font-size:14px; line-height:1.5; color:' + (dismissed ? '#9CA3AF' : '#1F2937') + '; ' + (dismissed ? 'text-decoration:line-through;' : '') + ' padding-right:120px;">' + escapeHtml(it.text) + '</div>' +
+          '<div style="display:flex; align-items:center; gap:8px; margin-top:6px; font-size:11.5px; color:#6B7280;">' +
+            '<i class="ph ph-flag"></i><span>· ' + it.when + '</span>' +
+            (it.decided ? '<span style="display:inline-flex; align-items:center; gap:4px; background:#DCFCE7; color:#15803D; border-radius:9999px; padding:1px 8px; font-weight:700;"><i class="ph-fill ph-check-circle"></i>Decided</span>' : '') +
+            (dismissed ? '<span style="color:#9CA3AF;">Dismissed · click trash to undo</span>' : '') +
+            '<span style="margin-left:auto; display:inline-flex; align-items:center; gap:4px;"><i class="ph ph-broadcast"></i>' + it.signals + '</span>' +
+          '</div>';
+        // per-row action bar (revealed on hover via CSS)
+        var bar = document.createElement('div');
+        bar.setAttribute('data-lens-bar', '');
+        bar.style.cssText = 'display:none; position:absolute; top:8px; right:10px; align-items:center; gap:2px; background:#fff; border:1px solid #E5E7EB; border-radius:9999px; box-shadow:0 4px 12px rgba(3,7,18,.14); padding:2px;';
+        var pushBtn = actionBtn('ph ph-arrow-square-out', 'Push to tool');
+        pushBtn.addEventListener('click', function (e) { e.stopPropagation(); openPushModal(key); });
+        var meetBtn = actionBtn('ph ph-calendar-plus', 'Schedule a meeting');
+        meetBtn.addEventListener('click', function (e) { e.stopPropagation(); openSchedModal(it.text); });
+        var trashBtn = actionBtn('ph ph-trash', 'Dismiss');
+        trashBtn.querySelector('i').style.color = '#B91C1C';
+        trashBtn.addEventListener('click', function (e) { e.stopPropagation(); state.dismissed[key] = !state.dismissed[key]; renderLensList(); });
+        bar.appendChild(pushBtn); bar.appendChild(divider()); bar.appendChild(meetBtn); bar.appendChild(divider()); bar.appendChild(trashBtn);
+        row.appendChild(bar);
+        // completed chips
+        if (done) {
+          var chip = document.createElement('div');
+          chip.style.cssText = 'display:inline-flex; align-items:center; gap:6px; margin-top:8px; background:#F0FDF4; border:1px solid #BBF7D0; color:#15803D; border-radius:9999px; padding:3px 10px; font-size:11.5px; font-weight:700;';
+          chip.innerHTML = (done === 'meeting')
+            ? '<i class="ph-fill ph-calendar-check"></i>Meeting scheduled'
+            : '<i class="ph-fill ph-check-circle"></i>Created in ' + done;
+          row.appendChild(chip);
+        }
+        list.appendChild(row);
+      });
+    });
   }
-  function togglePushMenu(key) {
-    state.pushMenu = (state.pushMenu === key) ? null : key;
-    renderLensItems(false);
+  function actionBtn(icon, title) {
+    var b = document.createElement('span');
+    b.setAttribute('data-lens-btn', '');
+    b.title = title;
+    b.style.cssText = 'display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:9999px; cursor:pointer;';
+    b.innerHTML = '<i class="' + icon + '" style="font-size:17px; color:#374151;"></i>';
+    return b;
   }
-  function pushItem(key, kind) {
-    // `kind` is the selected tool id (jira/linear/monday/…) or 'meeting'
-    recordEvent('lens_push', { key: key, kind: kind });
-    state.pushed[key] = kind;
-    state.pushMenu = null;
-    renderLensItems(false);
+  function divider() { var d = document.createElement('span'); d.style.cssText = 'width:1px; height:18px; background:#E5E7EB;'; return d; }
+  function escapeHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // Push modal
+  function renderToolRail() {
+    var rail = $('#lensToolRail');
+    if (!rail) return;
+    rail.innerHTML = '';
+    PM_TOOLS.forEach(function (t) {
+      var on = state.lensPick === t.label;
+      var row = document.createElement('button');
+      row.style.cssText = 'display:flex; align-items:center; gap:9px; width:100%; text-align:left; font-family:inherit; font-size:13px; font-weight:' + (on ? '700' : '500') + '; color:' + (t.soon ? '#9CA3AF' : (on ? '#5C28A4' : '#374151')) + '; border:none; border-radius:8px; padding:8px 9px; cursor:' + (t.soon ? 'default' : 'pointer') + '; background:' + (on ? '#F3EEFB' : 'transparent') + ';';
+      row.innerHTML = '<span style="width:16px; height:16px; background:url(\'' + t.logo + '\') center/contain no-repeat;' + (t.soon ? ' filter:grayscale(1); opacity:.5;' : '') + '"></span>'
+        + '<span style="flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + t.label + '</span>'
+        + (t.soon ? '<span style="font-size:8.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#6B7280; background:#F3F4F6; border-radius:9999px; padding:2px 6px;">Soon</span>'
+                  : (on ? '<i class="ph-fill ph-check-circle" style="color:#15803D;"></i>' : ''));
+      if (!t.soon) row.addEventListener('click', function () { state.lensPick = t.label; renderToolRail(); updatePushCreateLabel(); });
+      rail.appendChild(row);
+    });
+  }
+  function updatePushCreateLabel() {
+    var b = $('#lensPushCreate');
+    if (b) b.innerHTML = '<i class="ph-bold ph-plus"></i>Create in ' + state.lensPick;
+  }
+  function openPushModal(key) {
+    state._pushKey = key;
+    renderToolRail(); updatePushCreateLabel();
+    var m = $('#lensPushModal'); if (m) m.style.display = 'block';
+  }
+  function openSchedModal(title) {
+    var t = $('#lensSchedTitle'); if (t) t.textContent = title || 'Lens item';
+    var m = $('#lensSchedModal'); if (m) m.style.display = 'block';
+  }
+  function initLensModals() {
+    document.querySelectorAll('.lensModalScrim, .lensModalClose').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var m = $('#lensPushModal'); if (m) m.style.display = 'none';
+        var s = $('#lensSchedModal'); if (s) s.style.display = 'none';
+      });
+    });
+    var create = $('#lensPushCreate');
+    if (create) create.addEventListener('click', function () {
+      if (state._pushKey) { state.done[state._pushKey] = state.lensPick; recordEvent('lens_push', { key: state._pushKey, kind: state.lensPick }); }
+      var m = $('#lensPushModal'); if (m) m.style.display = 'none';
+      renderLensList();
+    });
+    var sched = $('#lensSchedConfirm');
+    if (sched) sched.addEventListener('click', function () {
+      var m = $('#lensSchedModal'); if (m) m.style.display = 'none';
+      recordEvent('lens_push', { kind: 'meeting' });
+    });
   }
 
-  // ── Ask a question panel ────────────────────────────────────────────────────
+  // ── Ask a question panel ──────────────────────────────────────────────────
   function initQuestion() {
     var panel = $('#qPanel');
     var form = $('#qForm');
     var done = $('#qDone');
+    var qStarted = false;
     function open() {
       $('#qText').value = '';
       $('#qSection').value = current || 'hero';
+      qStarted = false;
       form.style.display = '';
       done.style.display = 'none';
       panel.style.display = 'flex';
     }
     function close() { panel.style.display = 'none'; }
-    $('#askFab').addEventListener('click', open);
-    $('#ctaAsk').addEventListener('click', open);
+    $('#qText').addEventListener('input', function () {
+      if (qStarted || !$('#qText').value) return;
+      qStarted = true;
+      recordEvent('question_start');
+    });
+    var fab = $('#askFab'); if (fab) fab.addEventListener('click', open);
+    var ctaAsk = $('#ctaAsk'); if (ctaAsk) ctaAsk.addEventListener('click', open);
     document.querySelectorAll('.qClose').forEach(function (b) { b.addEventListener('click', close); });
     panel.addEventListener('click', function (e) { if (e.target === panel) close(); });
     $('#qSubmit').addEventListener('click', function () {
@@ -401,12 +386,14 @@
     });
   }
 
-  // ── CTA ─────────────────────────────────────────────────────────────────────
+  // ── CTA ───────────────────────────────────────────────────────────────────
   function initCTA() {
-    $('#ctaBook').addEventListener('click', function () { recordEvent('cta'); });
+    ['#ctaBook', '#ctaBook2'].forEach(function (sel) {
+      var el = $(sel); if (el) el.addEventListener('click', function () { recordEvent('cta'); });
+    });
   }
 
-  // ── scroll craft: progress bar, section dots, dwell tracking ─────────────────
+  // ── scroll craft: progress bar + dwell tracking ───────────────────────────
   var pendingMs = {};
   function initScroll() {
     var supportsView = (typeof CSS !== 'undefined' && CSS.supports && CSS.supports('animation-timeline: view()'));
@@ -428,27 +415,9 @@
         var r = el.getBoundingClientRect();
         if (r.top <= mid && r.bottom >= mid) cur = el.getAttribute('data-section');
       });
-      if (!cur) {
-        var best = 1e9;
-        els.forEach(function (el) {
-          var r = el.getBoundingClientRect();
-          var d = Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
-          if (d < best) { best = d; cur = el.getAttribute('data-section'); }
-        });
-      }
-      if (cur) {
-        current = cur;
-        document.querySelectorAll('[data-dot]').forEach(function (d) {
-          var on = d.getAttribute('data-dot') === cur;
-          d.style.background = on ? '#5C28A4' : '#D1D5DB';
-          d.style.transform = on ? 'scale(1.5)' : 'scale(1)';
-        });
-      }
+      if (cur) current = cur;
     }
-    function dwell() {
-      if (document.visibilityState !== 'visible') return;
-      if (tracking && current) pendingMs[current] = (pendingMs[current] || 0) + 1000;
-    }
+    function dwell() { if (document.visibilityState !== 'visible') return; if (tracking && current) pendingMs[current] = (pendingMs[current] || 0) + 1000; }
     function flush(useBeacon) {
       if (!tracking) return;
       Object.keys(pendingMs).forEach(function (sec) {
@@ -469,84 +438,97 @@
     tick();
   }
 
-  // ── boot ────────────────────────────────────────────────────────────────────
+  // ── personalize (light touch for standard: company on hero eyebrow) ───────
   function personalize(data) {
     var eyebrow = $('#heroEyebrow');
-    if (data && data.found && data.company) {
+    if (eyebrow && data && data.found && data.company) {
       eyebrow.textContent = "Built for " + data.company + "'s product & engineering teams";
-    } else {
-      eyebrow.textContent = 'Built for product & engineering teams';
     }
     var askingAs = $('#askingAs');
-    if (data && data.found && data.name) {
+    if (askingAs && data && data.found && data.name) {
       askingAs.textContent = 'Asking as ' + data.name + (data.company ? (' · ' + data.company) : '');
-    } else {
-      askingAs.textContent = 'Your question goes straight to the Quely team.';
     }
   }
 
-  // Apply a generated PagePlan to the page (Advanced mode). Overlays the plan's
-  // family-specific copy onto the fixed sections and swaps the Orbit + Lens data,
-  // then re-renders the JS-driven pieces. Standard mode never calls this.
+  // ── Advanced/custom page (v3) ─────────────────────────────────────────────
+  // A custom page IS the blocks: hide every standard section and render the plan's
+  // blocks in blockKeys order, each painted by its surface, then the footer.
   function applyPlan(plan) {
-    if (!plan) return;
-    var setText = function (sel, val) { var el = $(sel); if (el && val != null && val !== '') el.textContent = val; };
-    if (plan.hero) {
-      setText('#heroEyebrow', plan.hero.eyebrow);
-      setText('#heroHeadline', plan.hero.headline);
-      setText('#heroBody', plan.hero.body);
-    }
-    if (plan.problem) {
-      setText('#probHeadline', plan.problem.headline);
-      setText('#probBody', plan.problem.body);
-    }
-    if (plan.orbit) {
-      setText('#orbitIntro', plan.orbit.intro);
-      if (plan.orbit.suggestions && plan.orbit.suggestions.length) SUGGESTIONS = plan.orbit.suggestions;
-      if (plan.orbit.answers && plan.orbit.answers.length) ANSWERS = plan.orbit.answers;
-      if (plan.orbit.fallback && plan.orbit.fallback.text) ORBIT_FALLBACK = plan.orbit.fallback;
-    }
-    if (plan.lenses && plan.lenses.length) {
-      LENSES = plan.lenses;
-      state.lens = LENSES[0].id;
-    }
-    if (plan.cta) {
-      setText('#ctaHeadline', plan.cta.headline);
-      setText('#ctaBody', plan.cta.body);
-    }
-    // re-render the JS-driven pieces with the new data
-    renderChips();
-    renderLensRail();
-    renderLensItems(false);
+    if (!plan || !plan.blocks || !plan.blocks.length) return;
+    var mount = (window.QuelyBlocks && window.QuelyBlocks.mountBlock) || null;
+    if (!mount) return;
+    ['#hero', '#problem', '#proof', '#spaces', '#orbit', '#features', '#cta', '#footer'].forEach(function (sel) {
+      var el = $(sel); if (el) el.style.display = 'none';
+    });
+    var host = document.createElement('div');
+    host.id = 'advancedPage';
+    host.style.cssText = 'display:flex; flex-direction:column;';
+    plan.blocks.forEach(function (b) {
+      var sec = document.createElement('section');
+      sec.setAttribute('data-block', b.slug);
+      sec.setAttribute('data-section', b.key);
+      sec.style.cssText = 'display:block;';
+      sec.appendChild(mount(b.slug, b.props));
+      host.appendChild(sec);
+    });
+    host.appendChild(buildFooter());
+    var wrap = ($('#hero') && $('#hero').parentNode) || document.body;
+    wrap.appendChild(host);
+  }
+  function buildFooter() {
+    var f = document.createElement('footer');
+    f.style.cssText = 'background:#1A1611; color:#ECE7F2; padding:64px 40px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; font-family:\'Inter\',sans-serif;';
+    f.innerHTML =
+      '<img src="/assets/quely-logo-dark.svg" alt="Quely" style="height:32px;">' +
+      '<div style="font-size:18px; font-weight:600; color:#ECE7F2; max-width:520px; line-height:1.4;">Your tools track the work. Quely connects the understanding.</div>' +
+      '<div style="font-size:15px; color:rgba(236,231,242,.72); max-width:560px; line-height:1.5;">Keep the full context of every task in one place.</div>' +
+      '<div style="margin-top:10px; display:flex; align-items:center; gap:18px; font-size:14px;">' +
+        '<a href="https://quely.io" target="_blank" rel="noopener" style="color:#9385E6; text-decoration:none;">quely.io</a>' +
+        '<a href="mailto:ronma@quely.io" style="color:#9385E6; text-decoration:none;">ronma@quely.io</a>' +
+      '</div>' +
+      '<div style="margin-top:18px; font-size:12px; letter-spacing:.14em; color:rgba(236,231,242,.4);">© QUELY 2026</div>';
+    return f;
   }
 
+  // ── boot ──────────────────────────────────────────────────────────────────
   function boot() {
     renderChips();
-    renderLensRail();
-    renderLensItems(false);
+    renderLensPills();
+    renderLensList();
     initSpace();
+    initActions();
+    initLensModals();
     initQuestion();
     initCTA();
     initScroll();
-    orbitInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runOrbit(orbitInput.value); } });
-    $('#orbitSend').addEventListener('click', function () { runOrbit(orbitInput.value); });
-    // close an open "Push to tool" menu when clicking outside the lens items
-    document.addEventListener('click', function (e) {
-      if (state.pushMenu && !e.target.closest('#lensItems')) { state.pushMenu = null; renderLensItems(false); }
-    });
+    if (orbitInput) {
+      orbitInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); runOrbit(orbitInput.value); } });
+    }
+    var send = $('#orbitSend'); if (send) send.addEventListener('click', function () { runOrbit(orbitInput.value); });
 
-    if (!token) { personalize({ found: false }); return; }
+    if (!token) {
+      personalize({ found: false });
+      armDefaultCheck();
+      return;
+    }
     fetch('/api/v/' + encodeURIComponent(token))
       .then(function (r) { return r.json(); })
       .then(function (data) {
         prospect = data;
         tracking = !!(data && data.found);
         personalize(data);
-        // Advanced prospects get a per-prospect generated page; Standard keeps the frozen default.
-        if (data && data.advanced && data.pagePlan) applyPlan(data.pagePlan);
+        if (data && data.advanced && data.pagePlan && data.pagePlan.blocks) {
+          applyPlan(data.pagePlan);
+        } else {
+          armDefaultCheck(); // standard page → run the regression tripwire
+        }
         if (tracking) post('/api/v/' + encodeURIComponent(token) + '/visit');
       })
-      .catch(function () { personalize({ found: false }); });
+      .catch(function () { personalize({ found: false }); armDefaultCheck(); });
+  }
+
+  function armDefaultCheck() {
+    if (typeof window.runDefaultPageCheck === 'function') { try { window.runDefaultPageCheck(); } catch (e) {} }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
