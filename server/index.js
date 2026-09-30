@@ -59,6 +59,12 @@ function requireAuth(req, res, next) {
   return res.redirect('/login');
 }
 
+// Wrap async route handlers so a rejected promise (e.g. a DB hiccup) becomes a
+// clean 500 instead of an unhandled rejection that hangs the request.
+function wrap(fn) {
+  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+}
+
 function sectionLabel(id) {
   const s = store.SECTIONS.find(x => x.id === id);
   return s ? s.label : id;
@@ -83,18 +89,18 @@ app.get('/api/me', (req, res) => {
 });
 
 // ── dashboard API (auth required) ─────────────────────────────────────────
-app.get('/api/prospects', requireAuth, (req, res) => {
+app.get('/api/prospects', requireAuth, wrap(async (req, res) => {
   res.json({
     sections: store.SECTIONS,
     painAngles: store.PAIN_ANGLES,
-    prospects: store.listProspects()
+    prospects: await store.listProspects()
   });
-});
+}));
 
-app.post('/api/prospects', requireAuth, (req, res) => {
+app.post('/api/prospects', requireAuth, wrap(async (req, res) => {
   const d = req.body || {};
   if (!(d.name || d.company)) return res.status(400).json({ error: 'name_or_company_required' });
-  const p = store.createProspect({
+  const p = await store.createProspect({
     name: d.name, company: d.company, email: d.email, role: d.role, pain: d.pain, note: d.note,
     // Advanced (per-prospect generated page) — omitted/false = Standard mode
     advanced: !!d.advanced,
@@ -102,7 +108,7 @@ app.post('/api/prospects', requireAuth, (req, res) => {
   });
   analytics.pageCreated(p);
   res.json({ prospect: p });
-});
+}));
 
 // Options for the dashboard's Advanced generator (problem topics, roles).
 app.get('/api/generate/options', requireAuth, (req, res) => {
@@ -121,31 +127,31 @@ app.post('/api/generate', requireAuth, (req, res) => {
   res.json({ plan: plan });
 });
 
-app.get('/api/prospects/:token', requireAuth, (req, res) => {
-  const p = store.getProspect(req.params.token);
+app.get('/api/prospects/:token', requireAuth, wrap(async (req, res) => {
+  const p = await store.getProspect(req.params.token);
   if (!p) return res.status(404).json({ error: 'not_found' });
   res.json({ prospect: p });
-});
+}));
 
-app.delete('/api/prospects/:token', requireAuth, (req, res) => {
-  store.deleteProspect(req.params.token);
+app.delete('/api/prospects/:token', requireAuth, wrap(async (req, res) => {
+  await store.deleteProspect(req.params.token);
   res.json({ ok: true });
-});
+}));
 
-app.get('/api/notifications', requireAuth, (req, res) => {
-  res.json({ notifications: store.getNotifications() });
-});
+app.get('/api/notifications', requireAuth, wrap(async (req, res) => {
+  res.json({ notifications: await store.getNotifications() });
+}));
 
-app.post('/api/notifications/clear', requireAuth, (req, res) => {
-  store.clearNotifications();
+app.post('/api/notifications/clear', requireAuth, wrap(async (req, res) => {
+  await store.clearNotifications();
   res.json({ ok: true });
-});
+}));
 
 // ── prospect (public, token-scoped) API ───────────────────────────────────
 // Only ever exposes the prospect's own name/company (for personalization).
 // Unknown token → { found:false }, never a data leak.
-app.get('/api/v/:token', (req, res) => {
-  const p = store.getProspect(req.params.token);
+app.get('/api/v/:token', wrap(async (req, res) => {
+  const p = await store.getProspect(req.params.token);
   if (!p) return res.json({ found: false });
   // Advanced prospects carry a generated pagePlan the viewer renders; Standard
   // prospects get null and the viewer shows the frozen default page.
@@ -153,52 +159,52 @@ app.get('/api/v/:token', (req, res) => {
     found: true, name: p.name, company: p.company, sections: store.SECTIONS,
     advanced: !!p.advanced, pagePlan: p.advanced ? (p.pagePlan || null) : null
   });
-});
+}));
 
-app.post('/api/v/:token/visit', (req, res) => {
-  const r = store.recordVisit(req.params.token);
+app.post('/api/v/:token/visit', wrap(async (req, res) => {
+  const r = await store.recordVisit(req.params.token);
   if (r && r.ok) {
-    const p = store.getProspect(req.params.token);
+    const p = await store.getProspect(req.params.token);
     if (p) {
       analytics.visit(p, !!r.firstOpen); // Link Opened (first) vs Return Visit
       if (r.firstOpen) email.notifyView(p);
     }
   }
   res.json({ ok: true });
-});
+}));
 
-app.post('/api/v/:token/section-time', (req, res) => {
+app.post('/api/v/:token/section-time', wrap(async (req, res) => {
   const sectionId = req.body && req.body.sectionId;
   const ms = Number(req.body && req.body.ms) || 0;
-  const r = store.addSectionTime(req.params.token, sectionId, ms);
+  const r = await store.addSectionTime(req.params.token, sectionId, ms);
   if (r && r.ok) {
-    const p = store.getProspect(req.params.token);
+    const p = await store.getProspect(req.params.token);
     if (p) analytics.sectionTime(p, sectionId, ms);
   }
   res.json({ ok: true });
-});
+}));
 
-app.post('/api/v/:token/event', (req, res) => {
+app.post('/api/v/:token/event', wrap(async (req, res) => {
   const { type, meta } = req.body || {};
   if (!type) return res.status(400).json({ error: 'type_required' });
-  store.recordEvent(req.params.token, type, meta || null);
-  const p = store.getProspect(req.params.token);
+  await store.recordEvent(req.params.token, type, meta || null);
+  const p = await store.getProspect(req.params.token);
   if (p) analytics.viewerEvent(p, type, meta || null);
   res.json({ ok: true });
-});
+}));
 
-app.post('/api/v/:token/question', (req, res) => {
+app.post('/api/v/:token/question', wrap(async (req, res) => {
   const { text, section } = req.body || {};
-  const result = store.addQuestion(req.params.token, { text, section });
+  const result = await store.addQuestion(req.params.token, { text, section });
   if (result) {
-    const p = store.getProspect(req.params.token);
+    const p = await store.getProspect(req.params.token);
     if (p) {
       analytics.questionSubmitted(p, result.item);
       email.notifyQuestion(p, result.item.text, sectionLabel(result.item.section));
     }
   }
   res.json({ ok: true });
-});
+}));
 
 // ── page routes ───────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
@@ -220,10 +226,25 @@ app.get('/v/:token', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'viewer.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n  Quely Sales Enablement running`);
-  console.log(`  ▸ Dashboard : http://localhost:${PORT}/dashboard  (password: ${DASHBOARD_PASSWORD === 'quely' ? 'quely — set DASHBOARD_PASSWORD' : '••••••'})`);
-  console.log(`  ▸ Prospect  : http://localhost:${PORT}/v/<token>`);
-  console.log(`  ▸ Email     : ${email.enabled ? 'SMTP configured' : 'console-log mode (set SMTP_* to send real mail)'}${email.repConfigured ? '' : ', REP_EMAIL not set'}`);
-  console.log(`  ▸ Analytics : ${analytics.enabled ? 'Mixpanel configured' : 'console-log mode (set MIXPANEL_TOKEN to send events)'}\n`);
+// JSON error handler for anything a route passes to next() (e.g. a DB error).
+app.use((err, req, res, next) => {
+  console.error('[error]', err && err.stack ? err.stack : err);
+  if (res.headersSent) return next(err);
+  if (req.path && req.path.startsWith('/api/')) return res.status(500).json({ error: 'server_error' });
+  res.status(500).send('Server error');
+});
+
+// Prepare the database, then start listening.
+store.init().then(() => {
+  app.listen(PORT, () => {
+    console.log(`\n  Quely Sales Enablement running`);
+    console.log(`  ▸ Dashboard : http://localhost:${PORT}/dashboard  (password: ${DASHBOARD_PASSWORD === 'quely' ? 'quely — set DASHBOARD_PASSWORD' : '••••••'})`);
+    console.log(`  ▸ Prospect  : http://localhost:${PORT}/v/<token>`);
+    console.log(`  ▸ Database  : ${process.env.TURSO_DATABASE_URL ? 'Turso (cloud)' : 'local file'}`);
+    console.log(`  ▸ Email     : ${email.enabled ? 'SMTP configured' : 'console-log mode (set SMTP_* to send real mail)'}${email.repConfigured ? '' : ', REP_EMAIL not set'}`);
+    console.log(`  ▸ Analytics : ${analytics.enabled ? 'Mixpanel configured' : 'console-log mode (set MIXPANEL_TOKEN to send events)'}\n`);
+  });
+}).catch((err) => {
+  console.error('\n  Failed to initialise the database:', err && err.message ? err.message : err, '\n');
+  process.exit(1);
 });
