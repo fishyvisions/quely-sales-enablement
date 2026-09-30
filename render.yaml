@@ -1,0 +1,22 @@
+# Render Blueprint — one free web service for the Quely Sales Enablement app.
+# Data lives in Turso (see TURSO_* below), so no persistent disk is needed and
+# the free plan is enough. Connect this repo as a Blueprint and Render will read
+# this file, then prompt you for the three secret values (marked sync:false).
+services:
+  - type: web
+    name: quely-sales-enablement
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: TURSO_DATABASE_URL
+        sync: false          # paste your libsql://… URL when prompted
+      - key: TURSO_AUTH_TOKEN
+        sync: false          # paste your Turso token when prompted
+      - key: DASHBOARD_PASSWORD
+        sync: false          # pick the password your team will use to log in
+      - key: SESSION_SECRET
+        generateValue: true  # Render generates a random value automatically
+      - key: COOKIE_SECURE
+        value: "true"        # served over HTTPS on Render
