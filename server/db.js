@@ -44,8 +44,15 @@ if (TURSO_URL) {
   // Use the HTTP transport (https://) instead of the WebSocket transport
   // (libsql://). HTTP is more robust across Node versions / hosts and avoids a
   // byte-encoding error seen on some servers during the WebSocket handshake.
-  const httpUrl = TURSO_URL.replace(/^libsql:\/\//, 'https://');
-  client = createClient({ url: httpUrl, authToken: process.env.TURSO_AUTH_TOKEN });
+  const httpUrl = TURSO_URL.trim().replace(/^libsql:\/\//, 'https://');
+  const authToken = (process.env.TURSO_AUTH_TOKEN || '').trim();
+  // A valid Turso token is ASCII (starts with "eyJ"). If it has non-ASCII chars
+  // (e.g. the masked •••• dots got pasted by mistake), fail with a clear message
+  // instead of the cryptic "ByteString … value 8226" error.
+  if (/[^\x20-\x7E]/.test(authToken)) {
+    throw new Error('TURSO_AUTH_TOKEN contains invalid characters — it was likely copied wrong (the masked dots instead of the token). Re-paste the real token from Turso; it should start with "eyJ".');
+  }
+  client = createClient({ url: httpUrl, authToken });
 } else {
   const DATA_DIR = path.join(__dirname, '..', 'data');
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
