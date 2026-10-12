@@ -41,7 +41,11 @@ const PAIN_ANGLES = ['Jira context', 'EM visibility', 'Orbit / AI', 'Customer co
 const TURSO_URL = process.env.TURSO_DATABASE_URL;
 let client;
 if (TURSO_URL) {
-  client = createClient({ url: TURSO_URL, authToken: process.env.TURSO_AUTH_TOKEN });
+  // Use the HTTP transport (https://) instead of the WebSocket transport
+  // (libsql://). HTTP is more robust across Node versions / hosts and avoids a
+  // byte-encoding error seen on some servers during the WebSocket handshake.
+  const httpUrl = TURSO_URL.replace(/^libsql:\/\//, 'https://');
+  client = createClient({ url: httpUrl, authToken: process.env.TURSO_AUTH_TOKEN });
 } else {
   const DATA_DIR = path.join(__dirname, '..', 'data');
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -49,8 +53,10 @@ if (TURSO_URL) {
   client = createClient({ url: 'file:' + DB_PATH });
 }
 
-const SCHEMA = `
-  CREATE TABLE IF NOT EXISTS prospects (
+// Individual statements (run one at a time — the HTTP transport doesn't take a
+// multi-statement script).
+const SCHEMA = [
+  `CREATE TABLE IF NOT EXISTS prospects (
     token        TEXT PRIMARY KEY,
     seq          INTEGER,
     name         TEXT NOT NULL DEFAULT '',
@@ -68,33 +74,33 @@ const SCHEMA = `
     focus_role   TEXT,
     gen_notes    TEXT,
     page_plan    TEXT
-  );
-  CREATE TABLE IF NOT EXISTS visits (
+  )`,
+  `CREATE TABLE IF NOT EXISTS visits (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     token TEXT NOT NULL,
     ts    INTEGER NOT NULL
-  );
-  CREATE TABLE IF NOT EXISTS section_ms (
+  )`,
+  `CREATE TABLE IF NOT EXISTS section_ms (
     token   TEXT NOT NULL,
     section TEXT NOT NULL,
     ms      INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (token, section)
-  );
-  CREATE TABLE IF NOT EXISTS events (
+  )`,
+  `CREATE TABLE IF NOT EXISTS events (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     token TEXT NOT NULL,
     type  TEXT NOT NULL,
     meta  TEXT,
     ts    INTEGER NOT NULL
-  );
-  CREATE TABLE IF NOT EXISTS questions (
+  )`,
+  `CREATE TABLE IF NOT EXISTS questions (
     id      INTEGER PRIMARY KEY AUTOINCREMENT,
     token   TEXT NOT NULL,
     text    TEXT NOT NULL DEFAULT '',
     section TEXT NOT NULL DEFAULT '',
     ts      INTEGER NOT NULL
-  );
-  CREATE TABLE IF NOT EXISTS notifications (
+  )`,
+  `CREATE TABLE IF NOT EXISTS notifications (
     id      INTEGER PRIMARY KEY AUTOINCREMENT,
     type    TEXT NOT NULL,
     token   TEXT NOT NULL,
@@ -103,15 +109,15 @@ const SCHEMA = `
     text    TEXT,
     section TEXT,
     ts      INTEGER NOT NULL
-  );
-  CREATE INDEX IF NOT EXISTS idx_visits_token ON visits(token);
-  CREATE INDEX IF NOT EXISTS idx_events_token ON events(token);
-  CREATE INDEX IF NOT EXISTS idx_questions_token ON questions(token);
-`;
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_visits_token ON visits(token)`,
+  `CREATE INDEX IF NOT EXISTS idx_events_token ON events(token)`,
+  `CREATE INDEX IF NOT EXISTS idx_questions_token ON questions(token)`
+];
 
 // Create tables (idempotent), then add any missing columns for older databases.
 async function init() {
-  await client.executeMultiple(SCHEMA);
+  for (const stmt of SCHEMA) await client.execute(stmt);
   const info = await client.execute('PRAGMA table_info(prospects)');
   const cols = info.rows.map((c) => c.name);
   const adds = [
