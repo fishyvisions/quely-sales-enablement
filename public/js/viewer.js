@@ -391,6 +391,18 @@
     ['#ctaBook', '#ctaBook2'].forEach(function (sel) {
       var el = $(sel); if (el) el.addEventListener('click', function () { recordEvent('cta'); });
     });
+    stampBookingLinks();
+  }
+
+  // Add utm_content=<token> to every HubSpot booking link on the default page, so
+  // HubSpot can attribute a booked meeting back to this prospect/page.
+  function stampBookingLinks() {
+    if (!token) return;
+    document.querySelectorAll('a[href*="meetings.hubspot.com"]').forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('utm_content=') !== -1) return;
+      a.setAttribute('href', href + (href.indexOf('?') === -1 ? '?' : '&') + 'utm_content=' + encodeURIComponent(token));
+    });
   }
 
   // ── scroll craft: progress bar + dwell tracking ───────────────────────────
@@ -468,7 +480,15 @@
       sec.setAttribute('data-block', b.slug);
       sec.setAttribute('data-section', b.key);
       sec.style.cssText = 'display:block;';
-      sec.appendChild(mount(b.slug, b.props));
+      // Stamp the prospect token onto a CTA block's booking link so HubSpot can
+      // attribute the meeting to this prospect/page (utm_content = token).
+      var props = b.props;
+      if (token && /^cta/.test(b.slug || '')) {
+        props = Object.assign({}, props, {
+          primaryHref: 'https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=block&utm_content=' + encodeURIComponent(token)
+        });
+      }
+      sec.appendChild(mount(b.slug, props));
       host.appendChild(sec);
     });
     host.appendChild(buildFooter());

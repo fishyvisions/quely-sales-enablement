@@ -57,6 +57,9 @@ function base(p) {
 // the ONE function everything routes through
 function send(name, props) {
   const payload = Object.assign({}, props);
+  // Identify each event by the prospect's page token so Mixpanel can connect one
+  // prospect's journey into a funnel (open → engage → book) and compute rates.
+  if (payload.token && !payload.distinct_id) payload.distinct_id = payload.token;
   if (!mp) {
     console.log(`[analytics] (console mode) ${name} ${JSON.stringify(payload)}`);
     return;
