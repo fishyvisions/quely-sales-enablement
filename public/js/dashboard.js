@@ -368,7 +368,7 @@
 
   function createPrimary() {
     if (state.personalized) { openBuilder(); return; }
-    var d = { name: $('#fName').value, company: $('#fCompany').value, email: $('#fEmail').value, role: $('#fRole').value };
+    var d = { name: $('#fName').value, company: $('#fCompany').value, email: $('#fEmail').value, role: $('#fRole').value, useCase: $('#fUseCase').value };
     if (!(d.name || d.company)) return;
     fetch('/api/prospects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(handleAuth).then(function (r) { return r.json(); }).then(function (res) {
@@ -413,6 +413,7 @@
     if (!sel._filled) { sel.innerHTML = BUILDER_TOPICS.map(function (t) { return '<option value="' + esc(t.key) + '">' + esc(t.label) + '</option>'; }).join(''); sel._filled = true; }
     $('#bName').value = $('#fName').value || '';
     $('#bCompany').value = $('#fCompany').value || '';
+    if ($('#bUseCase') && $('#fUseCase')) $('#bUseCase').value = $('#fUseCase').value; // inherit the create-form choice
     if (!BUILDER_TOPICS.some(function (t) { return t.key === sel.value; })) sel.value = BUILDER_TOPICS[0].key;
     state.builder = { plan: null, frames: {}, open: null, token: null };
     $('#builder').style.display = 'flex';
@@ -556,7 +557,7 @@
   function publishFromBuilder() {
     var b = state.builder; if (!b || !b.plan || !b.plan.blocks.length) return;
     b.plan.custom = true; b.plan.blockKeys = b.plan.blocks.map(function (x) { return x.key; });
-    var d = { name: $('#bName').value || 'Prospect', company: $('#bCompany').value || 'Their team', email: $('#fEmail').value, role: $('#fRole').value, advanced: true, focusTopic: $('#bTopic').value, pagePlan: b.plan };
+    var d = { name: $('#bName').value || 'Prospect', company: $('#bCompany').value || 'Their team', email: $('#fEmail').value, role: $('#fRole').value, advanced: true, focusTopic: $('#bTopic').value, useCase: ($('#bUseCase') && $('#bUseCase').value) || 'outreach', pagePlan: b.plan };
     fetch('/api/prospects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
       .then(handleAuth).then(function (r) { return r.json(); }).then(function (res) {
         b.token = res.prospect.token; state.createdToken = res.prospect.token;

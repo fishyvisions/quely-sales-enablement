@@ -80,7 +80,8 @@ const SCHEMA = [
     focus_topic  TEXT,
     focus_role   TEXT,
     gen_notes    TEXT,
-    page_plan    TEXT
+    page_plan    TEXT,
+    use_case     TEXT
   )`,
   `CREATE TABLE IF NOT EXISTS visits (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -132,7 +133,8 @@ async function init() {
     ['focus_topic', 'focus_topic TEXT'],
     ['focus_role', 'focus_role TEXT'],
     ['gen_notes', 'gen_notes TEXT'],
-    ['page_plan', 'page_plan TEXT']
+    ['page_plan', 'page_plan TEXT'],
+    ['use_case', 'use_case TEXT']
   ];
   for (const [name, ddl] of adds) {
     if (cols.indexOf(name) === -1) await client.execute('ALTER TABLE prospects ADD COLUMN ' + ddl);
@@ -190,7 +192,8 @@ async function hydrate(row) {
     focusTopic: row.focus_topic || '',
     focusRole: row.focus_role || '',
     genNotes: row.gen_notes || '',
-    pagePlan: row.page_plan ? safeParse(row.page_plan) : null
+    pagePlan: row.page_plan ? safeParse(row.page_plan) : null,
+    useCase: row.use_case || ''
   };
 }
 
@@ -218,8 +221,8 @@ const API = {
     const seq = Number(seqRow.s);
     await run(
       `INSERT INTO prospects (token, seq, name, company, email, role, pain, note, created, cta_clicked,
-                              advanced, focus_topic, focus_role, gen_notes, page_plan)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)`,
+                              advanced, focus_topic, focus_role, gen_notes, page_plan, use_case)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)`,
       [
         token, seq, d.name || '', d.company || '', d.email || '',
         d.role || '', d.pain || '', d.note || '', now(),
@@ -227,7 +230,8 @@ const API = {
         d.focusTopic || null,
         d.focusRole || null,
         d.genNotes || null,
-        d.pagePlan ? JSON.stringify(d.pagePlan) : null
+        d.pagePlan ? JSON.stringify(d.pagePlan) : null,
+        d.useCase || null
       ]
     );
     return getProspect(token);

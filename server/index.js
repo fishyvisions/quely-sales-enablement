@@ -104,7 +104,9 @@ app.post('/api/prospects', requireAuth, wrap(async (req, res) => {
     name: d.name, company: d.company, email: d.email, role: d.role, pain: d.pain, note: d.note,
     // Advanced (per-prospect generated page) — omitted/false = Standard mode
     advanced: !!d.advanced,
-    focusTopic: d.focusTopic, focusRole: d.focusRole, genNotes: d.genNotes, pagePlan: d.pagePlan
+    focusTopic: d.focusTopic, focusRole: d.focusRole, genNotes: d.genNotes, pagePlan: d.pagePlan,
+    // Use case: 'outreach' | 'post-call' — lets analytics/HubSpot compare the two goals
+    useCase: d.useCase
   });
   analytics.pageCreated(p);
   res.json({ prospect: p });
@@ -157,7 +159,8 @@ app.get('/api/v/:token', wrap(async (req, res) => {
   // prospects get null and the viewer shows the frozen default page.
   res.json({
     found: true, name: p.name, company: p.company, sections: store.SECTIONS,
-    advanced: !!p.advanced, pagePlan: p.advanced ? (p.pagePlan || null) : null
+    advanced: !!p.advanced, pagePlan: p.advanced ? (p.pagePlan || null) : null,
+    useCase: p.useCase || ''
   });
 }));
 

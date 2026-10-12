@@ -14,6 +14,7 @@
   var tracking = false;
   var prospect = null;
   var current = 'hero';
+  var pageUseCase = ''; // 'outreach' | 'post-call' — stamped onto booking links
 
   // ── tiny API layer (fire-and-forget tracking) ────────────────────────────
   function post(path, body) {
@@ -394,14 +395,21 @@
     stampBookingLinks();
   }
 
-  // Add utm_content=<token> to every HubSpot booking link on the default page, so
-  // HubSpot can attribute a booked meeting back to this prospect/page.
+  // Add a query param to a URL once (skips if already present).
+  function addParam(href, k, v) {
+    if (!v || new RegExp('[?&]' + k + '=').test(href)) return href;
+    return href + (href.indexOf('?') === -1 ? '?' : '&') + k + '=' + encodeURIComponent(v);
+  }
+
+  // Stamp HubSpot booking links so HubSpot can attribute a booked meeting back to
+  // this prospect (utm_content = token) and this use case (utm_term = outreach|post-call).
   function stampBookingLinks() {
     if (!token) return;
     document.querySelectorAll('a[href*="meetings.hubspot.com"]').forEach(function (a) {
       var href = a.getAttribute('href') || '';
-      if (href.indexOf('utm_content=') !== -1) return;
-      a.setAttribute('href', href + (href.indexOf('?') === -1 ? '?' : '&') + 'utm_content=' + encodeURIComponent(token));
+      href = addParam(href, 'utm_content', token);
+      href = addParam(href, 'utm_term', pageUseCase);
+      a.setAttribute('href', href);
     });
   }
 
@@ -484,9 +492,9 @@
       // attribute the meeting to this prospect/page (utm_content = token).
       var props = b.props;
       if (token && /^cta/.test(b.slug || '')) {
-        props = Object.assign({}, props, {
-          primaryHref: 'https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=block&utm_content=' + encodeURIComponent(token)
-        });
+        var href = 'https://meetings.hubspot.com/ronma2/?utm_source=sales_enablement&utm_medium=block&utm_content=' + encodeURIComponent(token);
+        if (pageUseCase) href += '&utm_term=' + encodeURIComponent(pageUseCase);
+        props = Object.assign({}, props, { primaryHref: href });
       }
       sec.appendChild(mount(b.slug, props));
       host.appendChild(sec);
@@ -536,12 +544,14 @@
       .then(function (data) {
         prospect = data;
         tracking = !!(data && data.found);
+        pageUseCase = (data && data.useCase) || '';
         personalize(data);
         if (data && data.advanced && data.pagePlan && data.pagePlan.blocks) {
           applyPlan(data.pagePlan);
         } else {
           armDefaultCheck(); // standard page → run the regression tripwire
         }
+        stampBookingLinks(); // re-stamp now that the use case is known (adds utm_term)
         if (tracking) post('/api/v/' + encodeURIComponent(token) + '/visit');
       })
       .catch(function () { personalize({ found: false }); armDefaultCheck(); });

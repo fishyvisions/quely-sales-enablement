@@ -51,7 +51,9 @@ const EVENT_MAP = {
 // base identity props on every event
 function base(p) {
   if (!p) return {};
-  return { token: p.token, prospect: p.name || '', company: p.company || '' };
+  const b = { token: p.token, prospect: p.name || '', company: p.company || '' };
+  if (p.useCase) b.use_case = p.useCase; // 'outreach' | 'post-call' — segment the funnel
+  return b;
 }
 
 // the ONE function everything routes through
